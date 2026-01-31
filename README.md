@@ -1,4 +1,4 @@
-# shortnaas.work
+# naas.work
 
 Personal site: blog, projects, books, milestones, and custom pages. Built with Next.js and Sanity CMS.
 

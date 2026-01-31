@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+/* Chirpy theme variables – light (default) */
+:root {
+  --background: #FDFCFC;
+  --foreground: #34343c;
+  --main-bg: #F5F4F4;
+  --main-border-color: #f3f3f3;
+  --text-color: #34343c;
+  --text-muted-color: #333840;
+  --heading-color: #2a2a2a;
+  --link-color: #0056b2;
+  --sidebar-bg: #F0EFEF;
+  --sidebar-border-color: #efefef;
+  --sidebar-muted-color: #545454;
+  --sidebar-active-color: #1d1d1d;
+  --sidebar-hover-bg: rgba(223, 233, 241, 0.64);
+  --sidebar-btn-bg: #383838;
+  --sidebar-btn-color: #9ca3af;
+  --sidebar-btn-hover-color: #f3f4f6;
+  --site-title-color: rgb(113, 113, 113);
+  --site-subtitle-color: #717171;
+  --topbar-bg: rgba(255, 255, 255, 0.7);
+  --topbar-text-color: rgb(78, 78, 78);
+  --footer-text: #757575;
+  --avatar-border-color: white;
+  --card-bg: white;
+  --card-shadow: rgb(104, 104, 104, 0.05) 0 2px 6px 0, rgba(211, 209, 209, 0.15) 0 0 0 1px;
+  /* Archives / timeline (Jekyll Chirpy) */
+  --timeline-color: rgba(0, 0, 0, 0.075);
+  --timeline-node-bg: #c2c6cc;
+  --timeline-year-dot-color: #ffffff;
+}
+
+/* Chirpy theme – dark */
+.dark {
+  color-scheme: dark;
+  --background: rgb(27, 27, 30);
+  --foreground: rgb(175, 176, 177);
+  --main-bg: rgb(27, 27, 30);
+  --main-border-color: rgb(44, 45, 45);
+  --text-color: rgb(175, 176, 177);
+  --text-muted-color: #868686;
+  --heading-color: #cccccc;
+  --link-color: rgb(138, 180, 248);
+  --sidebar-bg: #1e1e1e;
+  --sidebar-border-color: #292929;
+  --sidebar-muted-color: #868686;
+  --sidebar-active-color: rgba(255, 255, 255, 0.95);
+  --sidebar-hover-bg: #262626;
+  --sidebar-btn-bg: #232328;
+  --sidebar-btn-color: #787878;
+  --sidebar-btn-hover-color: rgba(255, 255, 255, 0.95);
+  --site-title-color: #717070;
+  --site-subtitle-color: #868686;
+  --topbar-bg: rgba(27, 27, 30, 0.64);
+  --topbar-text-color: var(--text-color);
+  --footer-text: #868686;
+  --avatar-border-color: rgba(206, 206, 206, 0.9);
+  --card-bg: #1e1e1e;
+  --card-shadow: rgb(21, 21, 21, 0.72) 0 6px 18px 0, rgb(137, 135, 135, 0.24) 0 0 0 1px;
+  /* Archives / timeline (Jekyll Chirpy) */
+  --timeline-node-bg: rgb(150, 152, 156);
+  --timeline-color: rgb(63, 65, 68);
+  --timeline-year-dot-color: var(--timeline-color);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-heading), var(--font-sans);
+}
+
+/* Chirpy/Jekyll-style base and heading sizes */
+html {
+  font-size: 18px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  color: var(--heading-color);
+  font-weight: 600;
+}
+
+h1 { font-size: 2rem; margin: 2rem 0 1rem; }
+h2 { font-size: 1.75rem; margin: 2rem 0 1rem; scroll-margin-top: 3.5rem; }
+h3 { font-size: 1.5rem; margin: 1.5rem 0 0.75rem; scroll-margin-top: 3.5rem; }
+h4 { font-size: 1.25rem; margin: 1.25rem 0 0.5rem; }
+h5 { font-size: 1.125rem; margin: 1rem 0 0.5rem; }
+h6 { font-size: 1.05rem; margin: 0.75rem 0 0.25rem; }
+
+main {
+  line-height: 1.75;
+}
+
+/* Layout – matches sidebar width (232px / 264px xl) + gap */
+#main-wrapper {
+  margin-left: 252px;
+}
+
+@media (min-width: 1650px) {
+  #main-wrapper {
+    margin-left: 288px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  #main-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* Sidebar avatar: no border, outline, or shadow */
+#avatar,
+#avatar img {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Archives / Milestones – timeline starts from year, date left, bullet on line */
+#archives {
+  --line-left: 5rem;
+  --line-width: 4px;
+  letter-spacing: 0.03rem;
+  position: relative;
+  margin-left: 0;
+}
+
+/* Vertical line: runs from top through all year dots and entry bullets (above row backgrounds) */
+#archives::before {
+  content: "";
+  position: absolute;
+  left: var(--line-left);
+  top: 0;
+  bottom: 0;
+  width: var(--line-width);
+  margin-left: calc(var(--line-width) / -2);
+  background-color: var(--timeline-color);
+  z-index: 1;
+}
+
+#archives .year {
+  display: block;
+  font-size: 1.5rem;
+  height: 3.5rem;
+  line-height: 3.5rem;
+  color: var(--heading-color);
+  font-weight: 400;
+  position: relative;
+  width: var(--line-left);
+  padding-right: 0.5rem;
+  box-sizing: content-box;
+}
+
+/* Year marker: hollow circle centered on the line */
+#archives .year::after {
+  content: "";
+  position: absolute;
+  left: var(--line-left);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--timeline-node-bg);
+  background-color: var(--timeline-year-dot-color);
+  box-shadow: 0 0 2px 0 rgba(194, 198, 204, 0.35);
+  z-index: 2;
+}
+
+#archives ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#archives ul li {
+  font-size: 1.1rem;
+  line-height: 3rem;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 0;
+}
+
+/* Bullet: solid circle on the line for each entry */
+#archives ul li::before {
+  content: "";
+  position: absolute;
+  left: var(--line-left);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--timeline-node-bg);
+  box-shadow: 0 0 2px 0 rgba(194, 198, 204, 0.4);
+  z-index: 2;
+}
+
+#archives ul li:nth-child(odd) {
+  background-color: var(--main-bg);
+  background-image: linear-gradient(
+    to left,
+    var(--main-bg),
+    rgba(251, 251, 251, 0.98),
+    rgba(251, 251, 251, 0.98),
+    rgba(251, 251, 251, 0.98),
+    var(--main-bg)
+  );
+}
+
+.dark #archives ul li:nth-child(odd) {
+  background-image: linear-gradient(
+    to left,
+    rgb(26, 26, 30),
+    rgb(39, 39, 45),
+    rgb(39, 39, 45),
+    rgb(39, 39, 45),
+    rgb(26, 26, 30)
+  );
+}
+
+/* Date + month on the left (e.g. "15 Nov"), aligned with dot */
+#archives .archives-date {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--line-left);
+  padding-right: 0.5rem;
+  white-space: nowrap;
+  font-size: 1rem;
+  color: var(--text-color);
+  font-family: var(--font-sans), Lato, sans-serif;
+}
+
+/* Title aligned with dot */
+#archives .archives-title {
+  margin-left: 1rem;
+  color: var(--link-color);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Note aligned with dot (same row as title) */
+#archives .archives-note {
+  color: var(--text-color);
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

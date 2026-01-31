@@ -1,0 +1,34 @@
+import { client } from "@/lib/sanity/client";
+import { siteSettingsQuery } from "@/lib/sanity/queries";
+import { SiteSettings } from "@/lib/sanity/types";
+
+async function getSiteSettings(): Promise<SiteSettings | null> {
+  try {
+    const settings = await client.fetch<SiteSettings>(siteSettingsQuery);
+    return settings;
+  } catch (error) {
+    console.error("Error fetching site settings:", error);
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const settings = await getSiteSettings();
+
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center px-4">
+      <section className="max-w-xl text-center space-y-4">
+        <h1 className="text-3xl font-semibold sm:text-4xl text-[color:var(--heading-color)]">
+          {settings?.heroTitle || "Hi, I'm Naas."}
+        </h1>
+        <p className="text-sm uppercase tracking-wide text-[color:var(--text-muted-color)]">
+          {settings?.heroSubtitle || "A little bit of everything."}
+        </p>
+        <p className="text-base text-[color:var(--text-color)]">
+          {settings?.shortBio ||
+            "I write about ideas I find interesting, document projects I'm working on, and keep a log of milestones along the way."}
+        </p>
+      </section>
+    </div>
+  );
+}
