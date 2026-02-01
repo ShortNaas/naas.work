@@ -116,7 +116,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                       })}
                     </div>
                   )}
-                  <h2 className="mt-0 text-sm font-semibold text-[color:var(--heading-color)]">
+                  <div className="mt-0 font-semibold text-[color:var(--heading-color)]" style={{ fontSize: "0.875rem" }}>
                     {project.link ? (
                       <Link
                         href={project.link}
@@ -127,7 +127,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     ) : (
                       project.title
                     )}
-                  </h2>
+                  </div>
                   {project.description && (
                     <p className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1">
                       {project.description}
