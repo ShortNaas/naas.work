@@ -49,8 +49,6 @@ export default async function AboutPage() {
               <li key={i}>
                 <a
                   href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-[color:var(--link-color)] hover:underline"
                 >
                   {link.label}

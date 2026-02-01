@@ -79,8 +79,6 @@ export default async function BookPage({
                 Go to the{" "}
                 <a
                   href={book.amazonUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-[color:var(--link-color)] underline hover:no-underline"
                 >
                   Amazon page

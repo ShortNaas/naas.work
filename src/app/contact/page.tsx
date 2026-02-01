@@ -31,8 +31,6 @@ export default async function ContactPage() {
             <li key={i}>
               <Link
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="text-[color:var(--link-color)] hover:underline"
               >
                 {link.label}

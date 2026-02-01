@@ -71,8 +71,6 @@ const components = {
     link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => (
       <a
         href={value?.href}
-        target="_blank"
-        rel="noopener noreferrer"
         className="text-[color:var(--link-color)] hover:underline"
       >
         {children}

@@ -104,8 +104,6 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     {project.link ? (
                       <Link
                         href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="text-[color:var(--link-color)] hover:underline"
                       >
                         {project.title}

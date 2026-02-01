@@ -99,8 +99,6 @@ export function Sidebar({ open }: { open: boolean }) {
             <a
               key={link.href}
               href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={link.label}
               className="w-7 h-7 rounded-full bg-[var(--sidebar-btn-bg)] text-[color:var(--sidebar-btn-color)] hover:text-[color:var(--sidebar-btn-hover-color)] flex items-center justify-center transition-colors shadow-[0_0_0_1px_var(--sidebar-border-color)]"
             >

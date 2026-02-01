@@ -184,8 +184,6 @@ export function SearchOverlay({
                           <li key={item._id}>
                             <a
                               href={item.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
                               onClick={() => onClose()}
                               className="block px-3 py-2 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
                             >

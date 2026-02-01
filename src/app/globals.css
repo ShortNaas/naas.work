@@ -26,6 +26,7 @@
   --avatar-border-color: white;
   --card-bg: white;
   --card-shadow: rgb(104, 104, 104, 0.05) 0 2px 6px 0, rgba(211, 209, 209, 0.15) 0 0 0 1px;
+  --scroll-to-top-icon: #2a2a2a;
   /* Archives / timeline (Jekyll Chirpy) */
   --timeline-color: rgba(0, 0, 0, 0.075);
   --timeline-node-bg: #c2c6cc;
@@ -59,6 +60,7 @@
   --avatar-border-color: rgba(206, 206, 206, 0.9);
   --card-bg: #1e1e1e;
   --card-shadow: rgb(21, 21, 21, 0.72) 0 6px 18px 0, rgb(137, 135, 135, 0.24) 0 0 0 1px;
+  --scroll-to-top-icon: rgba(255, 255, 255, 0.9);
   /* Archives / timeline (Jekyll Chirpy) */
   --timeline-node-bg: rgb(150, 152, 156);
   --timeline-color: rgb(63, 65, 68);
