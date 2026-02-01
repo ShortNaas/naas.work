@@ -84,9 +84,20 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
   }
 
   const linkClass = "text-[color:var(--link-color)] hover:underline font-semibold";
+  const latestUpdatedAt = favorites
+    .map((f) => f._updatedAt)
+    .filter(Boolean)
+    .sort()
+    .pop();
 
   return (
     <>
+      <p className="mb-3 text-[color:var(--text-muted-color)]" style={{ fontSize: "1.0625rem" }}>
+        <Link href="/contact" className="text-[color:var(--link-color)] hover:underline">
+          Email me with any suggestions
+        </Link>
+        {latestUpdatedAt ? ` – Last update: ${formatUpdatedAt(latestUpdatedAt)}` : ""}
+      </p>
       {uniqueCategories.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6">
           {uniqueCategories.map((c) => {
@@ -137,16 +148,6 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                       {item.description && (
                         <p className="mt-2 text-sm text-[color:var(--text-color)]">
                           {item.description}
-                        </p>
-                      )}
-                      <p className="mt-1.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
-                        <Link href="/contact" className="text-[color:var(--link-color)] hover:underline">
-                          Email me with any suggestions
-                        </Link>
-                      </p>
-                      {item._updatedAt && (
-                        <p className="mt-0.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
-                          Last update: {formatUpdatedAt(item._updatedAt)}
                         </p>
                       )}
                     </div>

@@ -13,7 +13,7 @@ export default async function FavoritePage() {
 
   return (
     <div className="max-w-6xl mx-auto py-8">
-      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-8">
+      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-1">
         My Favorite Things
       </h1>
       <FavoritesWithFilters favorites={favorites} />
