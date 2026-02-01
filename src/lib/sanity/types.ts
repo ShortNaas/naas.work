@@ -90,5 +90,6 @@ export interface Favorite {
   name: string;
   description?: string;
   link?: string;
+  _updatedAt?: string;
   category?: FavoriteCategory | null;
 }

@@ -4,6 +4,16 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Favorite, FavoriteCategory } from "@/lib/sanity/types";
 
+function formatUpdatedAt(iso: string | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 function getUniqueCategories(favorites: Favorite[]): FavoriteCategory[] {
   const seen = new Set<string>();
   const categories: FavoriteCategory[] = [];
@@ -132,6 +142,11 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                       {item.description && (
                         <p className="mt-2 text-sm text-[color:var(--text-color)]">
                           {item.description}
+                        </p>
+                      )}
+                      {item._updatedAt && (
+                        <p className="mt-1.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
+                          Updated on {formatUpdatedAt(item._updatedAt)}
                         </p>
                       )}
                     </div>

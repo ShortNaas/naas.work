@@ -58,11 +58,12 @@ export const projectsQuery = groq`
 `;
 
 export const favoritesQuery = groq`
-  *[_type == "favorite"] | order(_createdAt desc) {
+  *[_type == "favorite"] | order(_updatedAt desc) {
     _id,
     name,
     description,
     link,
+    _updatedAt,
     "category": category->{ _id, title }
   }
 `;
