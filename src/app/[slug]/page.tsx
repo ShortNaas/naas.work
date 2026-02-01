@@ -9,6 +9,7 @@ const RESERVED_SLUGS = new Set([
   "books",
   "projects",
   "favorite",
+  "tools",
   "about",
   "contact",
   "milestones",

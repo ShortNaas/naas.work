@@ -1,0 +1,22 @@
+import { client } from "@/lib/sanity/client";
+import { toolsQuery } from "@/lib/sanity/queries";
+import type { Tool } from "@/lib/sanity/types";
+import { ToolsWithFilters } from "@/components/tools-with-filters";
+
+async function getTools(): Promise<Tool[]> {
+  const tools = await client.fetch<Tool[]>(toolsQuery);
+  return tools ?? [];
+}
+
+export default async function ToolsPage() {
+  const tools = await getTools();
+
+  return (
+    <div className="max-w-3xl mx-auto py-8">
+      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-8">
+        Tools
+      </h1>
+      <ToolsWithFilters tools={tools} />
+    </div>
+  );
+}

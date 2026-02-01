@@ -68,6 +68,17 @@ export const favoritesQuery = groq`
   }
 `;
 
+export const toolsQuery = groq`
+  *[_type == "tool"] | order(_updatedAt desc) {
+    _id,
+    name,
+    description,
+    link,
+    _updatedAt,
+    "category": category->{ _id, title }
+  }
+`;
+
 export const milestonesQuery = groq`
   *[_type == "milestone"] | order(date desc) {
     _id,

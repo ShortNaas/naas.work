@@ -93,3 +93,17 @@ export interface Favorite {
   _updatedAt?: string;
   category?: FavoriteCategory | null;
 }
+
+export interface ToolCategory {
+  _id: string;
+  title: string;
+}
+
+export interface Tool {
+  _id: string;
+  name: string;
+  description?: string;
+  link?: string;
+  _updatedAt?: string;
+  category?: ToolCategory | null;
+}
