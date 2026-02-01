@@ -14,7 +14,7 @@ export default async function ToolsPage() {
   return (
     <div className="max-w-3xl mx-auto py-8">
       <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-8">
-        Tools
+        Tools I use
       </h1>
       <ToolsWithFilters tools={tools} />
     </div>
