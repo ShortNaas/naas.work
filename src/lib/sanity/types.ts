@@ -90,11 +90,5 @@ export interface Favorite {
   name: string;
   description?: string;
   link?: string;
-  image?: {
-    asset: {
-      _ref: string;
-      _type: string;
-    };
-  };
   category?: FavoriteCategory | null;
 }

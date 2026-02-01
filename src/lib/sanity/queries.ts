@@ -63,7 +63,6 @@ export const favoritesQuery = groq`
     name,
     description,
     link,
-    image,
     "category": category->{ _id, title }
   }
 `;

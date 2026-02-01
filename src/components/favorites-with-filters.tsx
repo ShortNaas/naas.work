@@ -1,8 +1,28 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Favorite, FavoriteCategory } from "@/lib/sanity/types";
-import { urlFor } from "@/lib/sanity/image";
+
+function getUniqueCategories(favorites: Favorite[]): FavoriteCategory[] {
+  const seen = new Set<string>();
+  const categories: FavoriteCategory[] = [];
+  for (const f of favorites) {
+    if (!f.category) continue;
+    if (!seen.has(f.category._id)) {
+      seen.add(f.category._id);
+      categories.push(f.category);
+    }
+  }
+  return categories.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+function filterFavorites(favorites: Favorite[], selectedCategoryIds: Set<string>): Favorite[] {
+  if (selectedCategoryIds.size === 0) return favorites;
+  return favorites.filter(
+    (f) => f.category && selectedCategoryIds.has(f.category._id)
+  );
+}
 
 function groupByCategorySorted(favorites: Favorite[]): { category: FavoriteCategory | null; items: Favorite[] }[] {
   const withCategory = favorites.filter((f) => f.category);
@@ -29,74 +49,99 @@ function groupByCategorySorted(favorites: Favorite[]): { category: FavoriteCateg
 }
 
 export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set());
+
+  const uniqueCategories = useMemo(() => getUniqueCategories(favorites), [favorites]);
+  const filteredFavorites = useMemo(
+    () => filterFavorites(favorites, selectedCategoryIds),
+    [favorites, selectedCategoryIds]
+  );
+  const groups = useMemo(() => groupByCategorySorted(filteredFavorites), [filteredFavorites]);
+
+  const toggleCategory = (id: string) => {
+    setSelectedCategoryIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   if (favorites.length === 0) {
     return (
       <p className="text-sm text-[color:var(--text-muted-color)]">No favorites yet.</p>
     );
   }
 
-  const groups = groupByCategorySorted(favorites);
   const linkClass = "text-[color:var(--link-color)] hover:underline font-semibold";
 
   return (
-    <div className="space-y-8">
-      {groups.map(({ category, items }) => (
-        <section key={category?._id ?? "uncategorized"}>
-          <div className="border-b border-[var(--main-border-color)] pb-2 mb-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]">
-              {category ? category.title : "Other"}
-            </h2>
-          </div>
-          <ul className="grid gap-6 list-none p-0 m-0 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <li key={item._id} className="flex items-start gap-4">
-                {item.image ? (
-                  item.link ? (
-                    <Link href={item.link} className="shrink-0">
-                      <img
-                        src={urlFor(item.image).width(80).height(105).url()}
-                        alt=""
-                        className="w-[80px] h-[105px] object-cover shadow-md rounded"
-                      />
-                    </Link>
-                  ) : (
-                    <img
-                      src={urlFor(item.image).width(80).height(105).url()}
-                      alt=""
-                      className="w-[80px] h-[105px] object-cover shadow-md rounded shrink-0"
-                    />
-                  )
-                ) : (
-                  <div className="w-[80px] h-[105px] bg-[var(--sidebar-bg)] rounded flex items-center justify-center text-[color:var(--text-muted-color)] text-xs shrink-0">
-                    No image
-                  </div>
-                )}
-                <div className="min-w-0 flex-1">
-                  {item.link ? (
-                    <Link href={item.link} className={`block text-base ${linkClass}`}>
-                      {item.name}
-                    </Link>
-                  ) : (
-                    <span className="block text-base font-semibold text-[color:var(--heading-color)]">
-                      {item.name}
-                    </span>
-                  )}
-                  {item.category && (
-                    <span className="mt-0.5 block text-xs uppercase tracking-wide text-[color:var(--text-muted-color)]">
-                      {item.category.title}
-                    </span>
-                  )}
-                  {item.description && (
-                    <p className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
+    <>
+      {uniqueCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {uniqueCategories.map((c) => {
+            const isSelected = selectedCategoryIds.has(c._id);
+            return (
+              <button
+                key={c._id}
+                type="button"
+                onClick={() => toggleCategory(c._id)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wide transition-colors
+                  ${isSelected
+                    ? "bg-[var(--link-color)] text-white"
+                    : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
+                  }`}
+              >
+                {c.title}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {filteredFavorites.length === 0 ? (
+        <p className="text-sm text-[color:var(--text-muted-color)]">
+          No favorites match the selected filter.
+        </p>
+      ) : (
+        <div className="space-y-8">
+          {groups.map(({ category, items }) => (
+            <section key={category?._id ?? "uncategorized"}>
+              <div className="border-b border-[var(--main-border-color)] pb-1.5 mb-3">
+                <h2 className="text-xs font-medium uppercase tracking-wide text-[color:var(--text-muted-color)]">
+                  {category ? category.title : "Other"}
+                </h2>
+              </div>
+              <ul className="list-none p-0 m-0 space-y-6">
+                {items.map((item) => (
+                  <li key={item._id}>
+                    <div className="min-w-0">
+                      {item.link ? (
+                        <Link href={item.link} className={`block text-lg ${linkClass}`}>
+                          {item.name}
+                        </Link>
+                      ) : (
+                        <span className="block text-lg font-semibold text-[color:var(--heading-color)]">
+                          {item.name}
+                        </span>
+                      )}
+                      {item.category && (
+                        <span className="mt-0.5 block text-xs uppercase tracking-wide text-[color:var(--text-muted-color)]">
+                          {item.category.title}
+                        </span>
+                      )}
+                      {item.description && (
+                        <p className="mt-2 text-sm text-[color:var(--text-color)]">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      )}
+    </>
   );
 }

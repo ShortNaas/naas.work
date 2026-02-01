@@ -28,11 +28,5 @@ export const favorite = defineType({
       type: "url",
       title: "Link or location",
     }),
-    defineField({
-      name: "image",
-      type: "image",
-      title: "Image",
-      options: { hotspot: true },
-    }),
   ],
 });
