@@ -81,7 +81,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
           No projects match the selected filter.
         </p>
       ) : (
-        <ul className="grid gap-6 list-none p-0 m-0 sm:grid-cols-2">
+        <ul className="grid gap-4 list-none p-0 m-0 sm:grid-cols-2">
           {filteredProjects.map((project) => (
             <li key={project._id}>
               <article className="h-full rounded-lg bg-[var(--sidebar-bg)] shadow-[var(--card-shadow)] overflow-hidden transition-shadow hover:shadow-lg flex flex-col">
@@ -94,9 +94,9 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     />
                   </div>
                 )}
-                <div className="p-5 flex-1 flex flex-col">
+                <div className="p-3 flex-1 flex flex-col">
                   {project.kind && project.kind.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-2">
+                    <div className="flex flex-wrap gap-1.5 mb-0.5">
                       {project.kind.map((k) => {
                         const isSelected = selectedKindIds.has(k._id);
                         return (
@@ -116,7 +116,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                       })}
                     </div>
                   )}
-                  <h2 className="mt-1 text-lg font-semibold text-[color:var(--heading-color)]">
+                  <h2 className="mt-0.5 text-base font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
                       <Link
                         href={project.link}
@@ -129,7 +129,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     )}
                   </h2>
                   {project.description && (
-                    <p className="mt-2 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1">
+                    <p className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1">
                       {project.description}
                     </p>
                   )}
