@@ -94,9 +94,9 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     />
                   </div>
                 )}
-                <div className="p-4 flex-1 flex flex-col">
+                <div className="p-5 flex-1 flex flex-col">
                   {project.kind && project.kind.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-0.5">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
                       {project.kind.map((k) => {
                         const isSelected = selectedKindIds.has(k._id);
                         return (
@@ -116,7 +116,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                       })}
                     </div>
                   )}
-                  <h2 className="mt-0.5 text-lg font-semibold text-[color:var(--heading-color)]">
+                  <h2 className="mt-1 text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
                       <Link
                         href={project.link}
