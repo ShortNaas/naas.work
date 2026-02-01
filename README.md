@@ -50,6 +50,19 @@ When you publish content in Studio, the deployed site can stay cached. To refres
 
 After that, each time you create, update, or delete a document in Studio, Sanity calls `/api/revalidate` and Next.js invalidates the cache so the next request shows fresh content.
 
+## View counts (optional)
+
+Page views are counted so you can see how many people visit the site and which posts are most visited. The blog list **Sort by: popular** uses these counts.
+
+1. **Add a Redis store**  
+   In the [Vercel Marketplace](https://vercel.com/marketplace), add **Upstash Redis** to your project. Environment variables (e.g. `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) are set automatically.
+
+2. **Local dev**  
+   Without Redis configured, view counts are skipped (no errors). To test locally, create an Upstash Redis database at [upstash.com](https://upstash.com) and add the same env vars to `.env.local`.
+
+3. **How it works**  
+   On each page load, the client calls `POST /api/view` with the current path. Counts are stored in Redis (one key per path). The blog page fetches counts and passes them to `BlogList`, so “popular” sorts by real view counts.
+
 ## Scripts
 
 | Command      | Description              |

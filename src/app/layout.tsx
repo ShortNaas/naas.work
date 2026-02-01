@@ -3,6 +3,7 @@ import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
+import { ViewCounter } from "@/components/view-counter";
 
 const sourceSans = Source_Sans_3({
   variable: "--font-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
+          <ViewCounter />
         </ThemeProvider>
       </body>
     </html>
