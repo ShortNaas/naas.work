@@ -20,27 +20,25 @@ export default async function BlogPage() {
       {posts.length === 0 ? (
         <p className="text-sm text-[color:var(--text-muted-color)]">No posts yet.</p>
       ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none p-0 m-0">
+        <ul className="list-none p-0 m-0 space-y-2">
           {posts.map((post) => (
             <li key={post._id}>
-              <article className="rounded-lg bg-[var(--sidebar-bg)] shadow-[var(--card-shadow)] overflow-hidden transition-shadow hover:shadow-lg h-full flex flex-col">
-                <Link
-                  href={`/blog/${post.slug.current}`}
-                  className="block no-underline group p-3"
+              <Link
+                href={`/blog/${post.slug.current}`}
+                className="no-underline group flex flex-wrap items-baseline gap-x-1"
+              >
+                <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors" style={{ fontSize: "0.875rem" }}>
+                  {post.title}
+                </span>
+                <span className="text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>–</span>
+                <time
+                  dateTime={post.publishedAt}
+                  className="text-[color:var(--text-muted-color)]"
+                  style={{ fontSize: "0.75rem" }}
                 >
-                  <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors" style={{ fontSize: "0.875rem" }}>
-                    {post.title}
-                  </span>
-                  <span className="text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}> – </span>
-                  <time
-                    dateTime={post.publishedAt}
-                    className="text-xs text-[color:var(--text-muted-color)]"
-                    style={{ fontSize: "0.75rem" }}
-                  >
-                    {formatDateYYYYMMDD(post.publishedAt)}
-                  </time>
-                </Link>
-              </article>
+                  {formatDateYYYYMMDD(post.publishedAt)}
+                </time>
+              </Link>
             </li>
           ))}
         </ul>
