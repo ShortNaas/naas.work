@@ -108,14 +108,14 @@ export function BlogList({
               href={`/blog/${post.slug.current}`}
               className="no-underline group flex flex-wrap items-baseline gap-x-1"
             >
-              <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors" style={{ fontSize: "0.875rem" }}>
+              <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors" style={{ fontSize: "1.05em" }}>
                 {post.title}
               </span>
-              <span className="text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>–</span>
+              <span className="text-[color:var(--text-muted-color)]" style={{ fontSize: "1.05em" }}>–</span>
               <time
                 dateTime={post.publishedAt}
                 className="text-[color:var(--text-muted-color)]"
-                style={{ fontSize: "0.75rem" }}
+                style={{ fontSize: "1.05em" }}
               >
                 {formatDateYYYYMMDD(post.publishedAt)}
               </time>

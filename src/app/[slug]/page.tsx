@@ -5,6 +5,7 @@ import type { Page } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 
 const RESERVED_SLUGS = new Set([
+  "admin",
   "blog",
   "books",
   "projects",
