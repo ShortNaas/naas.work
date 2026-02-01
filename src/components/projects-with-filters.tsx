@@ -96,7 +96,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 )}
                 <div className="p-5 flex-1 flex flex-col">
                   {project.kind && project.kind.length > 0 && (
-                    <div className="inline-flex flex-wrap gap-1.5 p-2 rounded-md border border-[var(--main-border-color)] bg-[var(--main-bg)]/50 mb-2 w-fit">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
                       {project.kind.map((k) => {
                         const isSelected = selectedKindIds.has(k._id);
                         return (
@@ -104,7 +104,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                             key={k._id}
                             type="button"
                             onClick={() => toggleKind(k._id)}
-                            className={`px-2.5 py-1 rounded-full text-xs font-medium uppercase tracking-wide transition-colors
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium uppercase tracking-wide transition-all shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.12)]
                               ${isSelected
                                 ? "bg-[var(--link-color)] text-white"
                                 : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
