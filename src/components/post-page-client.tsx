@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { urlFor } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
 import { useToc } from "@/contexts/toc-context";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Post } from "@/lib/sanity/types";
 import type { TocItem } from "@/lib/toc";
 
@@ -21,15 +22,6 @@ export function PostPageClient({
     return () => setToc(null);
   }, [toc, setToc]);
 
-  function formatDate(dateString: string) {
-    const d = new Date(dateString);
-    return d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  }
-
   return (
     <article className="max-w-3xl mx-auto py-8">
       {post.coverImage && (
@@ -46,7 +38,7 @@ export function PostPageClient({
           dateTime={post.publishedAt}
           className="text-sm text-[color:var(--text-muted-color)]"
         >
-          {formatDate(post.publishedAt)}
+          {formatDateYYYYMMDD(post.publishedAt)}
         </time>
         <h1 className="mt-2 text-3xl font-semibold text-[color:var(--heading-color)]">
           {post.title}

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { client } from "@/lib/sanity/client";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { bookBySlugQuery, bookSlugsQuery } from "@/lib/sanity/queries";
 import type { Book } from "@/lib/sanity/types";
 import { urlFor } from "@/lib/sanity/image";
@@ -58,7 +59,7 @@ export default async function BookPage({
           )}
           {book.dateRead && (
             <div className="text-sm text-[color:var(--text-muted-color)] tracking-wide">
-              DATE READ: {book.dateRead}
+              DATE READ: {formatDateYYYYMMDD(book.dateRead)}
             </div>
           )}
           {book.rating != null && (

@@ -1,18 +1,11 @@
 import { client } from "@/lib/sanity/client";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { milestonesQuery } from "@/lib/sanity/queries";
 import type { Milestone } from "@/lib/sanity/types";
 
 async function getMilestones(): Promise<Milestone[]> {
   const milestones = await client.fetch<Milestone[]>(milestonesQuery);
   return milestones ?? [];
-}
-
-/** Date for archive-style display (e.g. "15 Nov"). */
-function formatArchiveDate(dateString: string) {
-  const d = new Date(dateString);
-  const day = d.getDate();
-  const month = d.toLocaleDateString("en-US", { month: "short" });
-  return `${day} ${month}`;
 }
 
 function groupByYear(milestones: Milestone[]) {
@@ -46,7 +39,7 @@ export default async function MilestonesPage() {
               <ul className="list-none p-0 m-0">
                 {items.map((m) => (
                   <li key={m._id}>
-                    <span className="archives-date">{formatArchiveDate(m.date)}</span>
+                    <span className="archives-date">{formatDateYYYYMMDD(m.date)}</span>
                     <span className="archives-title">{m.title}</span>
                     {m.note && (
                       <span className="archives-note">: {m.note}</span>

@@ -2,17 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Tool, ToolCategory } from "@/lib/sanity/types";
-
-function formatUpdatedAt(iso: string | undefined): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 function getUniqueCategories(tools: Tool[]): ToolCategory[] {
   const seen = new Set<string>();
@@ -96,7 +87,7 @@ export function ToolsWithFilters({ tools }: { tools: Tool[] }) {
         <Link href="/contact" className="text-[color:var(--link-color)] hover:underline">
           Email me with any suggestions
         </Link>
-        {latestUpdatedAt ? ` – Last update: ${formatUpdatedAt(latestUpdatedAt)}` : ""}
+        {latestUpdatedAt ? ` – Last update: ${formatDateYYYYMMDD(latestUpdatedAt)}` : ""}
       </p>
       {uniqueCategories.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6">

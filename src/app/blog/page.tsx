@@ -1,20 +1,12 @@
 import Link from "next/link";
 import { client } from "@/lib/sanity/client";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { postsQuery } from "@/lib/sanity/queries";
 import type { Post } from "@/lib/sanity/types";
 
 async function getPosts(): Promise<Post[]> {
   const posts = await client.fetch<Post[]>(postsQuery);
   return posts ?? [];
-}
-
-function formatDate(dateString: string) {
-  const d = new Date(dateString);
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 export default async function BlogPage() {
@@ -45,7 +37,7 @@ export default async function BlogPage() {
                     className="text-xs text-[color:var(--text-muted-color)]"
                     style={{ fontSize: "0.75rem" }}
                   >
-                    {formatDate(post.publishedAt)}
+                    {formatDateYYYYMMDD(post.publishedAt)}
                   </time>
                 </Link>
               </article>

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Book } from "@/lib/sanity/types";
 import { urlFor } from "@/lib/sanity/image";
 
@@ -103,7 +104,7 @@ export function BooksList({ books }: { books: Book[] }) {
                 {book.author ? `${book.title} - By ${book.author}` : book.title}
               </Link>
               <div className="mt-1 text-sm text-[color:var(--text-muted-color)]">
-                {book.dateRead && `Date Read: ${book.dateRead}. `}
+                {book.dateRead && `Date Read: ${formatDateYYYYMMDD(book.dateRead)}. `}
                 {book.rating != null && `How Strongly I Recommend It: ${book.rating}/5`}
               </div>
               {book.summary && (
