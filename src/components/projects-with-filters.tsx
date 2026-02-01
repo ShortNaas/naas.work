@@ -96,7 +96,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 )}
                 <div className="p-5 flex-1 flex flex-col">
                   {project.kind && project.kind.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5 p-2 rounded-md border border-[var(--main-border-color)] bg-[var(--main-bg)]/50 mb-2">
                       {project.kind.map((k) => {
                         const isSelected = selectedKindIds.has(k._id);
                         return (
