@@ -96,9 +96,25 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 )}
                 <div className="p-5 flex-1 flex flex-col">
                   {project.kind && project.kind.length > 0 && (
-                    <span className="text-xs uppercase tracking-wide text-[color:var(--text-muted-color)]">
-                      {project.kind.map((k) => k.title).join(", ")}
-                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.kind.map((k) => {
+                        const isSelected = selectedKindIds.has(k._id);
+                        return (
+                          <button
+                            key={k._id}
+                            type="button"
+                            onClick={() => toggleKind(k._id)}
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium uppercase tracking-wide transition-colors
+                              ${isSelected
+                                ? "bg-[var(--link-color)] text-white"
+                                : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
+                              }`}
+                          >
+                            {k.title}
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
                   <h2 className="mt-1 text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
