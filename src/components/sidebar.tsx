@@ -45,7 +45,7 @@ export function Sidebar({ open }: { open: boolean }) {
         lg:translate-x-0
         ${open ? "translate-x-0" : "-translate-x-full"}`}
     >
-      <header className="flex flex-col items-center justify-center text-center px-4 pt-6 lg:pt-8 flex-shrink-0 w-full">
+      <header className="flex flex-col items-center justify-center text-center px-4 pt-10 lg:pt-12 flex-shrink-0 w-full">
         <Link
           href="/"
           id="avatar"
@@ -55,7 +55,7 @@ export function Sidebar({ open }: { open: boolean }) {
         </Link>
       </header>
 
-      <nav className="flex-1 w-full px-4 py-2 flex flex-col items-start" aria-label="Main">
+      <nav className="flex-1 w-full pl-7 pr-4 pt-4 pb-2 flex flex-col items-start" aria-label="Main">
         <ul className="flex flex-col list-none p-0 m-0 w-full">
           {navItems.map((item, index) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
@@ -67,7 +67,7 @@ export function Sidebar({ open }: { open: boolean }) {
               >
                 <Link
                   href={item.href}
-                  className={`flex items-center justify-start w-full pl-3 pr-4 py-2.5 rounded-xl font-semibold text-sm transition-colors
+                  className={`flex items-center justify-start w-full pl-4 pr-4 py-2.5 rounded-xl font-semibold text-sm transition-colors
                     ${isActive
                       ? "text-[color:var(--sidebar-active-color)] bg-[var(--sidebar-hover-bg)]"
                       : "text-[color:var(--sidebar-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--sidebar-active-color)]"
