@@ -153,9 +153,9 @@ main {
 
 #archives .year {
   display: block;
-  font-size: 1.5rem;
-  height: 3.5rem;
-  line-height: 3.5rem;
+  font-size: 0.9375rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
   color: var(--heading-color);
   font-weight: 400;
   position: relative;
@@ -187,9 +187,9 @@ main {
 }
 
 #archives ul li {
-  font-size: 1.1rem;
-  line-height: 3rem;
-  min-height: 3rem;
+  font-size: 0.8125rem;
+  line-height: 2.25rem;
+  min-height: 2.25rem;
   display: flex;
   align-items: center;
   position: relative;
@@ -237,31 +237,34 @@ main {
   );
 }
 
-/* Date + month on the left (e.g. "15 Nov"), aligned with dot */
+/* Date on the left (YYYY-MM-DD), aligned with dot */
 #archives .archives-date {
   display: inline-block;
   flex-shrink: 0;
   width: var(--line-left);
   padding-right: 0.5rem;
   white-space: nowrap;
-  font-size: 1rem;
+  font-size: 0.8125rem;
   color: var(--text-color);
   font-family: var(--font-sans), Lato, sans-serif;
+  order: -1;
 }
 
-/* Title aligned with dot */
+/* Title to the right of date */
 #archives .archives-title {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
   color: var(--link-color);
   flex-shrink: 0;
   min-width: 0;
+  font-size: 0.8125rem;
 }
 
-/* Note aligned with dot (same row as title) */
+/* Note (same row as title) */
 #archives .archives-note {
   color: var(--text-color);
   flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.8125rem;
 }
