@@ -1,15 +1,21 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getViewCounts } from "@/lib/views";
+import {
+  COOKIE_NAME,
+  verifyViewDashboardToken,
+} from "@/lib/view-dashboard-auth";
 
-export default async function AdminViewsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ key?: string }>;
-}) {
-  const { key } = await searchParams;
+export default async function AdminViewsPage() {
   const secret = process.env.VIEW_DASHBOARD_SECRET;
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(COOKIE_NAME)?.value;
 
-  if (!secret || key !== secret) {
+  if (
+    !secret ||
+    !cookieValue ||
+    !verifyViewDashboardToken(secret, cookieValue)
+  ) {
     notFound();
   }
 

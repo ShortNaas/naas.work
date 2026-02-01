@@ -64,10 +64,7 @@ Page views are counted so you can see how many people visit the site and which p
    On each page load, the client calls `POST /api/view` with the current path. Counts are stored in Redis (one key per path). The blog page fetches counts and passes them to `BlogList`, so “popular” sorts by real view counts.
 
 4. **View dashboard (you only)**  
-   To see total views and counts per path in the app, set a secret and open the dashboard with it:
-   - **Env var:** `VIEW_DASHBOARD_SECRET` (e.g. a long random string).
-   - **URL:** `/admin/views?key=<same-value-as-VIEW_DASHBOARD_SECRET>`
-   - Without the correct `key`, the page returns 404.
+   Set `VIEW_DASHBOARD_SECRET` (e.g. `openssl rand -hex 32`). To sign in, visit `/api/admin/views-auth?key=<your-secret>` once; the app sets a signed cookie and redirects to `/admin/views`. After that, use `/admin/views` (no key in the URL) until the cookie expires (24 hours). Without a valid cookie, the page returns 404.
 
 ## Scripts
 
@@ -87,7 +84,9 @@ Page views are counted so you can see how many people visit the site and which p
 - `/milestones` — Milestones timeline
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
-- `/admin/views?key=…` — View counts dashboard (requires correct `key`; set `VIEW_DASHBOARD_SECRET`)
+- `/favorite` — My Favorite Things (grouped by category)
+- `/tools` — Tools I use (grouped by category)
+- `/admin/views` — View counts dashboard (sign in once via `/api/admin/views-auth?key=…`; set `VIEW_DASHBOARD_SECRET`)
 - `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, about, contact, milestones, studio, api)
 
 ## Project structure
