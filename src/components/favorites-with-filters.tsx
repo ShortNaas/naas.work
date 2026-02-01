@@ -107,9 +107,9 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
           {groups.map(({ category, items }) => (
             <section key={category?._id ?? "uncategorized"}>
               <div className="border-b border-[var(--main-border-color)] pb-1.5 mb-3">
-                <h2 className="text-xs font-medium uppercase tracking-wide text-[color:var(--text-muted-color)]">
+                <div className="text-xs font-medium uppercase tracking-wide text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
                   {category ? category.title : "Other"}
-                </h2>
+                </div>
               </div>
               <ul className="list-none p-0 m-0 space-y-6">
                 {items.map((item) => (
