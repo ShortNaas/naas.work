@@ -15,6 +15,7 @@ import {
   IconInstagram,
   IconYoutube,
   IconSoundcloud,
+  IconX,
 } from "./icons";
 
 const navItems: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
@@ -28,6 +29,7 @@ const navItems: { href: string; label: string; icon: React.ComponentType<{ class
 
 const socialLinks: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { href: "https://github.com/shortnaas", label: "GitHub", icon: IconGithub },
+  { href: "https://x.com/shortnaas", label: "X", icon: IconX },
   { href: "https://instagram.com/shortnaas", label: "Instagram", icon: IconInstagram },
   { href: "https://soundcloud.com/shortnaas", label: "SoundCloud", icon: IconSoundcloud },
   { href: "https://www.youtube.com/@shortnaas", label: "YouTube", icon: IconYoutube },
