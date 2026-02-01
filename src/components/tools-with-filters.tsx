@@ -134,11 +134,6 @@ export function ToolsWithFilters({ tools }: { tools: Tool[] }) {
                           {item.name}
                         </span>
                       )}
-                      {item.category && (
-                        <span className="mt-0.5 block text-xs uppercase tracking-wide text-[color:var(--text-muted-color)]">
-                          {item.category.title}
-                        </span>
-                      )}
                       {item.description && (
                         <p className="mt-2 text-sm text-[color:var(--text-color)]">
                           {item.description}
