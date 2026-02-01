@@ -144,9 +144,14 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                           {item.description}
                         </p>
                       )}
+                      <p className="mt-1.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
+                        <Link href="/contact" className="text-[color:var(--link-color)] hover:underline">
+                          Email me with any suggestions
+                        </Link>
+                      </p>
                       {item._updatedAt && (
-                        <p className="mt-1.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
-                          Updated on {formatUpdatedAt(item._updatedAt)}
+                        <p className="mt-0.5 text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
+                          Last update: {formatUpdatedAt(item._updatedAt)}
                         </p>
                       )}
                     </div>
