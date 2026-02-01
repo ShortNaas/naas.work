@@ -26,7 +26,7 @@ export function RightPanel() {
     return (
       <div className="access mt-12 sticky top-6">
         <section className="border-l border-[var(--main-border-color)] pl-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
+          <div className="text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]" style={{ fontSize: "1.0rem" }}>
             Contents
           </div>
           <ul className="mt-2 list-none p-0 m-0 space-y-1 text-[1.05em]">
@@ -52,7 +52,7 @@ export function RightPanel() {
   return (
     <div className="access mt-12">
       <section className="border-l border-[var(--main-border-color)] pl-4">
-        <div className="text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]" style={{ fontSize: "0.75rem" }}>
+        <div className="text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]" style={{ fontSize: "1.0rem" }}>
           Recently Updated
         </div>
         <ul className="mt-2 list-none p-0 m-0 space-y-1.5 text-[1.05em]">
