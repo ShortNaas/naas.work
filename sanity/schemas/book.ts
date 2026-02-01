@@ -29,8 +29,8 @@ export const book = defineType({
     defineField({
       name: "rating",
       type: "number",
-      title: "How strongly I recommend it (1–10)",
-      validation: (Rule) => Rule.min(1).max(10).integer(),
+      title: "How strongly I recommend it (1–5)",
+      validation: (Rule) => Rule.min(1).max(5).integer(),
     }),
     defineField({
       name: "amazonUrl",

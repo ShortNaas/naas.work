@@ -7,29 +7,49 @@ import { urlFor } from "@/lib/sanity/image";
 
 type SortBy = "title" | "best" | "date";
 
-function sortBooks(books: Book[], sortBy: SortBy): Book[] {
+function sortBooks(books: Book[], sortBy: SortBy, asc: boolean): Book[] {
   const sorted = [...books];
   if (sortBy === "title") {
     sorted.sort((a, b) => (a.title ?? "").localeCompare(b.title ?? ""));
   } else if (sortBy === "best") {
     sorted.sort((a, b) => {
-      const r = (b.rating ?? 0) - (a.rating ?? 0);
+      const r = (a.rating ?? 0) - (b.rating ?? 0);
       return r !== 0 ? r : (a.title ?? "").localeCompare(b.title ?? "");
     });
   } else {
     sorted.sort((a, b) => {
       const da = a.dateRead ? new Date(a.dateRead).getTime() : 0;
       const db = b.dateRead ? new Date(b.dateRead).getTime() : 0;
-      return db - da;
+      return da - db;
     });
   }
+  if (!asc) sorted.reverse();
   return sorted;
 }
 
+const defaultAsc: Record<SortBy, boolean> = {
+  title: true,
+  best: false,
+  date: false,
+};
+
 export function BooksList({ books }: { books: Book[] }) {
   const [sortBy, setSortBy] = useState<SortBy>("title");
+  const [sortAsc, setSortAsc] = useState(true);
 
-  const sortedBooks = useMemo(() => sortBooks(books, sortBy), [books, sortBy]);
+  const sortedBooks = useMemo(
+    () => sortBooks(books, sortBy, sortAsc),
+    [books, sortBy, sortAsc]
+  );
+
+  const handleSort = (key: SortBy) => {
+    if (sortBy === key) {
+      setSortAsc((a) => !a);
+    } else {
+      setSortBy(key);
+      setSortAsc(defaultAsc[key]);
+    }
+  };
 
   if (books.length === 0) {
     return (
@@ -38,15 +58,19 @@ export function BooksList({ books }: { books: Book[] }) {
   }
 
   const linkClass = "text-[color:var(--link-color)] hover:underline font-semibold";
-  const sortBtn = (key: SortBy, label: string) => (
-    <button
-      type="button"
-      onClick={() => setSortBy(key)}
-      className={`cursor-pointer mr-3 text-sm transition-colors ${sortBy === key ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
-    >
-      {label}
-    </button>
-  );
+  const sortBtn = (key: SortBy, label: string) => {
+    const isActive = sortBy === key;
+    const dir = isActive ? (sortAsc ? " ↑" : " ↓") : "";
+    return (
+      <button
+        type="button"
+        onClick={() => handleSort(key)}
+        className={`cursor-pointer mr-3 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
+      >
+        {label}{dir}
+      </button>
+    );
+  };
 
   return (
     <>
@@ -80,7 +104,7 @@ export function BooksList({ books }: { books: Book[] }) {
               </Link>
               <div className="mt-1 text-sm text-[color:var(--text-muted-color)]">
                 {book.dateRead && `Date Read: ${book.dateRead}. `}
-                {book.rating != null && `How Strongly I Recommend It: ${book.rating}/10`}
+                {book.rating != null && `How Strongly I Recommend It: ${book.rating}/5`}
               </div>
               {book.summary && (
                 <p className="mt-2 text-sm text-[color:var(--text-color)]">

@@ -63,7 +63,7 @@ export default async function BookPage({
           )}
           {book.rating != null && (
             <div className="text-sm text-[color:var(--text-muted-color)] tracking-wide">
-              HOW STRONGLY I RECOMMEND IT: {book.rating}/10
+              HOW STRONGLY I RECOMMEND IT: {book.rating}/5
             </div>
           )}
           <div className="mt-2 text-sm text-[color:var(--text-muted-color)]">
