@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <onboarding@resend.dev>";
+    const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <contact@naas.work>";
 
     if (!apiKey) {
       console.error("RESEND_API_KEY is not set");

@@ -116,7 +116,7 @@ export function ContactForm({ projects }: Props) {
       </div>
       <div>
         <label htmlFor="contact-captcha" className="block text-sm font-medium text-[color:var(--heading-color)] mb-1.5">
-          To verify you’re human: what is the name of this site? (It’s shown above.)
+          To verify you’re human: what is my name? (It’s shown above.)
         </label>
         <input
           id="contact-captcha"
@@ -125,10 +125,10 @@ export function ContactForm({ projects }: Props) {
           value={captcha}
           onChange={(e) => setCaptcha(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] text-[color:var(--text-color)] placeholder:text-[color:var(--text-muted-color)] focus:outline-none focus:ring-2 focus:ring-[var(--link-color)]"
-          placeholder="Answer: Naas"
+          placeholder="Say my name"
         />
         <p className="mt-1 text-xs text-[color:var(--text-muted-color)]">
-          The answer is Naas.
+          My name is Naas.
         </p>
       </div>
       <div>
