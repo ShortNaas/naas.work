@@ -47,9 +47,9 @@ export default async function BlogPage() {
                     </div>
                   )}
                   <div className="p-3 flex-1 min-h-0">
-                    <h2 className="text-base font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors line-clamp-2">
+                    <div className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors line-clamp-2" style={{ fontSize: "0.875rem" }}>
                       {post.title}
-                    </h2>
+                    </div>
                     <time
                       dateTime={post.publishedAt}
                       className="mt-1 block text-xs text-[color:var(--text-muted-color)]"
