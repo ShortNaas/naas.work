@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import {
   IconHome,
   IconDocument,
@@ -37,12 +35,6 @@ const socialLinks: { href: string; label: string; icon: React.ComponentType<{ cl
 
 export function Sidebar({ open }: { open: boolean }) {
   const pathname = usePathname();
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const avatarSrc = !mounted ? "/avatar-light.png" : resolvedTheme === "dark" ? "/avatar-dark.png" : "/avatar-light.png";
 
   return (
     <aside
@@ -53,15 +45,13 @@ export function Sidebar({ open }: { open: boolean }) {
         lg:translate-x-0
         ${open ? "translate-x-0" : "-translate-x-full"}`}
     >
-      <header className="flex flex-col items-center text-center px-4 pt-6 lg:pt-8 flex-shrink-0">
-        <Link href="/" id="avatar" className="block w-[5rem] h-[5rem] rounded-lg overflow-hidden flex-shrink-0">
-          <img
-            src={avatarSrc}
-            alt=""
-            width={80}
-            height={80}
-            className="w-full h-full object-cover"
-          />
+      <header className="flex flex-col items-center justify-center text-center px-4 pt-6 lg:pt-8 flex-shrink-0 w-full">
+        <Link
+          href="/"
+          id="avatar"
+          className="block text-4xl font-bold tracking-tight text-[color:var(--heading-color)] hover:text-[color:var(--link-color)] transition-colors no-underline"
+        >
+          NAAS
         </Link>
       </header>
 
