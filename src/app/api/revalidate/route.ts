@@ -21,7 +21,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    revalidatePath("/");
+    // Invalidate root layout and all routes below it (current and future).
+    revalidatePath("/", "layout");
     return NextResponse.json({ revalidated: true });
   } catch (error) {
     console.error("Revalidation error:", error);
