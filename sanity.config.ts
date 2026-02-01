@@ -9,6 +9,8 @@ import { page } from "./sanity/schemas/page";
 import { book } from "./sanity/schemas/book";
 import { milestone } from "./sanity/schemas/milestone";
 import { siteSettings } from "./sanity/schemas/siteSettings";
+import { favorite } from "./sanity/schemas/favorite";
+import { favoriteCategory } from "./sanity/schemas/favoriteCategory";
 
 export default defineConfig({
   name: "default",
@@ -22,6 +24,6 @@ export default defineConfig({
   },
   plugins: [structureTool(), visionTool()],
   schema: {
-    types: [post, project, projectKind, page, book, milestone, siteSettings],
+    types: [post, project, projectKind, page, book, milestone, siteSettings, favorite, favoriteCategory],
   },
 });

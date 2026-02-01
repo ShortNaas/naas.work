@@ -79,3 +79,22 @@ export interface Milestone {
   note?: string;
   category?: string;
 }
+
+export interface FavoriteCategory {
+  _id: string;
+  title: string;
+}
+
+export interface Favorite {
+  _id: string;
+  name: string;
+  description?: string;
+  link?: string;
+  image?: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  category?: FavoriteCategory | null;
+}

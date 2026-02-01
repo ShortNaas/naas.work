@@ -57,6 +57,17 @@ export const projectsQuery = groq`
   }
 `;
 
+export const favoritesQuery = groq`
+  *[_type == "favorite"] | order(_createdAt desc) {
+    _id,
+    name,
+    description,
+    link,
+    image,
+    "category": category->{ _id, title }
+  }
+`;
+
 export const milestonesQuery = groq`
   *[_type == "milestone"] | order(date desc) {
     _id,
