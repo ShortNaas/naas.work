@@ -95,8 +95,10 @@ export default async function BookPage({
         <div className="mt-6 text-[1.05em]">
           <PortableText value={book.body} />
         </div>
-      ) : book.summary ? (
-        <p className="mt-6 text-[color:var(--text-color)]">{book.summary}</p>
+      ) : book.summary && Array.isArray(book.summary) && book.summary.length > 0 ? (
+        <div className="mt-6 text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline">
+          <PortableText value={book.summary} />
+        </div>
       ) : null}
     </div>
   );

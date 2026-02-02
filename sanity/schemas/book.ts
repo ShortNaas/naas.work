@@ -39,9 +39,10 @@ export const book = defineType({
     }),
     defineField({
       name: "summary",
-      type: "text",
+      type: "array",
       title: "Short summary",
       description: "Shown on the book list page.",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "body",

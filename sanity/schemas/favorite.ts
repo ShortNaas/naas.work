@@ -20,8 +20,9 @@ export const favorite = defineType({
     }),
     defineField({
       name: "description",
-      type: "text",
+      type: "array",
       title: "Short description",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "link",

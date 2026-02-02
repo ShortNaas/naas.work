@@ -44,7 +44,7 @@ export interface Project {
       _type: string;
     };
   };
-  description?: string;
+  description?: any; // Portable text array
   link?: string;
   kind?: Array<{ _id: string; title: string }>;
 }
@@ -68,7 +68,7 @@ export interface Book {
   dateRead?: string;
   rating?: number;
   amazonUrl?: string;
-  summary?: string;
+  summary?: any; // Portable text array
   body?: unknown;
 }
 
@@ -80,7 +80,7 @@ export interface FavoriteCategory {
 export interface Favorite {
   _id: string;
   name: string;
-  description?: string;
+  description?: any; // Portable text array
   link?: string;
   _updatedAt?: string;
   category?: FavoriteCategory | null;
@@ -94,7 +94,7 @@ export interface ToolCategory {
 export interface Tool {
   _id: string;
   name: string;
-  description?: string;
+  description?: any; // Portable text array
   link?: string;
   _updatedAt?: string;
   category?: ToolCategory | null;

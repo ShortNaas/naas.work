@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
 import { urlFor } from "@/lib/sanity/image";
+import { PortableText } from "@/components/portable-text";
 
 type KindItem = { _id: string; title: string };
 
@@ -128,10 +129,10 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                       project.title
                     )}
                   </div>
-                  {project.description && (
-                    <p className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1">
-                      {project.description}
-                    </p>
+                  {project.description && Array.isArray(project.description) && project.description.length > 0 && (
+                    <div className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1 [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
+                      <PortableText value={project.description} />
+                    </div>
                   )}
                 </div>
               </article>

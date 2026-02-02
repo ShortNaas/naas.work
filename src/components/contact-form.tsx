@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
+import { portableTextToPlainString } from "@/lib/portable-text";
 
 const CAPTCHA_ANSWER = "naas";
 
@@ -67,7 +68,10 @@ export function ContactForm({ projects }: Props) {
                 className="text-[color:var(--link-color)] hover:underline text-sm"
               >
                 {p.title}
-                {p.description ? ` – ${p.description}` : ""}
+                {(() => {
+                  const desc = p.description ? portableTextToPlainString(p.description) : "";
+                  return desc ? ` – ${desc}` : "";
+                })()}
               </Link>
             </li>
           ))}

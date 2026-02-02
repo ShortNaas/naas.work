@@ -140,7 +140,7 @@ export const searchIndexQuery = groq`
       _type,
       title,
       "url": coalesce(link, "/projects"),
-      "snippet": description
+      "snippet": pt::text(description)
     }
   }
 `;

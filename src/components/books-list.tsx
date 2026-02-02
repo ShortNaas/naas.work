@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Book } from "@/lib/sanity/types";
 import { urlFor } from "@/lib/sanity/image";
+import { PortableText } from "@/components/portable-text";
 
 type SortBy = "title" | "best" | "date";
 
@@ -107,10 +108,10 @@ export function BooksList({ books }: { books: Book[] }) {
                 {book.dateRead && `Date Read: ${formatDateYYYYMMDD(book.dateRead)}. `}
                 {book.rating != null && `How Strongly I Recommend It: ${book.rating}/5`}
               </div>
-              {book.summary && (
-                <p className="mt-2 text-sm text-[color:var(--text-color)]">
-                  {book.summary}
-                </p>
+              {book.summary && Array.isArray(book.summary) && book.summary.length > 0 && (
+                <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
+                  <PortableText value={book.summary} />
+                </div>
               )}
             </div>
           </li>

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Tool, ToolCategory } from "@/lib/sanity/types";
+import { PortableText } from "@/components/portable-text";
 
 function getUniqueCategories(tools: Tool[]): ToolCategory[] {
   const seen = new Set<string>();
@@ -136,10 +137,10 @@ export function ToolsWithFilters({ tools }: { tools: Tool[] }) {
                           {item.name}
                         </span>
                       )}
-                      {item.description && (
-                        <p className="mt-2 text-sm text-[color:var(--text-color)]">
-                          {item.description}
-                        </p>
+                      {item.description && Array.isArray(item.description) && item.description.length > 0 && (
+                        <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
+                          <PortableText value={item.description} />
+                        </div>
                       )}
                     </div>
                   </li>
