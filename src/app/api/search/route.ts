@@ -13,17 +13,16 @@ export type SearchIndexItem = {
 export type SearchIndex = {
   posts: SearchIndexItem[];
   projects: SearchIndexItem[];
-  milestones: SearchIndexItem[];
 };
 
 export async function GET() {
   try {
     const data = await client.fetch<SearchIndex>(searchIndexQuery);
-    return NextResponse.json(data ?? { posts: [], projects: [], milestones: [] });
+    return NextResponse.json(data ?? { posts: [], projects: [] });
   } catch (error) {
     console.error("Search index error:", error);
     return NextResponse.json(
-      { posts: [], projects: [], milestones: [] },
+      { posts: [], projects: [] },
       { status: 200 }
     );
   }

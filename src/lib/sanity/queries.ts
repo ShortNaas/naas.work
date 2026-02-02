@@ -79,16 +79,6 @@ export const toolsQuery = groq`
   }
 `;
 
-export const milestonesQuery = groq`
-  *[_type == "milestone"] | order(date desc) {
-    _id,
-    title,
-    date,
-    note,
-    category
-  }
-`;
-
 export const pageSlugsQuery = groq`
   *[_type == "page" && defined(slug.current)].slug.current
 `;
@@ -135,7 +125,7 @@ export const bookBySlugQuery = groq`
   }
 `;
 
-// Minimal fields for search index (posts + projects + milestones)
+// Minimal fields for search index (posts + projects)
 export const searchIndexQuery = groq`
   {
     "posts": *[_type == "post"] | order(publishedAt desc) {
@@ -151,13 +141,6 @@ export const searchIndexQuery = groq`
       title,
       "url": coalesce(link, "/projects"),
       "snippet": description
-    },
-    "milestones": *[_type == "milestone"] | order(date desc) {
-      _id,
-      _type,
-      title,
-      "url": "/milestones",
-      "snippet": note
     }
   }
 `;

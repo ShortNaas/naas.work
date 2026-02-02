@@ -1,11 +1,11 @@
 # naas.work
 
-Personal site: blog, projects, books, milestones, and custom pages. Built with Next.js and Sanity CMS.
+Personal site: blog, projects, books, and custom pages. Built with Next.js and Sanity CMS.
 
 ## Tech
 
 - **Next.js** (App Router) + **Tailwind CSS**
-- **Sanity** for content (posts, projects, books, milestones, pages, site settings)
+- **Sanity** for content (posts, projects, books, pages, site settings)
 - **next-themes** for light/dark mode (default: dark)
 
 ## Run locally
@@ -81,17 +81,16 @@ Page views are counted so you can see how many people visit the site and which p
 - `/blog` — Blog list; `/blog/[slug]` — Post (with Contents + Recently Updated in right panel)
 - `/projects` — Projects with tag filters
 - `/books` — Books list; `/books/[slug]` — Book detail
-- `/milestones` — Milestones timeline
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
 - `/favorite` — My Favorite Things (grouped by category)
 - `/tools` — Tools I use (grouped by category)
 - `/admin/views` — View counts dashboard (sign in once via `/api/admin/views-auth?key=…`; set `VIEW_DASHBOARD_SECRET`)
-- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, about, contact, milestones, studio, api)
+- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, about, contact, studio, api)
 
 ## Project structure
 
 - `src/app/` — Next.js App Router pages and API routes
 - `src/components/` — Layout (sidebar, topbar, footer), right panel, search, theme toggle, etc.
 - `src/lib/sanity/` — Sanity client, queries, types, image URL helper
-- `sanity/` — Sanity config and schemas (post, project, projectKind, page, book, milestone, siteSettings)
+- `sanity/` — Sanity config and schemas (post, project, projectKind, page, book, siteSettings)

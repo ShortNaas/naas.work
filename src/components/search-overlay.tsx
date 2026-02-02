@@ -97,11 +97,7 @@ export function SearchOverlay({
     (data?.projects ?? []).filter((p) => matchesQuery(p, nq)),
     nq
   );
-  const milestones = sortByPriority(
-    (data?.milestones ?? []).filter((m) => matchesQuery(m, nq)),
-    nq
-  );
-  const total = posts.length + projects.length + milestones.length;
+  const total = posts.length + projects.length;
   const isExternal = (url: string) => url.startsWith("http://") || url.startsWith("https://");
 
   return (
@@ -123,7 +119,7 @@ export function SearchOverlay({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search posts, projects, milestones..."
+            placeholder="Search posts, projects..."
             className="flex-1 min-w-0 bg-transparent text-[color:var(--foreground)] placeholder:text-[color:var(--text-muted-color)] outline-none"
             aria-label="Search"
             autoComplete="off"
@@ -145,7 +141,7 @@ export function SearchOverlay({
             <>
               {total === 0 ? (
                 <p className="px-4 py-8 text-center text-[color:var(--text-muted-color)]">
-                  {nq ? "No results." : "Type to search posts, projects, milestones."}
+                  {nq ? "No results." : "Type to search posts, projects."}
                 </p>
               ) : (
                 <ul className="py-2 list-none p-0 m-0">
@@ -194,31 +190,6 @@ export function SearchOverlay({
                                 </span>
                               )}
                             </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  )}
-                  {milestones.length > 0 && (
-                    <li className="px-4 py-2">
-                      <span className="text-xs font-medium uppercase tracking-wide text-[color:var(--text-muted-color)]">
-                        Milestones
-                      </span>
-                      <ul className="mt-1 list-none p-0 m-0">
-                        {milestones.map((item) => (
-                          <li key={item._id}>
-                            <Link
-                              href={item.url}
-                              onClick={() => onClose()}
-                              className="block px-3 py-2 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
-                            >
-                              <span className="font-medium">{item.title}</span>
-                              {item.snippet && (
-                                <span className="block text-sm text-[color:var(--text-muted-color)] truncate mt-0.5">
-                                  {item.snippet}
-                                </span>
-                              )}
-                            </Link>
                           </li>
                         ))}
                       </ul>

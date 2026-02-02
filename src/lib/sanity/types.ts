@@ -72,14 +72,6 @@ export interface Book {
   body?: unknown;
 }
 
-export interface Milestone {
-  _id: string;
-  title: string;
-  date: string;
-  note?: string;
-  category?: string;
-}
-
 export interface FavoriteCategory {
   _id: string;
   title: string;

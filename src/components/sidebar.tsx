@@ -6,7 +6,6 @@ import {
   IconHome,
   IconDocument,
   IconFolder,
-  IconMilestone,
   IconUser,
   IconEnvelope,
   IconGithub,
@@ -20,7 +19,6 @@ const navItems: { href: string; label: string; icon: React.ComponentType<{ class
   { href: "/", label: "Home", icon: IconHome },
   { href: "/blog", label: "Blog", icon: IconDocument },
   { href: "/projects", label: "Projects", icon: IconFolder },
-  { href: "/milestones", label: "Milestones", icon: IconMilestone },
   { href: "/about", label: "About", icon: IconUser },
   { href: "/contact", label: "Contact", icon: IconEnvelope },
 ];

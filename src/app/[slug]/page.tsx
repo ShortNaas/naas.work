@@ -13,7 +13,6 @@ const RESERVED_SLUGS = new Set([
   "tools",
   "about",
   "contact",
-  "milestones",
   "studio",
   "api",
 ]);
