@@ -1,6 +1,7 @@
 import { client } from "@/lib/sanity/client";
 import { siteSettingsQuery } from "@/lib/sanity/queries";
 import { SiteSettings } from "@/lib/sanity/types";
+import { PortableText } from "@/components/portable-text";
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
@@ -24,10 +25,15 @@ export default async function HomePage() {
         <p className="text-sm uppercase tracking-wide text-[color:var(--text-muted-color)]">
           {settings?.heroSubtitle || "A little bit of everything."}
         </p>
-        <p className="text-base text-[color:var(--text-color)]">
-          {settings?.shortBio ||
-            "I write about ideas I find interesting, document projects I'm working on, and keep a log of milestones along the way."}
-        </p>
+        <div className="text-base text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline">
+          {settings?.shortBio && Array.isArray(settings.shortBio) && settings.shortBio.length > 0 ? (
+            <PortableText value={settings.shortBio} />
+          ) : (
+            <p>
+              I write about ideas I find interesting, document projects I'm working on, and keep a log of milestones along the way.
+            </p>
+          )}
+        </div>
       </section>
     </div>
   );

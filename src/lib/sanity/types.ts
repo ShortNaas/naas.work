@@ -1,7 +1,7 @@
 export interface SiteSettings {
   heroTitle?: string;
   heroSubtitle?: string;
-  shortBio?: string;
+  shortBio?: any; // Portable text array (same as fullBio)
   fullBio?: any; // Portable text array
   avatar?: {
     asset: {

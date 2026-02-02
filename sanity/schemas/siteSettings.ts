@@ -13,8 +13,9 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: "shortBio",
-      type: "text",
+      type: "array",
       title: "Short bio (homepage)",
+      of: [{ type: "block" }],
     }),
     defineField({
       name: "fullBio",
