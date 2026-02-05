@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 import { Footer } from "./footer";
@@ -10,8 +11,14 @@ import { ScrollToTop } from "./scroll-to-top";
 import { TocProvider } from "@/contexts/toc-context";
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Close mobile sidebar when route changes (e.g. after tapping a nav link)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   return (
     <TocProvider>
