@@ -125,6 +125,61 @@ export const bookBySlugQuery = groq`
   }
 `;
 
+// ── Writeups ──────────────────────────────────────────────────────────────────
+
+export const writeupsQuery = groq`
+  *[_type == "writeup"] | order(_createdAt desc) {
+    _id,
+    title,
+    slug,
+    description,
+    "entryCount": count(entries)
+  }
+`;
+
+export const writeupSlugsQuery = groq`
+  *[_type == "writeup" && defined(slug.current)].slug.current
+`;
+
+export const writeupBySlugQuery = groq`
+  *[_type == "writeup" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    description,
+    "entries": entries[]-> {
+      _id,
+      title,
+      slug,
+      publishedAt
+    }
+  }
+`;
+
+export const writeupEntrySlugsQuery = groq`
+  *[_type == "writeup" && defined(slug.current)] {
+    "writeupSlug": slug.current,
+    "entries": entries[]-> {
+      "entrySlug": slug.current
+    }
+  }
+`;
+
+export const writeupEntryBySlugQuery = groq`
+  *[_type == "writeupEntry" && slug.current == $entrySlug][0] {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    coverImage,
+    body,
+    "writeup": *[_type == "writeup" && references(^._id)][0] {
+      title,
+      slug
+    }
+  }
+`;
+
 // Minimal fields for search index (posts + projects)
 export const searchIndexQuery = groq`
   {

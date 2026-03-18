@@ -15,7 +15,11 @@ import {
   IconX,
 } from "./icons";
 
-const navItems: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+const navItems: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
   { href: "/", label: "Home", icon: IconHome },
   { href: "/blog", label: "Blog", icon: IconDocument },
   { href: "/projects", label: "Projects", icon: IconFolder },
@@ -23,12 +27,28 @@ const navItems: { href: string; label: string; icon: React.ComponentType<{ class
   { href: "/contact", label: "Contact", icon: IconEnvelope },
 ];
 
-const socialLinks: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+const socialLinks: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
   { href: "https://github.com/shortnaas", label: "GitHub", icon: IconGithub },
   { href: "https://x.com/shortnaas", label: "X", icon: IconX },
-  { href: "https://instagram.com/shortnaas", label: "Instagram", icon: IconInstagram },
-  { href: "https://soundcloud.com/shortnaas", label: "SoundCloud", icon: IconSoundcloud },
-  { href: "https://www.youtube.com/@shortnaas", label: "YouTube", icon: IconYoutube },
+  {
+    href: "https://instagram.com/shortnaas",
+    label: "Instagram",
+    icon: IconInstagram,
+  },
+  {
+    href: "https://soundcloud.com/shortnaas",
+    label: "SoundCloud",
+    icon: IconSoundcloud,
+  },
+  {
+    href: "https://www.youtube.com/@shortnaas",
+    label: "YouTube",
+    icon: IconYoutube,
+  },
 ];
 
 export function Sidebar({ open }: { open: boolean }) {
@@ -53,26 +73,31 @@ export function Sidebar({ open }: { open: boolean }) {
         </Link>
       </header>
 
-      <nav className="flex-1 w-full pl-7 pr-4 pt-4 pb-2 flex flex-col items-start" aria-label="Main">
+      <nav
+        className="flex-1 w-full pl-7 pr-4 pt-4 pb-2 flex flex-col items-start"
+        aria-label="Main"
+      >
         <ul className="flex flex-col list-none p-0 m-0 w-full">
           {navItems.map((item, index) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname?.startsWith(item.href));
             const Icon = item.icon;
             return (
-              <li
-                key={item.href}
-                className={index === 0 ? "" : "mt-1 w-full"}
-              >
+              <li key={item.href} className={index === 0 ? "" : "mt-1 w-full"}>
                 <Link
                   href={item.href}
                   className={`flex items-center justify-start w-full pl-4 pr-4 py-2.5 rounded-xl font-semibold text-sm transition-colors
-                    ${isActive
-                      ? "text-[color:var(--sidebar-active-color)] bg-[var(--sidebar-hover-bg)]"
-                      : "text-[color:var(--sidebar-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--sidebar-active-color)]"
+                    ${
+                      isActive
+                        ? "text-[color:var(--sidebar-active-color)] bg-[var(--sidebar-hover-bg)]"
+                        : "text-[color:var(--sidebar-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--sidebar-active-color)]"
                     }`}
                 >
                   <Icon className="w-4 h-4 flex-shrink-0 mr-3 opacity-80" />
-                  <span className="tracking-wide">{item.label.toUpperCase()}</span>
+                  <span className="tracking-wide">
+                    {item.label.toUpperCase()}
+                  </span>
                 </Link>
               </li>
             );

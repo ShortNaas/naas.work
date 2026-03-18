@@ -99,3 +99,34 @@ export interface Tool {
   _updatedAt?: string;
   category?: ToolCategory | null;
 }
+
+export interface WriteupEntryRef {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt?: string;
+}
+
+export interface Writeup {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  description?: string;
+  entryCount?: number;
+  entries?: WriteupEntryRef[];
+}
+
+export interface WriteupEntry {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt?: string;
+  coverImage?: {
+    asset: { _ref: string; _type: string };
+  };
+  body?: any; // Portable text array
+  writeup?: {
+    title: string;
+    slug: { current: string };
+  };
+}
