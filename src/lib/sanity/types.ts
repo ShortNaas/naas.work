@@ -100,23 +100,23 @@ export interface Tool {
   category?: ToolCategory | null;
 }
 
-export interface WriteupEntryRef {
+export interface LogsEntryRef {
   _id: string;
   title: string;
   slug: { current: string };
   publishedAt?: string;
 }
 
-export interface Writeup {
+export interface Logs {
   _id: string;
   title: string;
   slug: { current: string };
   description?: string;
   entryCount?: number;
-  entries?: WriteupEntryRef[];
+  entries?: LogsEntryRef[];
 }
 
-export interface WriteupEntry {
+export interface LogsEntry {
   _id: string;
   title: string;
   slug: { current: string };
@@ -125,7 +125,7 @@ export interface WriteupEntry {
     asset: { _ref: string; _type: string };
   };
   body?: any; // Portable text array
-  writeup?: {
+  logs?: {
     title: string;
     slug: { current: string };
   };

@@ -1,38 +1,38 @@
 import { notFound } from "next/navigation";
 import { client } from "@/lib/sanity/client";
 import {
-  writeupEntryBySlugQuery,
-  writeupEntrySlugsQuery,
+  logsEntryBySlugQuery,
+  logsEntrySlugsQuery,
 } from "@/lib/sanity/queries";
-import type { WriteupEntry } from "@/lib/sanity/types";
+import type { LogsEntry } from "@/lib/sanity/types";
 import { getTocFromBody } from "@/lib/toc";
 import { PostPageClient } from "@/components/post-page-client";
 
-interface WriteupEntrySlugsResult {
-  writeupSlug: string;
+interface LogsEntrySlugsResult {
+  logsSlug: string;
   entries: Array<{ entrySlug: string } | null> | null;
 }
 
-async function getEntry(entrySlug: string): Promise<WriteupEntry | null> {
-  const entry = await client.fetch<WriteupEntry | null>(
-    writeupEntryBySlugQuery,
+async function getEntry(entrySlug: string): Promise<LogsEntry | null> {
+  const entry = await client.fetch<LogsEntry | null>(
+    logsEntryBySlugQuery,
     { entrySlug },
   );
   return entry;
 }
 
 export async function generateStaticParams() {
-  const results = await client.fetch<WriteupEntrySlugsResult[]>(
-    writeupEntrySlugsQuery,
+  const results = await client.fetch<LogsEntrySlugsResult[]>(
+    logsEntrySlugsQuery,
   );
 
   const params: { slug: string; entrySlug: string }[] = [];
 
-  for (const writeup of results ?? []) {
-    for (const entry of writeup.entries ?? []) {
+  for (const logs of results ?? []) {
+    for (const entry of logs.entries ?? []) {
       if (entry?.entrySlug) {
         params.push({
-          slug: writeup.writeupSlug,
+          slug: logs.logsSlug,
           entrySlug: entry.entrySlug,
         });
       }
@@ -42,7 +42,7 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default async function WriteupEntryPage({
+export default async function LogsEntryPage({
   params,
 }: {
   params: Promise<{ slug: string; entrySlug: string }>;

@@ -239,7 +239,7 @@ export function IconX({ className }: { className?: string }) {
   );
 }
 
-/** Terminal icon — used for Writeups nav item. */
+/** Terminal icon — used for logs nav item. */
 export function IconTerminal({ className }: { className?: string }) {
   return (
     <svg

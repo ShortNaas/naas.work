@@ -12,8 +12,8 @@ import { favorite } from "./sanity/schemas/favorite";
 import { favoriteCategory } from "./sanity/schemas/favoriteCategory";
 import { tool } from "./sanity/schemas/tool";
 import { toolCategory } from "./sanity/schemas/toolCategory";
-import { writeup } from "./sanity/schemas/writeup";
-import { writeupEntry } from "./sanity/schemas/writeupEntry";
+import { logs } from "./sanity/schemas/logs";
+import { logsEntry } from "./sanity/schemas/logsEntry";
 
 export default defineConfig({
   name: "default",
@@ -38,8 +38,8 @@ export default defineConfig({
       favoriteCategory,
       tool,
       toolCategory,
-      writeup,
-      writeupEntry,
+      logs,
+      logsEntry,
     ],
   },
 });

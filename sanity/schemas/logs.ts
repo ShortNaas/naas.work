@@ -1,8 +1,8 @@
 import { defineField, defineType } from "sanity";
 
-export const writeup = defineType({
-  name: "writeup",
-  title: "Writeup",
+export const logs = defineType({
+  name: "logs",
+  title: "Logs",
   type: "document",
   fields: [
     defineField({
@@ -23,7 +23,7 @@ export const writeup = defineType({
       name: "description",
       type: "text",
       title: "Description",
-      description: "A short description of this writeup collection.",
+      description: "A short description of this logs collection.",
       rows: 3,
     }),
     defineField({
@@ -31,11 +31,11 @@ export const writeup = defineType({
       type: "array",
       title: "Entries",
       description:
-        "Ordered list of writeup entries (e.g. Level 0, Level 1 …). Create the entries first, then reference them here.",
+        "Ordered list of logs entries (e.g. Level 0, Level 1 …). Create the entries first, then reference them here.",
       of: [
         {
           type: "reference",
-          to: [{ type: "writeupEntry" }],
+          to: [{ type: "logsEntry" }],
           weak: true,
         },
       ],
