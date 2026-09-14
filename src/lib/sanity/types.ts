@@ -1,8 +1,10 @@
+import type { PortableTextBlock } from "@portabletext/types";
+
 export interface SiteSettings {
   heroTitle?: string;
   heroSubtitle?: string;
-  shortBio?: any; // Portable text array (same as fullBio)
-  fullBio?: any; // Portable text array
+  shortBio?: PortableTextBlock[];
+  fullBio?: PortableTextBlock[];
   avatar?: {
     asset: {
       _ref: string;
@@ -28,24 +30,27 @@ export interface Post {
       _type: string;
     };
   };
-  body?: any; // Portable text array
+  body?: PortableTextBlock[];
   excerpt?: string;
 }
 
 export interface Project {
   _id: string;
   title: string;
-  slug: {
-    current: string;
-  };
   image?: {
     asset: {
       _ref: string;
       _type: string;
     };
   };
-  description?: any; // Portable text array
+  description?: PortableTextBlock[];
   link?: string;
+  /** Pinned projects sort above everything else. */
+  pinned?: boolean;
+  /** Manual sort index from the Studio. Lower sorts first. */
+  order?: number | null;
+  /** Drag-and-drop ordering key managed by the Studio. */
+  orderRank?: string | null;
   kind?: Array<{ _id: string; title: string }>;
 }
 
@@ -68,8 +73,8 @@ export interface Book {
   dateRead?: string;
   rating?: number;
   amazonUrl?: string;
-  summary?: any; // Portable text array
-  body?: unknown;
+  summary?: PortableTextBlock[];
+  body?: PortableTextBlock[];
 }
 
 export interface FavoriteCategory {
@@ -80,7 +85,7 @@ export interface FavoriteCategory {
 export interface Favorite {
   _id: string;
   name: string;
-  description?: any; // Portable text array
+  description?: PortableTextBlock[];
   link?: string;
   _updatedAt?: string;
   category?: FavoriteCategory | null;
@@ -94,7 +99,7 @@ export interface ToolCategory {
 export interface Tool {
   _id: string;
   name: string;
-  description?: any; // Portable text array
+  description?: PortableTextBlock[];
   link?: string;
   _updatedAt?: string;
   category?: ToolCategory | null;
@@ -124,7 +129,7 @@ export interface LogsEntry {
   coverImage?: {
     asset: { _ref: string; _type: string };
   };
-  body?: any; // Portable text array
+  body?: PortableTextBlock[];
   logs?: {
     title: string;
     slug: { current: string };

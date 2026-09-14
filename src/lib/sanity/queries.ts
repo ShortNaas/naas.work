@@ -12,13 +12,11 @@ export const siteSettingsQuery = groq`
 `;
 
 export const postsQuery = groq`
-  *[_type == "post"] | order(publishedAt desc) {
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
     _id,
     title,
     slug,
-    publishedAt,
-    coverImage,
-    body
+    publishedAt
   }
 `;
 
@@ -46,13 +44,16 @@ export const latestPostsQuery = groq`
 `;
 
 export const projectsQuery = groq`
-  *[_type == "project"] | order(_createdAt desc) {
+  *[_type == "project" && defined(slug.current)]
+    | order(pinned desc, orderRank asc, order asc, _createdAt desc) {
     _id,
     title,
-    slug,
     image,
     description,
     link,
+    pinned,
+    order,
+    orderRank,
     "kind": kind[]->{ _id, title }
   }
 `;
@@ -180,22 +181,23 @@ export const logsEntryBySlugQuery = groq`
   }
 `;
 
-// Minimal fields for search index (posts + projects)
+// Minimal fields for search index (posts + projects).
+// Snippets are truncated to keep the payload small: this ships to the browser.
 export const searchIndexQuery = groq`
   {
-    "posts": *[_type == "post"] | order(publishedAt desc) {
+    "posts": *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
       _id,
       _type,
       title,
       "url": "/blog/" + slug.current,
-      "snippet": pt::text(body)
+      "snippet": pt::text(body)[0...200]
     },
-    "projects": *[_type == "project"] | order(_createdAt desc) {
+    "projects": *[_type == "project"] | order(orderRank asc, _createdAt desc) {
       _id,
       _type,
       title,
       "url": coalesce(link, "/projects"),
-      "snippet": pt::text(description)
+      "snippet": pt::text(description)[0...200]
     }
   }
 `;

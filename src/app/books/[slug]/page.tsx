@@ -4,7 +4,7 @@ import { client } from "@/lib/sanity/client";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { bookBySlugQuery, bookSlugsQuery } from "@/lib/sanity/queries";
 import type { Book } from "@/lib/sanity/types";
-import { urlFor } from "@/lib/sanity/image";
+import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
 
 async function getBook(slug: string): Promise<Book | null> {
@@ -37,8 +37,12 @@ export default async function BookPage({
       <article className="flex flex-col sm:flex-row gap-8 items-start">
         <div className="shrink-0 pt-10 sm:pt-16">
           {book.cover ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={urlFor(book.cover).width(120).height(160).url()}
+              {...responsiveImage(book.cover, { width: 120, height: 160 })}
+              sizes="120px"
+              loading="lazy"
+              decoding="async"
               alt={`${book.title} book cover`}
               className="w-[120px] h-[160px] object-cover shadow-lg rounded bg-[var(--sidebar-bg)]"
             />
@@ -49,7 +53,7 @@ export default async function BookPage({
           )}
         </div>
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold text-[#1e40af] dark:text-blue-400 mb-2">
+          <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-2">
             {displayTitle}
           </h1>
           {book.isbn && (

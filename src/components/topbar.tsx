@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconSearch, IconBars } from "./icons";
-import { ThemeToggle } from "./theme-toggle";
 
 const topbarTitles: Record<string, string> = {
   "/": "Home",
@@ -11,8 +10,20 @@ const topbarTitles: Record<string, string> = {
   "/projects": "Projects",
   "/books": "Books",
   "/blog": "Blog",
+  "/tools": "Tools",
+  "/favorite": "Favorites",
+  "/logs": "Logs",
   "/contact": "Contact",
 };
+
+/** Turn a URL slug into something readable: "my-first-post" -> "My First Post". */
+function humanizeSlug(segment: string): string {
+  return segment
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 function getBreadcrumb(pathname: string) {
   if (pathname === "/") return [{ label: "Home", href: "/" }];
@@ -21,8 +32,7 @@ function getBreadcrumb(pathname: string) {
   let acc = "";
   for (const seg of segments) {
     acc += `/${seg}`;
-    const title = topbarTitles[acc] ?? seg.charAt(0).toUpperCase() + seg.slice(1);
-    items.push({ label: title, href: acc });
+    items.push({ label: topbarTitles[acc] ?? humanizeSlug(seg), href: acc });
   }
   return items;
 }
@@ -30,9 +40,11 @@ function getBreadcrumb(pathname: string) {
 export function Topbar({
   onMenuClick,
   onSearchClick,
+  sidebarOpen,
 }: {
   onMenuClick?: () => void;
   onSearchClick?: () => void;
+  sidebarOpen?: boolean;
 }) {
   const pathname = usePathname();
   const breadcrumb = getBreadcrumb(pathname);
@@ -47,12 +59,16 @@ export function Topbar({
         id="topbar"
         className="flex items-center justify-between w-full px-4 lg:px-6 h-full"
       >
-        <nav id="breadcrumb" aria-label="Breadcrumb" className="hidden lg:flex items-center gap-1 text-base text-[color:var(--text-muted-color)] pl-2">
+        <nav
+          id="breadcrumb"
+          aria-label="Breadcrumb"
+          className="hidden lg:flex items-center gap-1 text-base text-[color:var(--text-muted-color)] pl-2"
+        >
           {breadcrumb.map((item, i) => (
             <span key={item.href} className="flex items-center gap-1">
               {i > 0 && <span className="opacity-60">›</span>}
               {i === breadcrumb.length - 1 ? (
-                <span>{item.label}</span>
+                <span aria-current="page">{item.label}</span>
               ) : (
                 <Link
                   href={item.href}
@@ -69,6 +85,8 @@ export function Topbar({
           type="button"
           id="sidebar-trigger"
           aria-label="Toggle sidebar"
+          aria-expanded={sidebarOpen ?? false}
+          aria-controls="sidebar"
           onClick={onMenuClick}
           className="lg:hidden p-2 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
         >
@@ -85,7 +103,6 @@ export function Topbar({
           >
             <IconSearch className="w-5 h-5" />
           </button>
-          <ThemeToggle />
         </div>
       </div>
     </header>

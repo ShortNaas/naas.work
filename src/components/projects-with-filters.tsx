@@ -1,12 +1,26 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
-import { urlFor } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
+import { portableTextToPlainString } from "@/lib/portable-text";
 
 type KindItem = { _id: string; title: string };
+
+/** Hashtag form of a label: "Open Source" -> "#opensource". */
+function toHashtag(title: string): string {
+  return `#${title.toLowerCase().replace(/[^a-z0-9]+/g, "")}`;
+}
+
+const TRUNCATE_AT = 200;
+
+/** Cut on a word boundary so the collapsed blurb does not end mid-word. */
+function truncate(text: string): string {
+  if (text.length <= TRUNCATE_AT) return text;
+  const cut = text.slice(0, TRUNCATE_AT);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${lastSpace > 0 ? cut.slice(0, lastSpace) : cut}…`;
+}
 
 function getUniqueKinds(projects: Project[]): KindItem[] {
   const seen = new Set<string>();
@@ -25,13 +39,12 @@ function getUniqueKinds(projects: Project[]): KindItem[] {
 
 function filterProjects(projects: Project[], selectedKindIds: Set<string>): Project[] {
   if (selectedKindIds.size === 0) return projects;
-  return projects.filter((p) =>
-    p.kind?.some((k) => selectedKindIds.has(k._id))
-  );
+  return projects.filter((p) => p.kind?.some((k) => selectedKindIds.has(k._id)));
 }
 
 export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
   const [selectedKindIds, setSelectedKindIds] = useState<Set<string>>(new Set());
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
   const uniqueKinds = useMemo(() => getUniqueKinds(projects), [projects]);
   const filteredProjects = useMemo(
@@ -48,6 +61,15 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
     });
   };
 
+  const toggleExpanded = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   if (projects.length === 0) {
     return (
       <p className="text-sm text-[color:var(--text-muted-color)]">No projects yet.</p>
@@ -57,7 +79,11 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
   return (
     <>
       {uniqueKinds.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div
+          role="group"
+          aria-label="Filter projects by tag"
+          className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-8"
+        >
           {uniqueKinds.map((k) => {
             const isSelected = selectedKindIds.has(k._id);
             return (
@@ -65,79 +91,119 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 key={k._id}
                 type="button"
                 onClick={() => toggleKind(k._id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wide transition-colors
-                  ${isSelected
-                    ? "bg-[var(--link-color)] text-white"
-                    : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
-                  }`}
+                aria-pressed={isSelected}
+                className={`cursor-pointer text-sm transition-colors ${
+                  isSelected
+                    ? "text-[color:var(--link-color)] font-semibold"
+                    : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
+                }`}
               >
-                {k.title}
+                {toHashtag(k.title)}
               </button>
             );
           })}
         </div>
       )}
+
       {filteredProjects.length === 0 ? (
         <p className="text-sm text-[color:var(--text-muted-color)]">
           No projects match the selected filter.
         </p>
       ) : (
-        <ul className="grid gap-4 list-none p-0 m-0 sm:grid-cols-2">
-          {filteredProjects.map((project) => (
-            <li key={project._id}>
-              <article className="h-full rounded-lg bg-[var(--sidebar-bg)] shadow-[var(--card-shadow)] overflow-hidden transition-shadow hover:shadow-lg flex flex-col">
-                {project.image && (
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-[var(--main-border-color)]">
-                    <img
-                      src={urlFor(project.image).width(600).height(450).url()}
-                      alt=""
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                )}
-                <div className="p-3 flex-1 flex flex-col">
-                  {project.kind && project.kind.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-0">
-                      {project.kind.map((k) => {
-                        const isSelected = selectedKindIds.has(k._id);
-                        return (
-                          <button
-                            key={k._id}
-                            type="button"
-                            onClick={() => toggleKind(k._id)}
-                            className={`px-2.5 py-1 rounded-full text-xs font-medium uppercase tracking-wide transition-all shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.12)]
-                              ${isSelected
-                                ? "bg-[var(--link-color)] text-white"
-                                : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
-                              }`}
-                          >
-                            {k.title}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                  <div className="mt-0 font-semibold text-[color:var(--heading-color)]" style={{ fontSize: "0.95rem" }}>
+        <ul className="list-none p-0 m-0 space-y-7" aria-live="polite">
+          {filteredProjects.map((project) => {
+            const isExpanded = expandedIds.has(project._id);
+            const plain = project.description
+              ? portableTextToPlainString(project.description).trim()
+              : "";
+            // Only offer "more" when the collapsed blurb would actually cut text.
+            const canExpand = plain.length > TRUNCATE_AT;
+
+            return (
+              <li key={project._id} className="relative pl-5">
+                {/* bullet */}
+                <span
+                  aria-hidden
+                  className="absolute left-0 top-[0.7em] h-1.5 w-1.5 rounded-full bg-[var(--link-color)]"
+                />
+                {/*
+                  Title and tags share one line, comma-separated, wrapping as a
+                  unit on narrow screens.
+                */}
+                <div className="flex flex-wrap items-baseline gap-x-1.5">
+                  <div className="text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
-                      <Link
+                      <a
                         href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-[color:var(--link-color)] hover:underline"
                       >
                         {project.title}
-                      </Link>
+                      </a>
                     ) : (
                       project.title
                     )}
                   </div>
-                  {project.description && Array.isArray(project.description) && project.description.length > 0 && (
-                    <div className="mt-1.5 text-sm text-[color:var(--text-color)] line-clamp-3 flex-1 [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
-                      <PortableText value={project.description} />
+
+                  {project.kind && project.kind.length > 0 && (
+                    <div className="flex flex-wrap items-baseline gap-x-1.5 text-sm">
+                      <span aria-hidden className="text-[color:var(--text-muted-color)]">
+                        ,
+                      </span>
+                      {project.kind.map((k, i) => (
+                        <span key={k._id} className="flex items-baseline gap-x-1.5">
+                          {i > 0 && (
+                            <span
+                              aria-hidden
+                              className="text-[color:var(--text-muted-color)]"
+                            >
+                              ,
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => toggleKind(k._id)}
+                            aria-pressed={selectedKindIds.has(k._id)}
+                            className={`cursor-pointer transition-colors ${
+                              selectedKindIds.has(k._id)
+                                ? "text-[color:var(--link-color)] font-semibold"
+                                : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
+                            }`}
+                          >
+                            {toHashtag(k.title)}
+                          </button>
+                        </span>
+                      ))}
                     </div>
                   )}
                 </div>
-              </article>
-            </li>
-          ))}
+
+                {project.description &&
+                  Array.isArray(project.description) &&
+                  project.description.length > 0 && (
+                    <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-1">
+                      {isExpanded || !canExpand ? (
+                        <PortableText value={project.description} />
+                      ) : (
+                        <p>{truncate(plain)}</p>
+                      )}
+                    </div>
+                  )}
+
+                {canExpand && (
+                  <button
+                    type="button"
+                    onClick={() => toggleExpanded(project._id)}
+                    aria-expanded={isExpanded}
+                    className="mt-1 cursor-pointer text-sm text-[color:var(--link-color)] hover:underline"
+                  >
+                    {isExpanded ? "less" : "more"}
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </>

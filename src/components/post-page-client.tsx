@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { urlFor } from "@/lib/sanity/image";
+import Link from "next/link";
+import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
 import { useToc } from "@/contexts/toc-context";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
@@ -11,9 +12,12 @@ import type { TocItem } from "@/lib/toc";
 export function PostPageClient({
   post,
   toc,
+  backLink = { href: "/blog", label: "← Back to blog" },
 }: {
   post: Post;
   toc: TocItem[];
+  /** Where the "back" affordance points. Log entries pass their collection. */
+  backLink?: { href: string; label: string };
 }) {
   const { setToc } = useToc();
 
@@ -22,12 +26,32 @@ export function PostPageClient({
     return () => setToc(null);
   }, [toc, setToc]);
 
+  const cover = post.coverImage
+    ? responsiveImage(post.coverImage, { width: 1200, height: 675 })
+    : null;
+
   return (
     <article className="max-w-3xl mx-auto py-8">
-      {post.coverImage && (
+      <p className="mb-4 text-sm">
+        <Link href={backLink.href} className="text-[color:var(--link-color)] hover:underline">
+          {backLink.label}
+        </Link>
+      </p>
+      {cover && (
         <div className="aspect-video w-full rounded-lg overflow-hidden bg-[var(--main-border-color)] mb-6">
+          {/* Plain <img> on purpose: the Sanity CDN does the resizing and the
+              srcSet keeps phones from downloading the desktop file. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={urlFor(post.coverImage).width(1200).height(630).url()}
+            src={cover.src}
+            srcSet={cover.srcSet}
+            sizes="(max-width: 768px) 100vw, 768px"
+            width={cover.width}
+            height={cover.height}
+            // Above the fold on an article page, so load it eagerly.
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             alt=""
             className="w-full h-full object-cover"
           />

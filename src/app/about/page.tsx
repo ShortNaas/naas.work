@@ -1,7 +1,7 @@
 import { client } from "@/lib/sanity/client";
 import { siteSettingsQuery } from "@/lib/sanity/queries";
 import type { SiteSettings } from "@/lib/sanity/types";
-import { urlFor } from "@/lib/sanity/image";
+import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
@@ -23,9 +23,14 @@ export default async function AboutPage() {
       </h1>
       {settings?.avatar && (
         <div className="mb-8">
+          {/* Plain <img> on purpose: sized by Sanity's CDN with a srcSet. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={urlFor(settings.avatar).width(224).height(224).url()}
-            alt=""
+            {...responsiveImage(settings.avatar, { width: 224, height: 224 })}
+            sizes="112px"
+            loading="lazy"
+            decoding="async"
+            alt="Portrait of Naas"
             className="w-28 h-28 rounded-full object-cover border-2 border-[var(--avatar-border-color)] shadow-[var(--card-shadow)]"
           />
         </div>

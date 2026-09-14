@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // A stray package-lock.json sits in the parent directory, which makes
+  // Next.js guess the wrong workspace root. Pin it to this project.
+  turbopack: {
+    root: import.meta.dirname,
+  },
 };
 
 export default nextConfig;

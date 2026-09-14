@@ -2,6 +2,7 @@
 
 import { PortableText as PortableTextRenderer, type PortableTextComponentProps } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
+import { inlineImageDimensions, responsiveImage } from "@/lib/sanity/image";
 
 function slugify(text: string): string {
   return text
@@ -76,6 +77,31 @@ const components = {
         {children}
       </a>
     ),
+  },
+  types: {
+    // Inline images are allowed in some schemas (e.g. logsEntry). Without this
+    // they were silently dropped from the rendered body.
+    image: ({ value }: { value?: { asset?: unknown; alt?: string } }) => {
+      if (!value?.asset) return null;
+      const dims = inlineImageDimensions();
+      const img = responsiveImage(value.asset, dims);
+      return (
+        <figure className="my-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={img.src}
+            srcSet={img.srcSet}
+            sizes="(max-width: 768px) 100vw, 768px"
+            width={img.width}
+            height={img.height}
+            loading="lazy"
+            decoding="async"
+            alt={value.alt ?? ""}
+            className="w-full h-auto rounded-lg"
+          />
+        </figure>
+      );
+    },
   },
 };
 

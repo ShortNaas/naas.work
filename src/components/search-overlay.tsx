@@ -43,47 +43,65 @@ function snippetPreview(snippet: string | undefined, maxLen = 120): string {
 export function SearchOverlay({
   open,
   onClose,
+  data,
+  loading,
+  error,
 }: {
   open: boolean;
   onClose: () => void;
+  data: SearchIndex | null;
+  loading: boolean;
+  error: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
   const [query, setQuery] = useState("");
-  const [data, setData] = useState<SearchIndex | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
+  // Focus the input on open, and put focus back where it came from on close.
+  // Body scroll is locked while the dialog is open.
   useEffect(() => {
     if (!open) return;
-    setQuery("");
-    setLoading(true);
-    setError(false);
-    fetch("/api/search")
-      .then((res) => res.json())
-      .then((json: SearchIndex) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-    const t = setTimeout(() => inputRef.current?.focus(), 100);
-    return () => clearTimeout(t);
+
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+    inputRef.current?.focus();
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      restoreFocusRef.current?.focus();
+    };
   }, [open]);
 
+  // Escape closes; Tab is kept inside the dialog because it declares aria-modal.
   useEffect(() => {
+    if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusables = panelRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
     };
-    if (open) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
 
   if (!open) return null;
@@ -98,7 +116,6 @@ export function SearchOverlay({
     nq
   );
   const total = posts.length + projects.length;
-  const isExternal = (url: string) => url.startsWith("http://") || url.startsWith("https://");
 
   return (
     <div
@@ -109,6 +126,7 @@ export function SearchOverlay({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
+        ref={panelRef}
         className="w-full max-w-xl rounded-lg bg-[var(--background)] shadow-xl border border-[var(--main-border-color)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
@@ -120,7 +138,7 @@ export function SearchOverlay({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search posts, projects..."
-            className="flex-1 min-w-0 bg-transparent text-[color:var(--foreground)] placeholder:text-[color:var(--text-muted-color)] outline-none"
+            className="flex-1 min-w-0 bg-transparent text-[color:var(--foreground)] placeholder:text-[color:var(--text-muted-color)] outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--link-color)]"
             aria-label="Search"
             autoComplete="off"
           />
@@ -128,7 +146,7 @@ export function SearchOverlay({
             Esc
           </kbd>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto">
+        <div className="max-h-[60vh] overflow-y-auto" aria-live="polite">
           {loading ? (
             <p className="px-4 py-8 text-center text-[color:var(--text-muted-color)]">
               Loading…
