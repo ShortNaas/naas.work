@@ -50,21 +50,31 @@ When you publish content in Studio, the deployed site can stay cached. To refres
 
 After that, each time you create, update, or delete a document in Studio, Sanity calls `/api/revalidate` and Next.js invalidates the cache so the next request shows fresh content.
 
-## View counts (optional)
+## Analytics (GoatCounter)
 
-Page views are counted so you can see how many people visit the site and which posts are most visited. The blog list **Sort by: popular** uses these counts.
+The site ships no analytics, ad, or tracking scripts by default. Analytics is
+[GoatCounter](https://www.goatcounter.com) — EUPL-licensed, cookie-free, and it
+stores no personal data, so no consent banner is needed.
 
-1. **Add a Redis store**  
-   In the [Vercel Marketplace](https://vercel.com/marketplace), add **Upstash Redis** to your project. Environment variables (e.g. `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) are set automatically.
+It stays completely off until you configure it. Set:
 
-2. **Local dev**  
-   Without Redis configured, view counts are skipped (no errors). To test locally, create an Upstash Redis database at [upstash.com](https://upstash.com) and add the same env vars to `.env.local`.
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_GOATCOUNTER_CODE` | Your site code — the `YOURCODE` in `https://YOURCODE.goatcounter.com`. Turns the counter on. |
+| `GOATCOUNTER_API_TOKEN` | Optional. A read-only token from *Settings → API*, used server-side to power the blog **popular** sort. Without it, popular falls back to date order. |
+| `NEXT_PUBLIC_GOATCOUNTER_URL` | Optional. Point at a self-hosted instance instead of goatcounter.com. |
 
-3. **How it works**  
-   On each page load, the client calls `POST /api/view` with the current path. Counts are stored in Redis (one key per path). The blog page fetches counts and passes them to `BlogList`, so “popular” sorts by real view counts.
+With none of these set, no analytics request is made at all.
 
-4. **View dashboard (you only)**  
-   Set `VIEW_DASHBOARD_SECRET` (e.g. `openssl rand -hex 32`). To sign in, visit `/api/admin/views-auth?key=<your-secret>` once; the app sets a signed cookie and redirects to `/admin/views`. After that, use `/admin/views` (no key in the URL) until the cookie expires (24 hours). Without a valid cookie, the page returns 404.
+The site code is public by design (it is the subdomain in the script URL), so
+`NEXT_PUBLIC_` is appropriate and no secret is exposed. `GOATCOUNTER_API_TOKEN`
+is a real secret and must stay server-side.
+
+Note: the counter is mounted in the root layout, so `/studio` visits are
+counted too. Exclude that path in GoatCounter's settings if it bothers you.
+
+Fonts are a system stack — no webfont is downloaded and nothing is requested
+from a font CDN at build or run time.
 
 ## Scripts
 
@@ -79,18 +89,38 @@ Page views are counted so you can see how many people visit the site and which p
 
 - `/` — Home (hero + short bio from Site Settings)
 - `/blog` — Blog list; `/blog/[slug]` — Post (with Contents + Recently Updated in right panel)
-- `/projects` — Projects with tag filters
+- `/projects` — Projects: bullet list, `#hashtag` filters, pinned + manually ordered
 - `/books` — Books list; `/books/[slug]` — Book detail
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
 - `/favorite` — My Favorite Things (grouped by category)
 - `/tools` — Tools I use (grouped by category)
-- `/admin/views` — View counts dashboard (sign in once via `/api/admin/views-auth?key=…`; set `VIEW_DASHBOARD_SECRET`)
-- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, about, contact, studio, api)
+- `/logs` — Logs index; `/logs/[slug]` — collection; `/logs/[slug]/[entrySlug]` — entry
+- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, favorite, tools, logs, about, contact, studio, api)
 
 ## Project structure
 
 - `src/app/` — Next.js App Router pages and API routes
-- `src/components/` — Layout (sidebar, topbar, footer), right panel, search, theme toggle, etc.
+- `src/components/` — Layout (sidebar, topbar, footer), right panel, search, list/filter views
 - `src/lib/sanity/` — Sanity client, queries, types, image URL helper
-- `sanity/` — Sanity config and schemas (post, project, projectKind, page, book, siteSettings)
+- `sanity/` — Sanity config and schemas (post, project, projectKind, page, book, siteSettings, favorite, favoriteCategory, tool, toolCategory, logs, logsEntry)
+
+## Ordering and pinning projects
+
+Both controls live on each Project document:
+
+- **Pin to top** — pinned projects always sort above unpinned ones.
+- **Manual order** — a sort index; lower numbers come first.
+
+In the Studio sidebar, **Projects (drag to reorder)** gives drag-and-drop
+ordering (it writes the same rank the site reads). The other document types are
+listed below it.
+
+## Theme and fonts
+
+The site is dark-only (base surface `#111111`). There is no light mode, no
+runtime theme switcher, and `next-themes` is not a dependency.
+
+Typography uses a system font stack, so no webfont is downloaded and nothing is
+requested from Google Fonts at build or run time. `--font-sans` / `--font-heading`
+in `src/app/globals.css` are the single place to swap in a self-hosted face.

@@ -30,7 +30,7 @@ export default async function HomePage() {
             <PortableText value={settings.shortBio} />
           ) : (
             <p>
-              I write about ideas I find interesting, document projects I'm working on, and keep a log of milestones along the way.
+              I write about ideas I find interesting, document projects I&apos;m working on, and keep a log of milestones along the way.
             </p>
           )}
         </div>

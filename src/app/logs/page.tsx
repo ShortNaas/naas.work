@@ -51,7 +51,7 @@ export default async function LogsPage() {
                   style={{ fontSize: "0.85em" }}
                 >
                   {logs.entryCount ?? 0}{" "}
-                  {logs.entryCount === 1 ? "logs" : "logs"}
+                  {logs.entryCount === 1 ? "entry" : "entries"}
                 </span>
               </Link>
             </li>

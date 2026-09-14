@@ -1,6 +1,7 @@
-import { defineConfig } from "sanity";
-import { structureTool } from "sanity/structure";
+import { defineConfig, type ConfigContext } from "sanity";
+import { structureTool, type StructureBuilder } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
 
 import { post } from "./sanity/schemas/post";
 import { project } from "./sanity/schemas/project";
@@ -25,7 +26,28 @@ export default defineConfig({
     projectId: "ouskx1kr",
     dataset: "production",
   },
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: (S: StructureBuilder, context: ConfigContext) =>
+        S.list()
+          .title("Content")
+          .items([
+            // Drag-and-drop ordering for projects; the rank it writes is what
+            // the site reads (pinned first, then this order).
+            orderableDocumentListDeskItem({
+              type: "project",
+              title: "Projects (drag to reorder)",
+              S,
+              context,
+            }),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => item.getId() !== "project"
+            ),
+          ]),
+    }),
+    visionTool(),
+  ],
   schema: {
     types: [
       post,

@@ -5,34 +5,35 @@ import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Post } from "@/lib/sanity/types";
 
-type SortBy = "title" | "date" | "popular";
+type SortBy = "date" | "title" | "popular";
+export type ViewCounts = Record<string, number>;
 
+/**
+ * Comparators sort ascending internally and the shared `asc` flag flips the
+ * result, so every mode must pick a `defaultAsc` that lands on its intended
+ * direction: newest/longest-first for date, most-viewed-first for popular.
+ */
 function sortPosts(
   posts: Post[],
   sortBy: SortBy,
   asc: boolean,
-  _viewCounts?: Record<string, number>
+  viewCounts?: ViewCounts
 ): Post[] {
   const sorted = [...posts];
   if (sortBy === "title") {
     sorted.sort((a, b) => (a.title ?? "").localeCompare(b.title ?? ""));
   } else if (sortBy === "popular") {
-    // Sort by view counts when viewCounts is provided; otherwise newest first.
-    if (_viewCounts && Object.keys(_viewCounts).length > 0) {
-      sorted.sort((a, b) => {
-        const pathA = `/blog/${a.slug?.current ?? ""}`;
-        const pathB = `/blog/${b.slug?.current ?? ""}`;
-        const va = _viewCounts[pathA] ?? 0;
-        const vb = _viewCounts[pathB] ?? 0;
-        return vb - va;
-      });
-    } else {
-      sorted.sort((a, b) => {
+    sorted.sort((a, b) => {
+      const va = viewCounts?.[`/blog/${a.slug?.current ?? ""}`] ?? 0;
+      const vb = viewCounts?.[`/blog/${b.slug?.current ?? ""}`] ?? 0;
+      // Break ties by date so equal-view posts stay in a stable order.
+      if (va === vb) {
         const da = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
         const db = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-        return db - da; // newest first as placeholder for "popular"
-      });
-    }
+        return db - da;
+      }
+      return va - vb;
+    });
   } else {
     sorted.sort((a, b) => {
       const da = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
@@ -47,6 +48,8 @@ function sortPosts(
 const defaultAsc: Record<SortBy, boolean> = {
   title: true,
   date: false,
+  // The comparator sorts least-viewed first, so the shared reverse() is what
+  // puts the most-viewed posts on top.
   popular: false,
 };
 
@@ -55,10 +58,10 @@ export function BlogList({
   viewCounts,
 }: {
   posts: Post[];
-  viewCounts?: Record<string, number>;
+  viewCounts?: ViewCounts;
 }) {
-  const [sortBy, setSortBy] = useState<SortBy>("title");
-  const [sortAsc, setSortAsc] = useState(true);
+  const [sortBy, setSortBy] = useState<SortBy>("date");
+  const [sortAsc, setSortAsc] = useState(defaultAsc.date);
 
   const sortedPosts = useMemo(
     () => sortPosts(posts, sortBy, sortAsc, viewCounts),
@@ -82,14 +85,22 @@ export function BlogList({
 
   const sortBtn = (key: SortBy, label: string) => {
     const isActive = sortBy === key;
-    const dir = isActive ? (sortAsc ? " ↑" : " ↓") : "";
+    const direction = isActive ? (sortAsc ? "ascending" : "descending") : null;
     return (
       <button
         type="button"
         onClick={() => handleSort(key)}
-        className={`cursor-pointer mr-3 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
+        aria-label={
+          direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
+        }
+        className={`cursor-pointer mr-3 px-1 py-0.5 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
       >
-        {label}{dir}
+        {label}
+        {isActive && (
+          <span aria-hidden className="ml-1">
+            {sortAsc ? "↑" : "↓"}
+          </span>
+        )}
       </button>
     );
   };
@@ -97,8 +108,8 @@ export function BlogList({
   return (
     <>
       <div className="mb-5 text-sm text-[color:var(--text-muted-color)]">
-        Sort by: {sortBtn("title", "title")}
-        {sortBtn("date", "date")}
+        Sort by: {sortBtn("date", "date")}
+        {sortBtn("title", "title")}
         {sortBtn("popular", "popular")}
       </div>
       <ul className="list-none p-0 m-0 space-y-2">
@@ -108,14 +119,15 @@ export function BlogList({
               href={`/blog/${post.slug.current}`}
               className="no-underline group flex flex-wrap items-baseline gap-x-1"
             >
-              <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors" style={{ fontSize: "1.05em" }}>
+              <span className="font-semibold text-[color:var(--heading-color)] group-hover:text-[color:var(--link-color)] transition-colors">
                 {post.title}
               </span>
-              <span className="text-[color:var(--text-muted-color)]" style={{ fontSize: "1.05em" }}>–</span>
+              <span aria-hidden className="text-[color:var(--text-muted-color)]">
+                –
+              </span>
               <time
                 dateTime={post.publishedAt}
                 className="text-[color:var(--text-muted-color)]"
-                style={{ fontSize: "1.05em" }}
               >
                 {formatDateYYYYMMDD(post.publishedAt)}
               </time>

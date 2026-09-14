@@ -1,69 +1,59 @@
 @import "tailwindcss";
 
-/* Chirpy theme variables – light (default) */
+/*
+ * Dark-only theme. There is no light mode and no runtime theme switching,
+ * so every token lives on :root and `color-scheme: dark` is always on.
+ *
+ * Base surface is #111111. Text/surface pairs are chosen for WCAG AA
+ * (4.5:1 for body text, 3:1 for non-text UI).
+ */
 :root {
-  --background: #F8F9FA;
-  --foreground: #34343c;
-  --main-bg: #F5F4F4;
-  --main-border-color: #f3f3f3;
-  --text-color: #34343c;
-  --text-muted-color: #333840;
-  --heading-color: #2a2a2a;
-  --link-color: #0056b2;
-  --sidebar-bg: #F0EFEF;
-  --sidebar-border-color: #efefef;
-  --sidebar-muted-color: #545454;
-  --sidebar-active-color: #1d1d1d;
-  --sidebar-hover-bg: rgba(223, 233, 241, 0.64);
-  --sidebar-btn-bg: #383838;
-  --sidebar-btn-color: #9ca3af;
-  --sidebar-btn-hover-color: #f3f4f6;
-  --site-title-color: rgb(113, 113, 113);
-  --site-subtitle-color: #717171;
-  --topbar-bg: rgba(255, 255, 255, 0.7);
-  --topbar-text-color: rgb(78, 78, 78);
-  --footer-text: #757575;
-  --avatar-border-color: white;
-  --card-bg: white;
-  --card-shadow: rgb(104, 104, 104, 0.05) 0 2px 6px 0, rgba(211, 209, 209, 0.15) 0 0 0 1px;
-  --scroll-to-top-icon: #2a2a2a;
-}
-
-/* Chirpy theme – dark */
-.dark {
   color-scheme: dark;
-  --background: rgb(27, 27, 30);
-  --foreground: rgb(175, 176, 177);
-  --main-bg: rgb(27, 27, 30);
-  --main-border-color: rgb(44, 45, 45);
-  --text-color: rgb(175, 176, 177);
-  --text-muted-color: #868686;
-  --heading-color: #cccccc;
-  --link-color: rgb(138, 180, 248);
-  --sidebar-bg: #1e1e1e;
-  --sidebar-border-color: #292929;
-  --sidebar-muted-color: #868686;
-  --sidebar-active-color: rgba(255, 255, 255, 0.95);
-  --sidebar-hover-bg: #262626;
-  --sidebar-btn-bg: #232328;
-  --sidebar-btn-color: #787878;
-  --sidebar-btn-hover-color: rgba(255, 255, 255, 0.95);
-  --site-title-color: #717070;
-  --site-subtitle-color: #868686;
-  --topbar-bg: rgba(27, 27, 30, 0.64);
-  --topbar-text-color: var(--text-color);
-  --footer-text: #868686;
-  --avatar-border-color: rgba(206, 206, 206, 0.9);
-  --card-bg: #1e1e1e;
-  --card-shadow: rgb(21, 21, 21, 0.72) 0 6px 18px 0, rgb(137, 135, 135, 0.24) 0 0 0 1px;
-  --scroll-to-top-icon: rgba(255, 255, 255, 0.9);
+
+  --background: #111111;
+  --foreground: #b4b6b9;
+  --main-border-color: #262626;
+
+  --text-color: #b4b6b9;
+  --text-muted-color: #8f9196;
+  --heading-color: #e8e8ea;
+  --link-color: #7cb0f0;
+
+  --sidebar-bg: #161616;
+  --sidebar-border-color: #262626;
+  --sidebar-muted-color: #8f9196;
+  --sidebar-active-color: #f0f0f2;
+  --sidebar-hover-bg: #232323;
+
+  --topbar-bg: rgba(17, 17, 17, 0.85);
+  --topbar-text-color: #b4b6b9;
+
+  --footer-text: #8f9196;
+
+  --avatar-border-color: #2c2c2c;
+  --card-bg: #171717;
+  --card-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5), 0 0 0 1px #262626;
+  --scroll-to-top-icon: #e8e8ea;
+
+  /* Surfaces that carry text as a filled button/chip. Kept separate from
+     --link-color so a link colour is never reused as a background. */
+  --accent-bg: #1d4ed8;
+  --accent-fg: #ffffff;
+
+  /*
+   * System font stack: no webfont is downloaded, no request leaves the
+   * visitor's browser for one, and the build needs no network access.
+   * --font-sans / --font-heading are the single place to swap in a
+   * self-hosted face later.
+   */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-heading: var(--font-sans);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-heading), var(--font-sans);
 }
 
 /* Chirpy/Jekyll-style base and heading sizes */
@@ -74,13 +64,13 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.75;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-heading);
   color: var(--heading-color);
   font-weight: 600;
 }
@@ -96,6 +86,11 @@ main {
   line-height: 1.75;
 }
 
+/* Long words and pasted URLs must never widen the page. */
+main, article {
+  overflow-wrap: anywhere;
+}
+
 /* Layout – matches sidebar width (232px / 264px xl) + gap */
 #main-wrapper {
   margin-left: 252px;
@@ -107,7 +102,9 @@ main {
   }
 }
 
-@media (max-width: 991.98px) {
+/* Must match Tailwind's `lg` breakpoint (1024px), where the sidebar appears.
+   The old 991.98px value left a dead 252px gutter between 992px and 1023px. */
+@media (max-width: 1023.98px) {
   #main-wrapper {
     margin-left: 0;
   }
@@ -117,6 +114,52 @@ main {
 #avatar,
 #avatar img {
   border: none !important;
-  outline: none !important;
   box-shadow: none !important;
+}
+
+/*
+ * Mobile drawer state.
+ *
+ * This is plain CSS on purpose. Tailwind variants were not reliable for this
+ * element: a `lg:translate-x-0` or `max-lg:visible` utility built inside a
+ * template literal is never emitted, which left the sidebar permanently
+ * off-screen on desktop. Plain CSS here is deterministic and easy to verify.
+ *
+ * All three conditions (position, visibility, focusability) are set together,
+ * so the drawer can never be focusable while it is off-screen.
+ */
+#sidebar {
+  visibility: hidden;
+  transform: translateX(-100%);
+}
+
+#sidebar.is-open {
+  visibility: visible;
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  #sidebar {
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
+/* Keep a visible focus ring on the sidebar wordmark. */
+#avatar:focus-visible {
+  outline: 2px solid var(--link-color);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Respect users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

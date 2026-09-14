@@ -6,6 +6,11 @@ import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Favorite, FavoriteCategory } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 
+/** Hashtag form of a label: "Open Source" -> "#opensource". */
+function toHashtag(title: string): string {
+  return `#${title.toLowerCase().replace(/[^a-z0-9]+/g, "")}`;
+}
+
 function getUniqueCategories(favorites: Favorite[]): FavoriteCategory[] {
   const seen = new Set<string>();
   const categories: FavoriteCategory[] = [];
@@ -128,15 +133,40 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                 {items.map((item) => (
                   <li key={item._id}>
                     <div className="min-w-0">
-                      {item.link ? (
-                        <Link href={item.link} className={`block text-lg ${linkClass}`}>
-                          {item.name}
-                        </Link>
-                      ) : (
-                        <span className="block text-lg font-semibold text-[color:var(--heading-color)]">
-                          {item.name}
-                        </span>
-                      )}
+                      {/* Name and category share one line, comma-separated. */}
+                      <div className="flex flex-wrap items-baseline gap-x-1.5">
+                        {item.link ? (
+                          <Link href={item.link} className={`text-lg ${linkClass}`}>
+                            {item.name}
+                          </Link>
+                        ) : (
+                          <span className="text-lg font-semibold text-[color:var(--heading-color)]">
+                            {item.name}
+                          </span>
+                        )}
+                        {category && (
+                          <span className="flex items-baseline gap-x-1.5 text-sm">
+                            <span
+                              aria-hidden
+                              className="text-[color:var(--text-muted-color)]"
+                            >
+                              ,
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggleCategory(category._id)}
+                              aria-pressed={selectedCategoryIds.has(category._id)}
+                              className={`cursor-pointer transition-colors ${
+                                selectedCategoryIds.has(category._id)
+                                  ? "text-[color:var(--link-color)] font-semibold"
+                                  : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
+                              }`}
+                            >
+                              {toHashtag(category.title)}
+                            </button>
+                          </span>
+                        )}
+                      </div>
                       {item.description && Array.isArray(item.description) && item.description.length > 0 && (
                         <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
                           <PortableText value={item.description} />

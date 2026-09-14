@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { orderRankField, orderRankOrdering } from "@sanity/orderable-document-list";
 
 export const project = defineType({
   name: "project",
@@ -11,6 +12,13 @@ export const project = defineType({
       type: "slug",
       title: "Slug",
       options: { source: "title", maxLength: 96 },
+    }),
+    defineField({
+      name: "pinned",
+      title: "Pin to top",
+      type: "boolean",
+      description: "Pinned projects always sort above unpinned ones.",
+      initialValue: false,
     }),
     defineField({
       name: "image",
@@ -42,5 +50,35 @@ export const project = defineType({
         },
       ],
     }),
+    // Managed by drag-and-drop; not meant to be edited by hand.
+    orderRankField({ type: "project", hidden: true }),
+    defineField({
+      name: "order",
+      title: "Manual order (sort index)",
+      type: "number",
+      description:
+        "Lower numbers come first. Sorted after Pin, so pinned projects group at the top.",
+      initialValue: 100,
+    }),
   ],
+  orderings: [
+    orderRankOrdering,
+    {
+      title: "Manual order (sort index)",
+      name: "manualOrder",
+      by: [
+        { field: "order", direction: "asc" },
+        { field: "title", direction: "asc" },
+      ],
+    },
+  ],
+  preview: {
+    select: { title: "title", pinned: "pinned", order: "order", media: "image" },
+    prepare({ title, pinned, order, media }) {
+      const flags = [pinned ? "📌 pinned" : null, order != null ? `#${order}` : null]
+        .filter(Boolean)
+        .join(" · ");
+      return { title, subtitle: flags || undefined, media };
+    },
+  },
 });

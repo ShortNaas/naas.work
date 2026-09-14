@@ -1,22 +1,7 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
-import { ViewCounter } from "@/components/view-counter";
-
-const sourceSans = Source_Sans_3({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const lato = Lato({
-  variable: "--font-heading",
-  weight: ["400", "700", "900"],
-  subsets: ["latin"],
-  display: "swap",
-});
+import { GoatCounter } from "@/components/goatcounter";
 
 export const metadata: Metadata = {
   title: "Naas",
@@ -28,15 +13,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Browser extensions (LanguageTool writes `data-lt-installed`) add attributes
+  // to <html> before React hydrates, which produces a hydration mismatch that
+  // cannot be patched. React honours this flag only one level deep, which is
+  // exactly this element, so it does not mask mismatches inside the app tree.
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${sourceSans.variable} ${lato.variable} font-sans antialiased min-h-screen bg-[var(--background)] text-[color:var(--foreground)]`}
-      >
-        <ThemeProvider>
-          <LayoutWrapper>{children}</LayoutWrapper>
-          <ViewCounter />
-        </ThemeProvider>
+      <body className="antialiased min-h-screen bg-[var(--background)] text-[color:var(--foreground)]">
+        <LayoutWrapper>{children}</LayoutWrapper>
+        <GoatCounter />
       </body>
     </html>
   );

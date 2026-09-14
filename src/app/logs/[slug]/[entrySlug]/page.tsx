@@ -54,6 +54,13 @@ export default async function LogsEntryPage({
     notFound();
   }
 
+  // The query scopes to the entry slug alone, so make sure the collection in
+  // the URL is actually the one this entry belongs to. Without this the same
+  // entry is served at /logs/<anything>/<entrySlug>.
+  if (entry.logs?.slug.current !== slug) {
+    notFound();
+  }
+
   const toc = getTocFromBody(entry.body ?? []);
 
   // Build a post-compatible shape so we can reuse PostPageClient
@@ -66,5 +73,14 @@ export default async function LogsEntryPage({
     body: entry.body,
   };
 
-  return <PostPageClient post={postShape} toc={toc} />;
+  return (
+    <PostPageClient
+      post={postShape}
+      toc={toc}
+      backLink={{
+        href: `/logs/${slug}`,
+        label: `← Back to ${entry.logs?.title ?? "collection"}`,
+      }}
+    />
+  );
 }

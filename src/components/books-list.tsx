@@ -4,11 +4,12 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Book } from "@/lib/sanity/types";
-import { urlFor } from "@/lib/sanity/image";
+import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
 
-type SortBy = "title" | "best" | "date";
+type SortBy = "date" | "title" | "best";
 
+/** Most recently read first is the default. */
 function sortBooks(books: Book[], sortBy: SortBy, asc: boolean): Book[] {
   const sorted = [...books];
   if (sortBy === "title") {
@@ -36,8 +37,8 @@ const defaultAsc: Record<SortBy, boolean> = {
 };
 
 export function BooksList({ books }: { books: Book[] }) {
-  const [sortBy, setSortBy] = useState<SortBy>("title");
-  const [sortAsc, setSortAsc] = useState(true);
+  const [sortBy, setSortBy] = useState<SortBy>("date");
+  const [sortAsc, setSortAsc] = useState(defaultAsc.date);
 
   const sortedBooks = useMemo(
     () => sortBooks(books, sortBy, sortAsc),
@@ -62,14 +63,22 @@ export function BooksList({ books }: { books: Book[] }) {
   const linkClass = "text-[color:var(--link-color)] hover:underline font-semibold";
   const sortBtn = (key: SortBy, label: string) => {
     const isActive = sortBy === key;
-    const dir = isActive ? (sortAsc ? " ↑" : " ↓") : "";
+    const direction = isActive ? (sortAsc ? "ascending" : "descending") : null;
     return (
       <button
         type="button"
         onClick={() => handleSort(key)}
-        className={`cursor-pointer mr-3 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
+        aria-label={
+          direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
+        }
+        className={`cursor-pointer mr-3 px-1 py-0.5 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
       >
-        {label}{dir}
+        {label}
+        {isActive && (
+          <span aria-hidden className="ml-1">
+            {sortAsc ? "↑" : "↓"}
+          </span>
+        )}
       </button>
     );
   };
@@ -77,17 +86,24 @@ export function BooksList({ books }: { books: Book[] }) {
   return (
     <>
       <div className="mb-5 text-sm text-[color:var(--text-muted-color)]">
-        Sort by: {sortBtn("title", "title")}
+        Sort by: {sortBtn("date", "date")}
+        {sortBtn("title", "title")}
         {sortBtn("best", "best")}
-        {sortBtn("date", "date")}
       </div>
       <ul className="list-none p-0 m-0 space-y-8">
         {sortedBooks.map((book) => (
           <li key={book._id} className="flex items-start gap-6">
             <Link href={`/books/${book.slug.current}`} className="shrink-0">
               {book.cover ? (
+                // Deliberately a plain <img>: it points straight at Sanity's
+                // resizing CDN with explicit dimensions and a srcSet, so there
+                // is no need to route image bytes through an image proxy.
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={urlFor(book.cover).width(92).height(120).url()}
+                  {...responsiveImage(book.cover, { width: 92, height: 120 })}
+                  sizes="92px"
+                  loading="lazy"
+                  decoding="async"
                   alt={`${book.title} book cover`}
                   className="w-[92px] h-[120px] object-cover shadow-md rounded"
                 />
