@@ -15,6 +15,8 @@ import { tool } from "./sanity/schemas/tool";
 import { toolCategory } from "./sanity/schemas/toolCategory";
 import { logs } from "./sanity/schemas/logs";
 import { logsEntry } from "./sanity/schemas/logsEntry";
+import { bodyImage } from "./sanity/schemas/bodyImage";
+import { inlineImage } from "./sanity/schemas/inlineImage";
 
 export default defineConfig({
   name: "default",
@@ -62,6 +64,9 @@ export default defineConfig({
       toolCategory,
       logs,
       logsEntry,
+      // Shared rich-text block types, referenced from every prose field.
+      bodyImage,
+      inlineImage,
     ],
   },
 });

@@ -22,7 +22,11 @@ export const favorite = defineType({
       name: "description",
       type: "array",
       title: "Short description",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
     defineField({
       name: "link",

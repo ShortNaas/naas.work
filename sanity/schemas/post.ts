@@ -27,7 +27,11 @@ export const post = defineType({
       name: "body",
       type: "array",
       title: "Body",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
   ],
 });
