@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 import { portableTextToPlainString } from "@/lib/portable-text";
@@ -133,14 +134,17 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 <div className="flex flex-wrap items-baseline gap-x-1.5">
                   <div className="text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
-                      <a
+                      /*
+                       * In-page navigation, no new tab. `prefetch` pulls the
+                       * destination early so it still feels instant.
+                       */
+                      <Link
                         href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        prefetch
                         className="text-[color:var(--link-color)] hover:underline"
                       >
                         {project.title}
-                      </a>
+                      </Link>
                     ) : (
                       project.title
                     )}

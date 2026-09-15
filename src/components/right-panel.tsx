@@ -1,26 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useToc } from "@/contexts/toc-context";
 
-type LatestPost = {
+export type LatestPost = {
   _id: string;
   title: string;
   url: string;
 };
 
-export function RightPanel() {
+export function RightPanel({ posts }: { posts: LatestPost[] }) {
   const { toc } = useToc();
-  const [posts, setPosts] = useState<LatestPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/panel/latest-posts")
-      .then((r) => r.json())
-      .then((json: LatestPost[]) => setPosts(Array.isArray(json) ? json : []))
-      .finally(() => setLoading(false));
-  }, []);
 
   if (toc && toc.length > 0) {
     return (
@@ -56,9 +46,7 @@ export function RightPanel() {
           Recent Articles
         </div>
         <ul className="mt-2 list-none p-0 m-0 space-y-1.5 text-[1.05em]">
-          {loading ? (
-            <li className="text-[color:var(--text-muted-color)]">Loading…</li>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <li className="text-[color:var(--text-muted-color)]">No posts yet.</li>
           ) : (
             posts.map((p) => (
@@ -77,4 +65,3 @@ export function RightPanel() {
     </div>
   );
 }
-

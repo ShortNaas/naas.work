@@ -6,12 +6,19 @@ import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 import { Footer } from "./footer";
 import { SearchOverlay } from "./search-overlay";
-import { RightPanel } from "./right-panel";
+import { RightPanel, type LatestPost } from "./right-panel";
 import { ScrollToTop } from "./scroll-to-top";
 import { TocProvider } from "@/contexts/toc-context";
 import type { SearchIndex } from "@/app/api/search/route";
 
-export function MainLayout({ children }: { children: React.ReactNode }) {
+export function MainLayout({
+  children,
+  latestPosts,
+}: {
+  children: React.ReactNode;
+  /** Rendered on the server so the panel needs no client-side fetch. */
+  latestPosts: LatestPost[];
+}) {
   const pathname = usePathname();
   // Remember *which* route the drawer was opened on, so navigating away closes
   // it without a setState-in-effect.
@@ -82,7 +89,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               aria-label="Panel"
               className="hidden xl:block xl:w-3/12 ps-2 text-sm text-[color:var(--text-muted-color)]"
             >
-              <RightPanel />
+              <RightPanel posts={latestPosts} />
             </aside>
           </div>
           <div className="row">
