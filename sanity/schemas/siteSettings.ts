@@ -15,13 +15,21 @@ export const siteSettings = defineType({
       name: "shortBio",
       type: "array",
       title: "Short bio (homepage)",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
     defineField({
       name: "fullBio",
       type: "array",
       title: "Full bio (about page)",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
     defineField({
       name: "avatar",

@@ -173,7 +173,7 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                       </div>
                       {item.description && Array.isArray(item.description) && item.description.length > 0 && (
                         <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
-                          <PortableText value={item.description} />
+                          <PortableText value={item.description} size="inline" />
                         </div>
                       )}
                     </div>

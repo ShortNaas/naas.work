@@ -1,7 +1,8 @@
 import { client } from "@/lib/sanity/client";
-import { siteSettingsQuery } from "@/lib/sanity/queries";
+import { siteSettingsQuery, postSlugsQuery } from "@/lib/sanity/queries";
 import { SiteSettings } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
+import { RandomPostButton } from "@/components/random-post-button";
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
@@ -13,8 +14,21 @@ async function getSiteSettings(): Promise<SiteSettings | null> {
   }
 }
 
+/** Slugs for the random-post button, prefixed so one click is a plain push. */
+async function getPostPaths(): Promise<string[]> {
+  try {
+    const slugs = await client.fetch<string[]>(postSlugsQuery);
+    return (slugs ?? []).map((slug) => `/blog/${slug}`);
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const settings = await getSiteSettings();
+  const [settings, postPaths] = await Promise.all([
+    getSiteSettings(),
+    getPostPaths(),
+  ]);
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-4">
@@ -33,6 +47,9 @@ export default async function HomePage() {
               I write about ideas I find interesting, document projects I&apos;m working on, and keep a log of milestones along the way.
             </p>
           )}
+        </div>
+        <div className="pt-2">
+          <RandomPostButton slugs={postPaths} />
         </div>
       </section>
     </div>

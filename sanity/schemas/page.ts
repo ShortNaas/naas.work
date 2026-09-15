@@ -20,7 +20,11 @@ export const page = defineType({
       name: "body",
       type: "array",
       title: "Content",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
   ],
 });

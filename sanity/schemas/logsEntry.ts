@@ -36,10 +36,8 @@ export const logsEntry = defineType({
       title: "Body",
       of: [
         { type: "block" },
-        {
-          type: "image",
-          options: { hotspot: true },
-        },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
       ],
     }),
   ],

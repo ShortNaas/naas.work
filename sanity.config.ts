@@ -15,6 +15,8 @@ import { tool } from "./sanity/schemas/tool";
 import { toolCategory } from "./sanity/schemas/toolCategory";
 import { logs } from "./sanity/schemas/logs";
 import { logsEntry } from "./sanity/schemas/logsEntry";
+import { bodyImage } from "./sanity/schemas/bodyImage";
+import { inlineImage } from "./sanity/schemas/inlineImage";
 
 export default defineConfig({
   name: "default",
@@ -40,9 +42,18 @@ export default defineConfig({
               S,
               context,
             }),
+            // Logs list. Open a log and add entries inline through its Entries
+            // field, so entries are never mixed together across logs.
+            S.listItem()
+              .title("Logs")
+              .child(S.documentTypeList("logs").title("Logs")),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => item.getId() !== "project"
+              (item) =>
+                item.getId() !== "project" &&
+                item.getId() !== "logs" &&
+                // Entries are authored inside their log, not loose in the list.
+                item.getId() !== "logsEntry"
             ),
           ]),
     }),
@@ -62,6 +73,9 @@ export default defineConfig({
       toolCategory,
       logs,
       logsEntry,
+      // Shared rich-text block types, referenced from every prose field.
+      bodyImage,
+      inlineImage,
     ],
   },
 });

@@ -10,11 +10,12 @@ const RESERVED_SLUGS = new Set([
   "books",
   "projects",
   "favorite",
-  "tools",
+  "uses",
   "about",
   "contact",
   "studio",
   "api",
+  "rss.xml",
 ]);
 
 async function getPage(slug: string): Promise<Page | null> {

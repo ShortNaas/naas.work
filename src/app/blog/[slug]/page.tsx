@@ -4,6 +4,7 @@ import { postBySlugQuery, postSlugsQuery } from "@/lib/sanity/queries";
 import type { Post } from "@/lib/sanity/types";
 import { getTocFromBody } from "@/lib/toc";
 import { PostPageClient } from "@/components/post-page-client";
+import { CommentSection } from "@/components/comment-section";
 
 async function getPost(slug: string): Promise<Post | null> {
   const post = await client.fetch<Post | null>(postBySlugQuery, { slug });
@@ -29,5 +30,10 @@ export default async function BlogPostPage({
 
   const toc = getTocFromBody(post.body ?? []);
 
-  return <PostPageClient post={post} toc={toc} />;
+  return (
+    <div className="max-w-3xl mx-auto">
+      <PostPageClient post={post} toc={toc} />
+      <CommentSection postSlug={`/blog/${slug}`} />
+    </div>
+  );
 }

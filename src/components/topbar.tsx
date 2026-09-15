@@ -10,7 +10,7 @@ const topbarTitles: Record<string, string> = {
   "/projects": "Projects",
   "/books": "Books",
   "/blog": "Blog",
-  "/tools": "Tools",
+  "/uses": "Uses",
   "/favorite": "Favorites",
   "/logs": "Logs",
   "/contact": "Contact",

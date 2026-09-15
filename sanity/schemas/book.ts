@@ -42,14 +42,22 @@ export const book = defineType({
       type: "array",
       title: "Short summary",
       description: "Shown on the book list page.",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
     defineField({
       name: "body",
       type: "array",
       title: "Review & notes",
       description: "Full review, actionable takeaways, and notes.",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        { type: "bodyImage" },
+        { type: "inlineImage" },
+      ],
     }),
   ],
 });
