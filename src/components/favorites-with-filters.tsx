@@ -136,7 +136,11 @@ export function FavoritesWithFilters({ favorites }: { favorites: Favorite[] }) {
                       {/* Name and category share one line, comma-separated. */}
                       <div className="flex flex-wrap items-baseline gap-x-1.5">
                         {item.link ? (
-                          <Link href={item.link} className={`text-lg ${linkClass}`}>
+                          <Link
+                            href={item.link}
+                            prefetch
+                            className={`text-lg ${linkClass}`}
+                          >
                             {item.name}
                           </Link>
                         ) : (

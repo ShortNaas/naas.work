@@ -1,7 +1,13 @@
 import { createImageUrlBuilder } from "@sanity/image-url";
-import { client } from "./client";
+import { dataset, projectId } from "./config";
 
-const builder = createImageUrlBuilder(client);
+/*
+ * Built from the project coordinates rather than the Sanity client. Passing the
+ * client here would make every module that builds an image URL — including
+ * `portable-text.tsx`, which runs in the browser — pull in the whole
+ * `@sanity/client` runtime (~120 KB) for nothing.
+ */
+const builder = createImageUrlBuilder({ projectId, dataset });
 
 export function urlFor(source: unknown) {
   return builder.image(source as never);

@@ -2,17 +2,35 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { GoatCounter } from "@/components/goatcounter";
+import { client } from "@/lib/sanity/client";
+import { latestPostsQuery } from "@/lib/sanity/queries";
+import type { LatestPost } from "@/components/right-panel";
 
 export const metadata: Metadata = {
   title: "Naas",
   description: "A little bit of everything.",
 };
 
-export default function RootLayout({
+/**
+ * Fetched here (server-side) so the right panel ships as HTML instead of
+ * triggering a client fetch on every page load.
+ */
+async function getLatestPosts(): Promise<LatestPost[]> {
+  try {
+    const posts = await client.fetch<LatestPost[]>(latestPostsQuery);
+    return posts ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const latestPosts = await getLatestPosts();
+
   // Browser extensions (LanguageTool writes `data-lt-installed`) add attributes
   // to <html> before React hydrates, which produces a hydration mismatch that
   // cannot be patched. React honours this flag only one level deep, which is
@@ -20,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen bg-[var(--background)] text-[color:var(--foreground)]">
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <LayoutWrapper latestPosts={latestPosts}>{children}</LayoutWrapper>
         <GoatCounter />
       </body>
     </html>

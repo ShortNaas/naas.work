@@ -2,8 +2,15 @@
 
 import { usePathname } from "next/navigation";
 import { MainLayout } from "./main-layout";
+import type { LatestPost } from "./right-panel";
 
-export function LayoutWrapper({ children }: { children: React.ReactNode }) {
+export function LayoutWrapper({
+  children,
+  latestPosts,
+}: {
+  children: React.ReactNode;
+  latestPosts: LatestPost[];
+}) {
   const pathname = usePathname();
 
   // Don't wrap Sanity Studio or other full-screen routes
@@ -11,5 +18,5 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  return <MainLayout>{children}</MainLayout>;
+  return <MainLayout latestPosts={latestPosts}>{children}</MainLayout>;
 }
