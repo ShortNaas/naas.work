@@ -45,8 +45,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
         role="status"
         className="rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] p-4 text-sm text-[color:var(--text-color)]"
       >
-        Thanks — your comment is awaiting moderation and will appear once
-        approved.
+        Thank You.
       </div>
     );
   }

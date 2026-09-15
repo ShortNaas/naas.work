@@ -6,7 +6,6 @@ import {
   IconGithub,
   IconInstagram,
   IconYoutube,
-  IconSoundcloud,
   IconX,
   IconRss,
 } from "./icons";
@@ -30,11 +29,6 @@ const socialLinks: {
     href: "https://instagram.com/shortnaas",
     label: "Instagram",
     icon: IconInstagram,
-  },
-  {
-    href: "https://soundcloud.com/shortnaas",
-    label: "SoundCloud",
-    icon: IconSoundcloud,
   },
   {
     href: "https://www.youtube.com/@shortnaas",
