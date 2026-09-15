@@ -11,6 +11,14 @@ async function getPost(slug: string): Promise<Post | null> {
   return post;
 }
 
+/**
+ * Post pages are static, and the comment list is read at render time. Approving
+ * a comment revalidates its post immediately; this hourly fallback covers the
+ * case where that revalidation never fires (or the database was unreachable
+ * during a build), so a page cannot be stuck with an empty comment list.
+ */
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const slugs = await client.fetch<string[]>(postSlugsQuery);
   return (slugs ?? []).map((slug) => ({ slug }));
