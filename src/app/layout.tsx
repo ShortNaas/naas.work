@@ -6,9 +6,17 @@ import { client } from "@/lib/sanity/client";
 import { latestPostsQuery } from "@/lib/sanity/queries";
 import type { LatestPost } from "@/components/right-panel";
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.naas.work"
+).replace(/\/$/, "");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Naas",
   description: "A little bit of everything.",
+  alternates: {
+    types: { "application/rss+xml": `${SITE_URL}/rss.xml` },
+  },
 };
 
 /**

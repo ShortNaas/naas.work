@@ -274,3 +274,17 @@ export function IconStar({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/** RSS feed. */
+export function IconRss({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden
+    >
+      <path d="M6.18 17.82a2.18 2.18 0 1 1-4.36 0 2.18 2.18 0 0 1 4.36 0zM1.82 9.27v3.05a9.86 9.86 0 0 1 9.86 9.86h3.05c0-7.13-5.78-12.91-12.91-12.91zm0-6.18v3.05C10.9 6.14 17.86 13.1 17.86 22h3.05C20.91 11.42 12.58 3.09 1.82 3.09z" />
+    </svg>
+  );
+}

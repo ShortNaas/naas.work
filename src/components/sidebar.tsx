@@ -8,6 +8,7 @@ import {
   IconYoutube,
   IconSoundcloud,
   IconX,
+  IconRss,
 } from "./icons";
 
 const navItems: { href: string; label: string }[] = [
@@ -99,6 +100,15 @@ export function Sidebar({ open }: { open: boolean }) {
       </nav>
 
       <div className="sidebar-bottom flex flex-wrap items-center justify-center gap-2 px-4 pb-6 w-full">
+        {/* RSS sits with the social icons. In-page, since it is our own URL. */}
+        <Link
+          href="/rss.xml"
+          aria-label="RSS feed"
+          title="RSS feed"
+          className="w-7 h-7 rounded-full bg-[var(--sidebar-btn-bg)] text-[color:var(--sidebar-btn-color)] hover:text-[#f26522] flex items-center justify-center transition-colors shadow-[0_0_0_1px_var(--sidebar-border-color)]"
+        >
+          <IconRss className="w-3.5 h-3.5" />
+        </Link>
         {socialLinks.map((link) => {
           const SocialIcon = link.icon;
           return (

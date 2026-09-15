@@ -6,6 +6,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: import.meta.dirname,
   },
+  async redirects() {
+    return [
+      // The tools page moved to /uses. Permanent so bookmarks and any links
+      // already in published content keep working.
+      { source: "/tools", destination: "/uses", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

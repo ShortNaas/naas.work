@@ -76,6 +76,32 @@ counted too. Exclude that path in GoatCounter's settings if it bothers you.
 Fonts are a system stack — no webfont is downloaded and nothing is requested
 from a font CDN at build or run time.
 
+## Comments
+
+Blog comments are stored in Postgres (Neon) and held for moderation.
+
+1. **Create a database** at [neon.tech](https://neon.tech) (free tier is plenty).
+2. **Set environment variables** in Vercel and `.env.local`:
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Pooled connection string from the Neon dashboard. Without it, comments are disabled and the rest of the site works normally. |
+| `COMMENTS_ADMIN_SECRET` | A long random string (`openssl rand -hex 32`). Unlocks moderation. |
+
+The `comments` table is created automatically on first use — there is no migration to run.
+
+**Moderating.** Sign in by POSTing the secret once, then use the dashboard:
+
+```bash
+curl -X POST https://your-domain/api/comments/admin \
+  -H 'Content-Type: application/json' \
+  -d '{"secret":"YOUR_COMMENTS_ADMIN_SECRET"}'
+```
+
+That sets an httpOnly cookie; visit `/admin/comments` afterwards to approve, unapprove, or delete. The secret is sent in a request body, never a query string, so it stays out of access logs and browser history. The page returns 404 when not signed in.
+
+Comments only appear on the site once approved. New comments are protected by a hidden honeypot field and per-field length limits.
+
 ## Scripts
 
 | Command      | Description              |
@@ -94,9 +120,11 @@ from a font CDN at build or run time.
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
 - `/favorite` — My Favorite Things (grouped by category)
-- `/tools` — Tools I use (grouped by category)
+- `/uses` — Tools I use (grouped by category). `/tools` 301-redirects here.
 - `/logs` — Logs index; `/logs/[slug]` — collection; `/logs/[slug]/[entrySlug]` — entry
-- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, favorite, tools, logs, about, contact, studio, api)
+- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, favorite, uses, logs, about, contact, studio, api)
+- `/rss.xml` — RSS 2.0 feed for the blog
+- `/admin/comments` — Comment moderation (see below)
 
 ## Project structure
 

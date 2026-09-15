@@ -42,9 +42,18 @@ export default defineConfig({
               S,
               context,
             }),
+            // Logs list. Open a log and add entries inline through its Entries
+            // field, so entries are never mixed together across logs.
+            S.listItem()
+              .title("Logs")
+              .child(S.documentTypeList("logs").title("Logs")),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => item.getId() !== "project"
+              (item) =>
+                item.getId() !== "project" &&
+                item.getId() !== "logs" &&
+                // Entries are authored inside their log, not loose in the list.
+                item.getId() !== "logsEntry"
             ),
           ]),
     }),
