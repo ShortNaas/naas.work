@@ -48,9 +48,7 @@ export default async function HomePage() {
             </p>
           )}
         </div>
-        <div className="pt-2">
-          <RandomPostButton slugs={postPaths} />
-        </div>
+        <RandomPostButton slugs={postPaths} />
       </section>
     </div>
   );

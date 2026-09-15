@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 /**
  * Picks a random post and navigates to it. The slug list arrives as a prop from
  * the server, so clicking costs no network round trip.
+ *
+ * Styled as plain inline text so it reads as part of the paragraph above it —
+ * same size, colour, and link hover as the bio links. Reset browser button
+ * defaults that would otherwise leak in (background, border, padding, font).
  */
 export function RandomPostButton({ slugs }: { slugs: string[] }) {
   const router = useRouter();
@@ -24,13 +28,15 @@ export function RandomPostButton({ slugs }: { slugs: string[] }) {
   };
 
   return (
-    <button
-      type="button"
-      onClick={go}
-      disabled={busy}
-      className="mt-2 cursor-pointer rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] px-4 py-2 text-sm text-[color:var(--text-color)] transition-colors hover:border-[var(--link-color)] hover:text-[color:var(--link-color)] disabled:opacity-60"
-    >
-      {busy ? "Opening…" : "🎲 Random post"}
-    </button>
+    <p className="text-base text-[color:var(--text-color)]">
+      <button
+        type="button"
+        onClick={go}
+        disabled={busy}
+        className="cursor-pointer border-0 bg-transparent p-0 font-sans text-base text-[color:var(--link-color)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--link-color)]"
+      >
+        {busy ? "Opening…" : "Random post"}
+      </button>
+    </p>
   );
 }

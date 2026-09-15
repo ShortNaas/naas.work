@@ -153,6 +153,22 @@ export async function getAllComments(limit = 200): Promise<PendingComment[]> {
   }
 }
 
+/** The post a comment belongs to, so its static page can be revalidated. */
+export async function getCommentPostSlug(id: number): Promise<string | null> {
+  const sql = getSql();
+  if (!sql) return null;
+  try {
+    await ensureSchema(sql);
+    const rows = (await sql`
+      select post_slug from comments where id = ${id} limit 1
+    `) as Array<{ post_slug: string }>;
+    return rows[0]?.post_slug ?? null;
+  } catch (error) {
+    console.error("Failed to look up comment:", error);
+    return null;
+  }
+}
+
 export async function setCommentApproved(
   id: number,
   approved: boolean

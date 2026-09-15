@@ -90,15 +90,18 @@ Blog comments are stored in Postgres (Neon) and held for moderation.
 
 The `comments` table is created automatically on first use — there is no migration to run.
 
-**Moderating.** Sign in by POSTing the secret once, then use the dashboard:
+**Moderating.** Visit [`/admin/comments`](https://www.naas.work/admin/comments) and enter `COMMENTS_ADMIN_SECRET` in the sign-in form. That sets an httpOnly session cookie (24 hours), after which the page lists everything awaiting approval so you can approve, unapprove, or delete.
 
-```bash
-curl -X POST https://your-domain/api/comments/admin \
-  -H 'Content-Type: application/json' \
-  -d '{"secret":"YOUR_COMMENTS_ADMIN_SECRET"}'
-```
+The secret is submitted in a request body, never a query string, so it stays out of access logs and browser history. Comparison is constant-time. Once signed in, all other comment endpoints also accept the cookie.
 
-That sets an httpOnly cookie; visit `/admin/comments` afterwards to approve, unapprove, or delete. The secret is sent in a request body, never a query string, so it stays out of access logs and browser history. The page returns 404 when not signed in.
+**If `/admin/comments` will not let you in**, check these in order:
+
+1. `COMMENTS_ADMIN_SECRET` is set for the environment you are visiting (Production vs Preview are separate in Vercel).
+2. You **redeployed** after adding it. Environment changes do not apply to an existing deployment.
+3. You are entering the secret itself, not the variable name.
+4. The page says "COMMENTS_ADMIN_SECRET is not set for this deployment" if the variable is missing — that message means the deploy cannot see it.
+
+Comments need `DATABASE_URL`; moderation needs `COMMENTS_ADMIN_SECRET`. They are independent, so the comment form can work while moderation does not.
 
 Comments only appear on the site once approved. New comments are protected by a hidden honeypot field and per-field length limits.
 
