@@ -96,7 +96,11 @@ export function ToolsWithFilters({ tools }: { tools: Tool[] }) {
         {latestUpdatedAt ? ` – Last update: ${formatDateYYYYMMDD(latestUpdatedAt)}` : ""}
       </p>
       {uniqueCategories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div
+          role="group"
+          aria-label="Filter tools by tag"
+          className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-8"
+        >
           {uniqueCategories.map((c) => {
             const isSelected = selectedCategoryIds.has(c._id);
             return (
@@ -104,13 +108,14 @@ export function ToolsWithFilters({ tools }: { tools: Tool[] }) {
                 key={c._id}
                 type="button"
                 onClick={() => toggleCategory(c._id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wide transition-colors
-                  ${isSelected
-                    ? "bg-[var(--link-color)] text-white"
-                    : "bg-[var(--sidebar-bg)] text-[color:var(--text-muted-color)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[color:var(--heading-color)]"
-                  }`}
+                aria-pressed={isSelected}
+                className={`cursor-pointer text-sm transition-colors ${
+                  isSelected
+                    ? "text-[color:var(--link-color)] font-semibold"
+                    : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
+                }`}
               >
-                {c.title}
+                {toHashtag(c.title)}
               </button>
             );
           })}
