@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { useToc } from "@/contexts/toc-context";
 import { useActiveHeading } from "@/lib/use-active-heading";
-import { HookSidebar } from "@/components/hook-sidebar";
+import { BounceSidebar } from "@/components/bounce-sidebar";
 
 export type LatestPost = {
   _id: string;
@@ -32,8 +32,10 @@ export function RightPanel({ posts }: { posts: LatestPost[] }) {
   if (toc && toc.length > 0) {
     return (
       <div className="mt-12 sticky top-6">
-        <HookSidebar
-          label="Contents"
+        <div className="pb-3 text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]">
+          Contents
+        </div>
+        <BounceSidebar
           items={items}
           value={activeIndex}
           aria-label="On this page"
