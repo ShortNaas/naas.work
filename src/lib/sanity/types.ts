@@ -101,6 +101,10 @@ export interface Tool {
   link?: string;
   _updatedAt?: string;
   category?: ToolCategory | null;
+  /** Kept on the page: struck through, last in its category, badged. */
+  archived?: boolean;
+  /** Why I stopped using it. Only rendered while `archived`. */
+  archivedNote?: string;
 }
 
 export interface LogsEntryRef {

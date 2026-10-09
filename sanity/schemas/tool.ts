@@ -4,5 +4,6 @@ export const tool = listType({
   name: "tool",
   title: "Tool",
   category: "toolCategory",
-  categoryHint: "Add new categories in Tool Category.",
+  categoryHint: "Categories live under Tools → Categories.",
+  archive: true,
 });

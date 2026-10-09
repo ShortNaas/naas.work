@@ -25,6 +25,17 @@ Content is edited in Sanity Studio, embedded at:
 
 Configure CORS for your Studio URL in [sanity.io/manage](https://sanity.io/manage) (Project → API → CORS origins) so the embedded Studio can connect.
 
+The sidebar groups content by how it is authored:
+
+- **Projects**, **Tools** and **Favorites** list each label (`kind` / `category`)
+  as a parent, with `All …` and `Kinds` / `Categories` (create, rename, delete)
+  at the end of the group. The `+` inside a label opens the item form with that
+  reference already set, so a label is never created elsewhere and linked back
+  by hand. Projects keep drag-and-drop ordering in `All projects`.
+- **Logs** open to their entries.
+- A tool can be marked **No longer using**: it stays on `/uses`, struck through,
+  badged and sorted last in its category, with an optional one-line reason.
+
 ## On-demand revalidation (Vercel)
 
 When you publish content in Studio, the deployed site can stay cached. To refresh the site on publish:
@@ -124,7 +135,7 @@ Comments only appear on the site once approved. New comments are protected by a 
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
 - `/favorite` — My Favorite Things (grouped by category)
-- `/uses` — Tools I use (grouped by category). `/tools` 301-redirects here.
+- `/uses` — Tools I use (grouped by category; anything marked *no longer using* is struck through and sorted last). `/tools` 301-redirects here.
 - `/logs` — Logs index; `/logs/[slug]` — collection; `/logs/[slug]/[entrySlug]` — entry
 - `/[slug]` — Custom pages from Sanity (a slug that collides with a static route above loses to it)
 - `/rss.xml` — RSS 2.0 feed for the blog

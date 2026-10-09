@@ -57,6 +57,9 @@
 
   /* Status. Tuned for this canvas: 6.9:1 on --background, 6.6:1 on --card-bg. */
   --danger-color: #f2777a;
+  /* Retired-but-kept, e.g. a tool I no longer use. Amber, not the error red:
+     9.9:1 on --background, so the badge stays AA at 12px. */
+  --warning-color: #e8b34a;
   /* Scrim behind the mobile drawer and the search dialog. */
   --overlay-color: rgba(0, 0, 0, 0.55);
 

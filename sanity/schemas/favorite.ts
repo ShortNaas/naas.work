@@ -4,6 +4,5 @@ export const favorite = listType({
   name: "favorite",
   title: "Favorite",
   category: "favoriteCategory",
-  categoryHint:
-    "Books, YouTuber, Documentary, etc. Add new categories in Favorite Category.",
+  categoryHint: "Categories live under Favorites → Categories.",
 });

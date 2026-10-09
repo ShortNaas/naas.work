@@ -98,48 +98,67 @@ export function CategoryList({
                 </div>
               </div>
               <ul className="list-none p-0 m-0 space-y-6">
-                {groupItems.map((item) => (
-                  <li key={item._id}>
-                    {/* Name and category share one line, comma-separated. */}
-                    <div className="flex flex-wrap items-baseline gap-x-1.5">
-                      {item.link ? (
-                        <Link href={item.link} prefetch className={`text-lg ${linkClass}`}>
-                          {item.name}
-                        </Link>
-                      ) : (
-                        <span className="text-lg font-semibold text-[color:var(--heading-color)]">
-                          {item.name}
-                        </span>
-                      )}
-                      {category && (
-                        <span className="flex items-baseline gap-x-1.5 text-sm">
-                          <span aria-hidden className="text-[color:var(--text-muted-color)]">
-                            ,
+                {groupItems.map((item) => {
+                  // Archived items are still listed: struck through, badged, and
+                  // (via the query order) last within their category.
+                  const retired = item.archived === true;
+                  const nameClass = retired
+                    ? "text-lg font-semibold line-through text-[color:var(--text-muted-color)]"
+                    : item.link
+                      ? `text-lg ${linkClass}`
+                      : "text-lg font-semibold text-[color:var(--heading-color)]";
+
+                  return (
+                    <li key={item._id}>
+                      {/* Name and category share one line, comma-separated. */}
+                      <div className="flex flex-wrap items-baseline gap-x-1.5">
+                        {item.link ? (
+                          <Link href={item.link} prefetch className={nameClass}>
+                            {item.name}
+                          </Link>
+                        ) : (
+                          <span className={nameClass}>{item.name}</span>
+                        )}
+                        {category && (
+                          <span className="flex items-baseline gap-x-1.5 text-sm">
+                            <span aria-hidden className="text-[color:var(--text-muted-color)]">
+                              ,
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => toggle(category._id)}
+                              aria-pressed={selectedIds.has(category._id)}
+                              className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 transition-colors ${
+                                selectedIds.has(category._id)
+                                  ? "text-[color:var(--link-color)] font-semibold"
+                                  : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
+                              }`}
+                            >
+                              {toHashtag(category.title)}
+                            </button>
                           </span>
-                          <button
-                            type="button"
-                            onClick={() => toggle(category._id)}
-                            aria-pressed={selectedIds.has(category._id)}
-                            className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 transition-colors ${
-                              selectedIds.has(category._id)
-                                ? "text-[color:var(--link-color)] font-semibold"
-                                : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
-                            }`}
-                          >
-                            {toHashtag(category.title)}
-                          </button>
-                        </span>
+                        )}
+                        {retired && (
+                          <span className="rounded-full border border-[var(--warning-color)] px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-[color:var(--warning-color)]">
+                            no longer using
+                          </span>
+                        )}
+                      </div>
+                      {retired && item.archivedNote && (
+                        <p className="mt-1 text-sm text-[color:var(--text-muted-color)]">
+                          Why I stopped: {item.archivedNote}
+                        </p>
                       )}
-                    </div>
-                    {item.description &&
-                      Array.isArray(item.description) &&
-                      item.description.length > 0 && (
-                        <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
-                          <PortableText value={item.description} size="inline" />
-                        </div>
-                      )}
-                  </li>
-                ))}
+                      {item.description &&
+                        Array.isArray(item.description) &&
+                        item.description.length > 0 && (
+                          <div className="mt-2 text-sm text-[color:var(--text-color)] [&_a]:text-[color:var(--link-color)] [&_a]:hover:underline [&_p]:mb-0">
+                            <PortableText value={item.description} size="inline" />
+                          </div>
+                        )}
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           ))}

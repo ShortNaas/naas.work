@@ -69,12 +69,14 @@ export const favoritesQuery = groq`
 `;
 
 export const toolsQuery = groq`
-  *[_type == "tool"] | order(_updatedAt desc) {
+  *[_type == "tool"] | order(coalesce(archived, false) asc, _updatedAt desc) {
     _id,
     name,
     description,
     link,
     _updatedAt,
+    archived,
+    archivedNote,
     "category": category->{ _id, title }
   }
 `;

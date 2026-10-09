@@ -10,6 +10,10 @@ export type CategorizedItem = {
   link?: string;
   _updatedAt?: string;
   category?: Category | null;
+  /** Tools only: kept on the page, struck through and last in its category. */
+  archived?: boolean;
+  /** Tools only: why I stopped using it. Only rendered while `archived`. */
+  archivedNote?: string;
 };
 
 /** Hashtag form of a label: "Open Source" -> "#opensource". */

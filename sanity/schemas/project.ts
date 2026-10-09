@@ -41,7 +41,7 @@ export const project = defineType({
       name: "kind",
       type: "array",
       title: "Kind",
-      description: "Add one or more kinds (e.g. Software, Book). Existing kinds are suggested; you can create new ones.",
+      description: "Kinds live under Projects → Kinds. Add one or more; existing kinds are suggested.",
       of: [
         {
           type: "reference",
