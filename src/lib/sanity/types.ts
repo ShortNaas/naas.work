@@ -47,8 +47,6 @@ export interface Project {
   link?: string;
   /** Pinned projects sort above everything else. */
   pinned?: boolean;
-  /** Manual sort index from the Studio. Lower sorts first. */
-  order?: number | null;
   /** Drag-and-drop ordering key managed by the Studio. */
   orderRank?: string | null;
   kind?: Array<{ _id: string; title: string }>;

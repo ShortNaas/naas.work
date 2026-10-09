@@ -10,7 +10,7 @@ import { isAuthorizedRequest } from "@/lib/comments-auth";
 
 /** Moderation actions. Requires the admin cookie or x-admin-token header. */
 export async function POST(request: Request) {
-  if (!isAuthorizedRequest(request)) {
+  if (!(await isAuthorizedRequest(request))) {
     return NextResponse.json({ message: "Not authorized." }, { status: 401 });
   }
 

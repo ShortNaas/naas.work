@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PendingComment } from "@/lib/comments";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 
 type Action = "approve" | "unapprove" | "delete";
 
@@ -57,7 +58,7 @@ export function CommentsModeration({
           {c.author_name}
         </span>
         <span className="text-xs text-[color:var(--text-muted-color)]">
-          {new Date(c.created_at).toISOString().slice(0, 10)} · {c.post_slug}
+          {formatDateYYYYMMDD(c.created_at)} · {c.post_slug}
         </span>
       </div>
       <p className="mt-1 text-xs text-[color:var(--text-muted-color)]">

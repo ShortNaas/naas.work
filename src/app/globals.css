@@ -152,6 +152,11 @@ main, article {
   border-radius: 4px;
 }
 
+/* A modal dialog traps focus and interaction, but not wheel scrolling. */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
 /* Respect users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
   *,

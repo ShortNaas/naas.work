@@ -1,15 +1,3 @@
-import { defineField, defineType } from "sanity";
+import { categoryType } from "./shared";
 
-export const projectKind = defineType({
-  name: "projectKind",
-  title: "Project Kind",
-  type: "document",
-  fields: [
-    defineField({
-      name: "title",
-      type: "string",
-      title: "Label",
-      validation: (Rule) => Rule.required(),
-    }),
-  ],
-});
+export const projectKind = categoryType("projectKind", "Project Kind");

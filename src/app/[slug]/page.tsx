@@ -4,20 +4,6 @@ import { pageBySlugQuery, pageSlugsQuery } from "@/lib/sanity/queries";
 import type { Page } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 
-const RESERVED_SLUGS = new Set([
-  "admin",
-  "blog",
-  "books",
-  "projects",
-  "favorite",
-  "uses",
-  "about",
-  "contact",
-  "studio",
-  "api",
-  "rss.xml",
-]);
-
 async function getPage(slug: string): Promise<Page | null> {
   return client.fetch<Page | null>(pageBySlugQuery, { slug });
 }
@@ -34,10 +20,8 @@ export default async function CustomPage({
 }) {
   const { slug } = await params;
 
-  if (RESERVED_SLUGS.has(slug)) {
-    notFound();
-  }
-
+  // Static routes (blog, about, api, rss.xml, …) already win over this dynamic
+  // segment, so a conflicting Sanity page slug fails at build time, not here.
   const page = await getPage(slug);
 
   if (!page) {

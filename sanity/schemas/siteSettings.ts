@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { proseOf } from "./shared";
 
 export const siteSettings = defineType({
   name: "siteSettings",
@@ -15,21 +16,13 @@ export const siteSettings = defineType({
       name: "shortBio",
       type: "array",
       title: "Short bio (homepage)",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
     defineField({
       name: "fullBio",
       type: "array",
       title: "Full bio (about page)",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
     defineField({
       name: "avatar",

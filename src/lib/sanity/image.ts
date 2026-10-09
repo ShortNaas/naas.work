@@ -15,16 +15,10 @@ export function urlFor(source: unknown) {
 
 /**
  * Dimensions for an inline (in-body) image. The Sanity document only carries an
- * asset reference here, not its metadata, so this assumes a sensible ratio
- * rather than requesting the asset just to measure it.
+ * asset reference here, not its metadata, so this assumes 16:9 rather than
+ * requesting the asset just to measure it.
  */
-export function inlineImageDimensions(aspect = 16 / 9): {
-  width: number;
-  height: number;
-} {
-  const width = 1600;
-  return { width, height: Math.max(1, Math.round(width / aspect)) };
-}
+export const inlineImageDimensions = { width: 1600, height: 900 };
 
 /**
  * Build a Sanity CDN URL that is already the right size for its slot, plus a

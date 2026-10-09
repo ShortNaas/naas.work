@@ -6,7 +6,7 @@ Personal site: blog, projects, books, and custom pages. Built with Next.js and S
 
 - **Next.js** (App Router) + **Tailwind CSS**
 - **Sanity** for content (posts, projects, books, pages, site settings)
-- **next-themes** for light/dark mode (default: dark)
+- **Neon Postgres** for comments, **Resend** for the contact form
 
 ## Run locally
 
@@ -113,6 +113,7 @@ Comments only appear on the site once approved. New comments are protected by a 
 | `npm run build` | Production build         |
 | `npm run start` | Start production server  |
 | `npm run lint`  | Run ESLint               |
+| `npm test`      | Run the shared-logic self-check |
 
 ## Main routes
 
@@ -125,7 +126,7 @@ Comments only appear on the site once approved. New comments are protected by a 
 - `/favorite` — My Favorite Things (grouped by category)
 - `/uses` — Tools I use (grouped by category). `/tools` 301-redirects here.
 - `/logs` — Logs index; `/logs/[slug]` — collection; `/logs/[slug]/[entrySlug]` — entry
-- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, favorite, uses, logs, about, contact, studio, api)
+- `/[slug]` — Custom pages from Sanity (a slug that collides with a static route above loses to it)
 - `/rss.xml` — RSS 2.0 feed for the blog
 - `/admin/comments` — Comment moderation (see below)
 
@@ -138,14 +139,12 @@ Comments only appear on the site once approved. New comments are protected by a 
 
 ## Ordering and pinning projects
 
-Both controls live on each Project document:
+Two controls:
 
 - **Pin to top** — pinned projects always sort above unpinned ones.
-- **Manual order** — a sort index; lower numbers come first.
-
-In the Studio sidebar, **Projects (drag to reorder)** gives drag-and-drop
-ordering (it writes the same rank the site reads). The other document types are
-listed below it.
+- **Projects (drag to reorder)** in the Studio sidebar gives drag-and-drop
+  ordering; it writes the rank the site reads. The other document types are
+  listed below it.
 
 ## Theme and fonts
 

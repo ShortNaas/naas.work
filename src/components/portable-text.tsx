@@ -6,21 +6,7 @@ import {
 } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";
 import { inlineImageDimensions, responsiveImage } from "@/lib/sanity/image";
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
-}
-
-function getBlockText(value: PortableTextBlock | null): string {
-  if (!value?.children) return "";
-  return value.children
-    .map((c) => (typeof c === "object" && c !== null && "text" in c ? (c as { text?: string }).text : ""))
-    .join("");
-}
+import { blockText, headingId } from "@/lib/portable-text";
 
 type BlockProps = PortableTextComponentProps<PortableTextBlock>;
 
@@ -48,7 +34,7 @@ function BodyImage({
 }) {
   if (!value?.asset) return null;
 
-  const img = responsiveImage(value.asset, inlineImageDimensions());
+  const img = responsiveImage(value.asset, inlineImageDimensions);
   const sizes = size === "full" ? "(max-width: 768px) 100vw, 768px" : "240px";
 
   return (
@@ -94,7 +80,7 @@ function buildComponents(size: ImageSize) {
         </h1>
       ),
       h2: ({ value, children }: BlockProps) => {
-        const id = slugify(getBlockText(value ?? null)) || "h2";
+        const id = headingId(blockText(value));
         return (
           <h2 id={id} className="text-xl font-semibold text-[color:var(--heading-color)] mt-6 mb-3 scroll-mt-[3.5rem]">
             {children}
@@ -102,7 +88,7 @@ function buildComponents(size: ImageSize) {
         );
       },
       h3: ({ value, children }: BlockProps) => {
-        const id = slugify(getBlockText(value ?? null)) || "h3";
+        const id = headingId(blockText(value));
         return (
           <h3 id={id} className="text-lg font-medium text-[color:var(--heading-color)] mt-4 mb-2 scroll-mt-[3.5rem]">
             {children}

@@ -1,15 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Book } from "@/lib/sanity/types";
 import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
+import { SortControls, useSort } from "@/components/sort-controls";
 
 type SortBy = "date" | "title" | "best";
 
-/** Most recently read first is the default. */
+/** Comparators sort ascending; `asc` flips them (see blog-list). */
 function sortBooks(books: Book[], sortBy: SortBy, asc: boolean): Book[] {
   const sorted = [...books];
   if (sortBy === "title") {
@@ -33,26 +34,23 @@ function sortBooks(books: Book[], sortBy: SortBy, asc: boolean): Book[] {
 const defaultAsc: Record<SortBy, boolean> = {
   title: true,
   best: false,
+  // Most recently read first is the default.
   date: false,
 };
 
+const sortOptions: { key: SortBy; label: string }[] = [
+  { key: "date", label: "date" },
+  { key: "title", label: "title" },
+  { key: "best", label: "best" },
+];
+
 export function BooksList({ books }: { books: Book[] }) {
-  const [sortBy, setSortBy] = useState<SortBy>("date");
-  const [sortAsc, setSortAsc] = useState(defaultAsc.date);
+  const { sortBy, sortAsc, toggle } = useSort<SortBy>("date", defaultAsc);
 
   const sortedBooks = useMemo(
     () => sortBooks(books, sortBy, sortAsc),
     [books, sortBy, sortAsc]
   );
-
-  const handleSort = (key: SortBy) => {
-    if (sortBy === key) {
-      setSortAsc((a) => !a);
-    } else {
-      setSortBy(key);
-      setSortAsc(defaultAsc[key]);
-    }
-  };
 
   if (books.length === 0) {
     return (
@@ -61,35 +59,15 @@ export function BooksList({ books }: { books: Book[] }) {
   }
 
   const linkClass = "text-[color:var(--link-color)] hover:underline font-semibold";
-  const sortBtn = (key: SortBy, label: string) => {
-    const isActive = sortBy === key;
-    const direction = isActive ? (sortAsc ? "ascending" : "descending") : null;
-    return (
-      <button
-        type="button"
-        onClick={() => handleSort(key)}
-        aria-label={
-          direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
-        }
-        className={`cursor-pointer mr-3 px-1 py-0.5 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
-      >
-        {label}
-        {isActive && (
-          <span aria-hidden className="ml-1">
-            {sortAsc ? "↑" : "↓"}
-          </span>
-        )}
-      </button>
-    );
-  };
 
   return (
     <>
-      <div className="mb-5 text-sm text-[color:var(--text-muted-color)]">
-        Sort by: {sortBtn("date", "date")}
-        {sortBtn("title", "title")}
-        {sortBtn("best", "best")}
-      </div>
+      <SortControls
+        options={sortOptions}
+        sortBy={sortBy}
+        sortAsc={sortAsc}
+        onToggle={toggle}
+      />
       <ul className="list-none p-0 m-0 space-y-8">
         {sortedBooks.map((book) => (
           <li key={book._id} className="flex items-start gap-6">

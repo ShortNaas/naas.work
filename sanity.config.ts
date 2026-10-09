@@ -24,10 +24,6 @@ export default defineConfig({
   projectId: "ouskx1kr",
   dataset: "production",
   basePath: "/studio",
-  api: {
-    projectId: "ouskx1kr",
-    dataset: "production",
-  },
   plugins: [
     structureTool({
       structure: (S: StructureBuilder, context: ConfigContext) =>

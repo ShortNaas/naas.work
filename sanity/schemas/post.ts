@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { proseOf } from "./shared";
 
 export const post = defineType({
   name: "post",
@@ -27,11 +28,7 @@ export const post = defineType({
       name: "body",
       type: "array",
       title: "Body",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
   ],
 });

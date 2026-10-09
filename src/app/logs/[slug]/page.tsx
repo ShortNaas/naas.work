@@ -33,17 +33,15 @@ export default async function LogsCollectionPage({
 
   return (
     <div className="max-w-6xl mx-auto py-8">
-      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-2">
+      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-8">
         {logs.title}
       </h1>
 
       {logs.description && (
-        <p className="text-sm text-[color:var(--text-muted-color)] mb-8">
+        <p className="text-sm text-[color:var(--text-muted-color)] mb-2">
           {logs.description}
         </p>
       )}
-
-      {!logs.description && <div className="mb-8" />}
 
       {entries.length === 0 ? (
         <p className="text-sm text-[color:var(--text-muted-color)]">

@@ -45,14 +45,13 @@ export const latestPostsQuery = groq`
 
 export const projectsQuery = groq`
   *[_type == "project" && defined(slug.current)]
-    | order(pinned desc, orderRank asc, order asc, _createdAt desc) {
+    | order(pinned desc, orderRank asc, _createdAt desc) {
     _id,
     title,
     image,
     description,
     link,
     pinned,
-    order,
     orderRank,
     "kind": kind[]->{ _id, title }
   }
