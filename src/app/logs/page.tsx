@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { logsQuery } from "@/lib/sanity/queries";
 import type { Logs } from "@/lib/sanity/types";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Logs",
+  description: "Every update, write-up, and experiment log—all in one feed.",
+};
 
 async function getLogs(): Promise<Logs[]> {
   const logs = await client.fetch<Logs[]>(logsQuery);

@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { toolsQuery } from "@/lib/sanity/queries";
 import type { Tool } from "@/lib/sanity/types";
 import { CategoryList } from "@/components/category-list";
+
+export const metadata: Metadata = { title: "Tools I use" };
 
 async function getTools(): Promise<Tool[]> {
   const tools = await client.fetch<Tool[]>(toolsQuery);

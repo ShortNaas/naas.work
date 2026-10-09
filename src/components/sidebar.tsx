@@ -38,6 +38,14 @@ const socialLinks: {
   },
 ];
 
+/**
+ * Sidebar footer chips (RSS + social). One definition, so the whole row keeps
+ * one surface, one size, and one hover: muted by default, lifting to the
+ * heading colour on pointer. 44px on touch pointers, 28px under a mouse.
+ */
+const chipClass =
+  "w-7 h-7 pointer-coarse:w-11 pointer-coarse:h-11 rounded-full bg-[var(--sidebar-btn-bg)] text-[color:var(--sidebar-btn-color)] hover:bg-[var(--sidebar-btn-hover-bg)] hover:text-[var(--sidebar-btn-hover-color)] flex items-center justify-center transition-colors shadow-[0_0_0_1px_var(--sidebar-border-color)]";
+
 export function Sidebar({ open }: { open: boolean }) {
   const pathname = usePathname();
 
@@ -51,8 +59,8 @@ export function Sidebar({ open }: { open: boolean }) {
     <aside
       id="sidebar"
       aria-label="Sidebar"
-      className={`fixed top-0 left-0 h-full w-[232px] xl:w-[264px] flex flex-col bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border-color)] z-40 overflow-y-auto
-        transition-transform duration-200 ease-out
+      className={`fixed top-0 left-0 h-full w-[var(--sidebar-width)] flex flex-col bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border-color)] z-50 overflow-y-auto
+        transition-transform duration-200 ease-[var(--ease-out-expo)]
         ${open ? "is-open" : ""}`}
     >
       <header className="flex flex-col items-center justify-center text-center px-4 pt-12 pb-6 flex-shrink-0 w-full">
@@ -94,15 +102,15 @@ export function Sidebar({ open }: { open: boolean }) {
         </ul>
       </nav>
 
-      <div className="sidebar-bottom flex flex-wrap items-center justify-center gap-2 px-4 pb-6 w-full">
+      <div className="sidebar-bottom flex flex-wrap items-center justify-center gap-2 pointer-coarse:gap-3 px-4 pb-6 w-full">
         {/* RSS sits with the social icons. In-page, since it is our own URL. */}
         <Link
           href="/rss.xml"
           aria-label="RSS feed"
           title="RSS feed"
-          className="w-7 h-7 rounded-full bg-[var(--sidebar-btn-bg)] text-[color:var(--sidebar-btn-color)] hover:text-[#f26522] flex items-center justify-center transition-colors shadow-[0_0_0_1px_var(--sidebar-border-color)]"
+          className={`${chipClass} hover:text-[var(--brand-rss)]`}
         >
-          <IconRss className="w-3.5 h-3.5" />
+          <IconRss className="w-3.5 h-3.5 pointer-coarse:w-5 pointer-coarse:h-5" />
         </Link>
         {socialLinks.map((link) => {
           const SocialIcon = link.icon;
@@ -114,9 +122,9 @@ export function Sidebar({ open }: { open: boolean }) {
               title={link.label}
               rel="me noopener noreferrer"
               target="_blank"
-              className="w-7 h-7 rounded-full bg-[var(--sidebar-btn-bg)] text-[color:var(--sidebar-btn-color)] hover:text-[color:var(--sidebar-btn-hover-color)] flex items-center justify-center transition-colors shadow-[0_0_0_1px_var(--sidebar-border-color)]"
+              className={chipClass}
             >
-              <SocialIcon className="w-3.5 h-3.5" />
+              <SocialIcon className="w-3.5 h-3.5 pointer-coarse:w-5 pointer-coarse:h-5" />
             </a>
           );
         })}

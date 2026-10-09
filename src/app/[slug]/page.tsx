@@ -1,11 +1,24 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { pageBySlugQuery, pageSlugsQuery } from "@/lib/sanity/queries";
 import type { Page } from "@/lib/sanity/types";
+import { metaDescription } from "@/lib/portable-text";
 import { PortableText } from "@/components/portable-text";
 
 async function getPage(slug: string): Promise<Page | null> {
   return client.fetch<Page | null>(pageBySlugQuery, { slug });
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await getPage(slug);
+  if (!page) return {};
+  return { title: page.title, description: metaDescription(page.body) };
 }
 
 export async function generateStaticParams() {

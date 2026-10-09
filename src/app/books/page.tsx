@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { booksQuery } from "@/lib/sanity/queries";
 import type { Book } from "@/lib/sanity/types";
 import { BooksList } from "@/components/books-list";
+
+export const metadata: Metadata = {
+  title: "Book Notes",
+  description: "Books I've read, with notes and how strongly I recommend them.",
+};
 
 async function getBooks(): Promise<Book[]> {
   const books = await client.fetch<Book[]>(booksQuery);

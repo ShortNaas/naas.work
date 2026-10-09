@@ -1,15 +1,13 @@
-"use client";
-
-import { useEffect } from "react";
 import Link from "next/link";
 import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
-import { useToc } from "@/contexts/toc-context";
+import { TocRegistrar } from "@/components/toc-registrar";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Post } from "@/lib/sanity/types";
 import type { TocItem } from "@/lib/toc";
 
-export function PostPageClient({
+/** Article body, rendered on the server. */
+export function Article({
   post,
   toc,
   backLink = { href: "/blog", label: "← Back to blog" },
@@ -19,19 +17,13 @@ export function PostPageClient({
   /** Where the "back" affordance points. Log entries pass their collection. */
   backLink?: { href: string; label: string };
 }) {
-  const { setToc } = useToc();
-
-  useEffect(() => {
-    setToc(toc);
-    return () => setToc(null);
-  }, [toc, setToc]);
-
   const cover = post.coverImage
     ? responsiveImage(post.coverImage, { width: 1200, height: 675 })
     : null;
 
   return (
     <article className="max-w-3xl mx-auto py-8">
+      <TocRegistrar toc={toc} />
       <p className="mb-4 text-sm">
         <Link href={backLink.href} className="text-[color:var(--link-color)] hover:underline">
           {backLink.label}

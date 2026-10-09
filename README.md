@@ -154,3 +154,26 @@ runtime theme switcher, and `next-themes` is not a dependency.
 Typography uses a system font stack, so no webfont is downloaded and nothing is
 requested from Google Fonts at build or run time. `--font-sans` / `--font-heading`
 in `src/app/globals.css` are the single place to swap in a self-hosted face.
+
+## Design system
+
+Everything visual lives in `src/app/globals.css`: the palette is `:root` custom
+properties consumed as arbitrary Tailwind values (`bg-[var(--card-bg)]`). There
+is no `tailwind.config` and no second way to express a colour.
+
+- **Roles, not swatches** — canvas (`--background`), elevated surfaces
+  (`--card-bg`, `--sidebar-btn-bg`), text (`--foreground`, `--text-color`,
+  `--text-muted-color`, `--heading-color`), action (`--link-color`,
+  `--accent-bg` / `--accent-fg`), status (`--danger-color`), scrim
+  (`--overlay-color`).
+- **Layering** — 20 scroll-to-top · 30 sticky topbar · 40 drawer scrim ·
+  50 drawer · 60 skip link. The search dialog uses the browser's top layer.
+- **Motion** — a reading surface, so nothing enters on page load. The drawer
+  (200ms) and the drawer scrim + search panel (150–180ms, exponential ease-out)
+  are the only authored moments. `prefers-reduced-motion` removes the movement
+  at its source and keeps colour/opacity feedback.
+- **Touch** — controls reach 44px through `pointer-coarse:` variants, so pointer
+  layouts keep their density.
+- **Reachable** — a skip link is the first tab stop, every route sets its own
+  title, and the search dialog is a native `<dialog>` (focus trap, Escape and
+  focus restore come from the browser).

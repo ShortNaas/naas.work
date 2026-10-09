@@ -1,5 +1,7 @@
-"use client";
-
+/*
+ * No "use client": this is presentational, so server pages render it to HTML
+ * and the browser never downloads a renderer it cannot use.
+ */
 import {
   PortableText as PortableTextRenderer,
   type PortableTextComponentProps,

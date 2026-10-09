@@ -97,14 +97,14 @@ export function SearchOverlay({
     <dialog
       ref={dialogRef}
       aria-label="Search"
-      className="w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50"
+      className="w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-[var(--overlay-color)]"
     >
       <div
         className="flex items-start justify-center pt-[15vh] px-4"
         // A click on the backdrop lands on this wrapper, not on the panel.
         onClick={(e) => e.target === e.currentTarget && onClose()}
       >
-        <div className="w-full max-w-xl rounded-lg bg-[var(--background)] shadow-xl border border-[var(--main-border-color)] overflow-hidden">
+        <div className="dialog-panel w-full max-w-xl rounded-lg bg-[var(--background)] shadow-xl border border-[var(--main-border-color)] overflow-hidden">
           <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--main-border-color)]">
             <IconSearch className="w-5 h-5 shrink-0 text-[color:var(--text-muted-color)]" />
             <input
@@ -147,7 +147,7 @@ export function SearchOverlay({
                           <Link
                             href={item.url}
                             onClick={() => onClose()}
-                            className="block px-3 py-2 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
+                            className="block px-3 py-2 pointer-coarse:py-3 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
                           >
                             <span className="font-medium">{item.title}</span>
                             {snippetPreview(item.snippet) && (
@@ -172,7 +172,7 @@ export function SearchOverlay({
                           <a
                             href={item.url}
                             onClick={() => onClose()}
-                            className="block px-3 py-2 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
+                            className="block px-3 py-2 pointer-coarse:py-3 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
                           >
                             <span className="font-medium">{item.title}</span>
                             {item.snippet && (

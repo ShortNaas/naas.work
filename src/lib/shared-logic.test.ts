@@ -4,7 +4,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { headingId, portableTextToPlainString, slugify } from "./portable-text.ts";
+import { headingId, metaDescription, portableTextToPlainString, slugify } from "./portable-text.ts";
 import { groupByCategory, toHashtag, uniqueCategories } from "./category-groups.ts";
 
 const block = (text: string) => ({ _type: "block", children: [{ text }] });
@@ -23,6 +23,15 @@ test("portableTextToPlainString: joins block text, skips non-text blocks", () =>
   assert.equal(portableTextToPlainString([block("one"), { _type: "image" }]), "one");
   assert.equal(portableTextToPlainString(null), "");
   assert.equal(portableTextToPlainString([]), "");
+});
+
+test("metaDescription: trimmed to length, undefined when there is nothing", () => {
+  assert.equal(metaDescription([block("short")]), "short");
+  assert.equal(metaDescription(null), undefined);
+  assert.equal(metaDescription([block("   ")]), undefined);
+  const long = metaDescription([block("x".repeat(400))], 20);
+  assert.equal(long?.length, 21);
+  assert.ok(long?.endsWith("…"));
 });
 
 test("toHashtag", () => {

@@ -68,6 +68,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
             type="text"
             required
             maxLength={80}
+            autoComplete="name"
             value={authorName}
             onChange={(e) => setAuthorName(e.target.value)}
             className={field}
@@ -86,6 +87,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
             type="email"
             required
             maxLength={200}
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className={field}
@@ -130,7 +132,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
       </div>
 
       {status === "error" && message && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="text-sm text-[color:var(--danger-color)]">
           {message}
         </p>
       )}
@@ -138,7 +140,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 pointer-coarse:min-h-11 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {status === "sending" ? "Posting…" : "Post comment"}
       </button>

@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { client } from "@/lib/sanity/client";
 import { siteSettingsQuery, projectsQuery } from "@/lib/sanity/queries";
 import type { SiteSettings, Project } from "@/lib/sanity/types";
 import { ContactForm } from "@/components/contact-form";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Send a message below.",
+};
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
   try {

@@ -71,7 +71,7 @@ export function CategoryList({
                 type="button"
                 onClick={() => toggle(c._id)}
                 aria-pressed={isSelected}
-                className={`cursor-pointer text-sm transition-colors ${
+                className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 text-sm transition-colors ${
                   isSelected
                     ? "text-[color:var(--link-color)] font-semibold"
                     : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
@@ -120,7 +120,7 @@ export function CategoryList({
                             type="button"
                             onClick={() => toggle(category._id)}
                             aria-pressed={selectedIds.has(category._id)}
-                            className={`cursor-pointer transition-colors ${
+                            className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 transition-colors ${
                               selectedIds.has(category._id)
                                 ? "text-[color:var(--link-color)] font-semibold"
                                 : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"

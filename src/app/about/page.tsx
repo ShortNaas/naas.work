@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { siteSettingsQuery } from "@/lib/sanity/queries";
 import type { SiteSettings } from "@/lib/sanity/types";
 import { responsiveImage } from "@/lib/sanity/image";
 import { PortableText } from "@/components/portable-text";
+
+export const metadata: Metadata = { title: "About" };
 
 async function getSiteSettings(): Promise<SiteSettings | null> {
   try {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
-import { portableTextToPlainString } from "@/lib/portable-text";
+import { metaDescription } from "@/lib/portable-text";
 
 const CAPTCHA_ANSWER = "naas";
 
@@ -53,7 +53,10 @@ export function ContactForm({ projects }: Props) {
 
   if (status === "success") {
     return (
-      <div className="rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] p-6 space-y-4">
+      <div
+        role="status"
+        className="rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] p-6 space-y-4"
+      >
         <p className="text-[color:var(--heading-color)] font-medium">
           I will get back to you as soon as possible.
         </p>
@@ -61,20 +64,20 @@ export function ContactForm({ projects }: Props) {
           In the meantime, explore what I’ve been building:
         </p>
         <ul className="list-none p-0 m-0 space-y-2">
-          {projects.map((p) => (
-            <li key={p._id}>
-              <Link
-                href={p.link ?? "/projects"}
-                className="text-[color:var(--link-color)] hover:underline text-sm"
-              >
-                {p.title}
-                {(() => {
-                  const desc = p.description ? portableTextToPlainString(p.description) : "";
-                  return desc ? ` – ${desc}` : "";
-                })()}
-              </Link>
-            </li>
-          ))}
+          {projects.map((p) => {
+            const blurb = metaDescription(p.description, 90);
+            return (
+              <li key={p._id}>
+                <Link
+                  href={p.link ?? "/projects"}
+                  className="text-[color:var(--link-color)] hover:underline text-sm"
+                >
+                  {p.title}
+                  {blurb ? ` – ${blurb}` : ""}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
         {projects.length === 0 && (
           <Link
@@ -98,6 +101,8 @@ export function ContactForm({ projects }: Props) {
           id="contact-fullname"
           type="text"
           required
+          maxLength={100}
+          autoComplete="name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] text-[color:var(--text-color)] placeholder:text-[color:var(--text-muted-color)] focus:outline-none focus:ring-2 focus:ring-[var(--link-color)]"
@@ -112,6 +117,8 @@ export function ContactForm({ projects }: Props) {
           id="contact-email"
           type="email"
           required
+          maxLength={200}
+          autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] text-[color:var(--text-color)] placeholder:text-[color:var(--text-muted-color)] focus:outline-none focus:ring-2 focus:ring-[var(--link-color)]"
@@ -126,6 +133,8 @@ export function ContactForm({ projects }: Props) {
           id="contact-captcha"
           type="text"
           required
+          maxLength={40}
+          autoComplete="off"
           value={captcha}
           onChange={(e) => setCaptcha(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] text-[color:var(--text-color)] placeholder:text-[color:var(--text-muted-color)] focus:outline-none focus:ring-2 focus:ring-[var(--link-color)]"
@@ -143,6 +152,7 @@ export function ContactForm({ projects }: Props) {
           id="contact-message"
           required
           rows={5}
+          maxLength={5000}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-[var(--main-border-color)] bg-[var(--card-bg)] text-[color:var(--text-color)] placeholder:text-[color:var(--text-muted-color)] focus:outline-none focus:ring-2 focus:ring-[var(--link-color)] resize-y min-h-[120px]"
@@ -150,12 +160,14 @@ export function ContactForm({ projects }: Props) {
         />
       </div>
       {errorMessage && (
-        <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
+        <p role="alert" className="text-sm text-[color:var(--danger-color)]">
+          {errorMessage}
+        </p>
       )}
       <button
         type="submit"
         disabled={status === "sending"}
-        className="px-4 py-2.5 rounded-lg bg-[var(--link-color)] text-white font-medium text-sm hover:opacity-90 disabled:opacity-60 transition-opacity"
+        className="px-4 py-2.5 rounded-lg bg-[var(--accent-bg)] text-[var(--accent-fg)] font-medium text-sm hover:opacity-90 disabled:opacity-60 transition-opacity pointer-coarse:min-h-11"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>

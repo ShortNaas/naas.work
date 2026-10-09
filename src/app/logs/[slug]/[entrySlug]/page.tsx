@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import {
   logsEntryBySlugQuery,
@@ -6,7 +7,8 @@ import {
 } from "@/lib/sanity/queries";
 import type { LogsEntry } from "@/lib/sanity/types";
 import { getTocFromBody } from "@/lib/toc";
-import { PostPageClient } from "@/components/post-page-client";
+import { metaDescription } from "@/lib/portable-text";
+import { Article } from "@/components/article";
 
 interface LogsEntrySlugsResult {
   logsSlug: string;
@@ -19,6 +21,17 @@ async function getEntry(entrySlug: string): Promise<LogsEntry | null> {
     { entrySlug },
   );
   return entry;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; entrySlug: string }>;
+}): Promise<Metadata> {
+  const { entrySlug } = await params;
+  const entry = await getEntry(entrySlug);
+  if (!entry) return { title: "Entry not found" };
+  return { title: entry.title, description: metaDescription(entry.body) };
 }
 
 export async function generateStaticParams() {
@@ -63,7 +76,7 @@ export default async function LogsEntryPage({
 
   const toc = getTocFromBody(entry.body ?? []);
 
-  // Build a post-compatible shape so we can reuse PostPageClient
+  // Build a post-compatible shape so we can reuse Article
   const postShape = {
     _id: entry._id,
     title: entry.title,
@@ -74,7 +87,7 @@ export default async function LogsEntryPage({
   };
 
   return (
-    <PostPageClient
+    <Article
       post={postShape}
       toc={toc}
       backLink={{

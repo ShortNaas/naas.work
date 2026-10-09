@@ -12,7 +12,8 @@ const SITE_URL = (
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Naas",
+  // Every route names itself; the template keeps the site in the tab title.
+  title: { default: "Naas", template: "%s · Naas" },
   description: "A little bit of everything.",
   alternates: {
     types: { "application/rss+xml": `${SITE_URL}/rss.xml` },

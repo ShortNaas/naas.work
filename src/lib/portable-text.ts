@@ -38,6 +38,13 @@ export function portableTextToPlainString(value: unknown): string {
     .trim();
 }
 
+/** One-line summary for meta descriptions; undefined when there is no text. */
+export function metaDescription(value: unknown, max = 160): string | undefined {
+  const text = portableTextToPlainString(value);
+  if (!text) return undefined;
+  return text.length <= max ? text : `${text.slice(0, max).trimEnd()}…`;
+}
+
 /**
  * Anchor id for a heading. The TOC and the rendered heading must derive the
  * same id from the same text, so both go through here — including the fallback

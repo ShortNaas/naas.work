@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { favoritesQuery } from "@/lib/sanity/queries";
 import type { Favorite } from "@/lib/sanity/types";
 import { CategoryList } from "@/components/category-list";
+
+export const metadata: Metadata = { title: "My Favorite Things" };
 
 async function getFavorites(): Promise<Favorite[]> {
   const favorites = await client.fetch<Favorite[]>(favoritesQuery);

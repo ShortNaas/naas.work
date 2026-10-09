@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { getViewCounts } from "@/lib/view-counts";
 import { postsQuery } from "@/lib/sanity/queries";
 import type { Post } from "@/lib/sanity/types";
 import { BlogList } from "@/components/blog-list";
+
+export const metadata: Metadata = { title: "Blog" };
 
 async function getPosts(): Promise<Post[]> {
   const posts = await client.fetch<Post[]>(postsQuery);

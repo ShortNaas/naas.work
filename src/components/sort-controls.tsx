@@ -48,7 +48,7 @@ export function SortControls<K extends string>({
             aria-label={
               direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
             }
-            className={`cursor-pointer mr-3 px-1 py-0.5 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
+            className={`cursor-pointer mr-3 px-1 py-0.5 pointer-coarse:min-h-11 pointer-coarse:px-3 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
           >
             {label}
             {isActive && (

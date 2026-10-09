@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { logsBySlugQuery, logsSlugsQuery } from "@/lib/sanity/queries";
 import type { Logs } from "@/lib/sanity/types";
@@ -10,6 +11,17 @@ async function getlogs(slug: string): Promise<Logs | null> {
     slug,
   });
   return logs;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const logs = await getlogs(slug);
+  if (!logs) return { title: "Log not found" };
+  return { title: logs.title, description: logs.description };
 }
 
 export async function generateStaticParams() {

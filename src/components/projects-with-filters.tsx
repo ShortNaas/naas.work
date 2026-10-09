@@ -79,6 +79,10 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
 
   return (
     <>
+      {/* One summary line rather than announcing the whole list on every toggle. */}
+      <p role="status" className="sr-only">
+        {filteredProjects.length} project{filteredProjects.length === 1 ? "" : "s"} shown
+      </p>
       {uniqueKinds.length > 0 && (
         <div
           role="group"
@@ -93,7 +97,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 type="button"
                 onClick={() => toggleKind(k._id)}
                 aria-pressed={isSelected}
-                className={`cursor-pointer text-sm transition-colors ${
+                className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 text-sm transition-colors ${
                   isSelected
                     ? "text-[color:var(--link-color)] font-semibold"
                     : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
@@ -111,7 +115,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
           No projects match the selected filter.
         </p>
       ) : (
-        <ul className="list-none p-0 m-0 space-y-7" aria-live="polite">
+        <ul className="list-none p-0 m-0 space-y-7">
           {filteredProjects.map((project) => {
             const isExpanded = expandedIds.has(project._id);
             const plain = project.description
@@ -169,7 +173,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                             type="button"
                             onClick={() => toggleKind(k._id)}
                             aria-pressed={selectedKindIds.has(k._id)}
-                            className={`cursor-pointer transition-colors ${
+                            className={`cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 transition-colors ${
                               selectedKindIds.has(k._id)
                                 ? "text-[color:var(--link-color)] font-semibold"
                                 : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"
@@ -200,7 +204,7 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                     type="button"
                     onClick={() => toggleExpanded(project._id)}
                     aria-expanded={isExpanded}
-                    className="mt-1 cursor-pointer text-sm text-[color:var(--link-color)] hover:underline"
+                    className="mt-1 cursor-pointer px-1 pointer-coarse:min-h-11 pointer-coarse:px-3 text-sm text-[color:var(--link-color)] hover:underline"
                   >
                     {isExpanded ? "less" : "more"}
                   </button>
