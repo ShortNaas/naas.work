@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { toolsQuery } from "@/lib/sanity/queries";
 import type { Tool } from "@/lib/sanity/types";
-import { ToolsWithFilters } from "@/components/tools-with-filters";
+import { CategoryList } from "@/components/category-list";
+
+export const metadata: Metadata = { title: "Tools I use" };
 
 async function getTools(): Promise<Tool[]> {
   const tools = await client.fetch<Tool[]>(toolsQuery);
@@ -16,7 +19,7 @@ export default async function ToolsPage() {
       <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-1">
         Tools I use
       </h1>
-      <ToolsWithFilters tools={tools} />
+      <CategoryList items={tools} noun="tools" />
     </div>
   );
 }

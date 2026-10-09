@@ -18,7 +18,8 @@ export type ViewCounts = Record<string, number>;
 const CACHE_SECONDS = 3600;
 
 function instanceBase(): string | null {
-  const selfHosted = process.env.GOATCOUNTER_URL;
+  // Same variable the counter script reads, so one setting moves both.
+  const selfHosted = process.env.NEXT_PUBLIC_GOATCOUNTER_URL;
   if (selfHosted) return selfHosted.replace(/\/$/, "");
   const code = process.env.NEXT_PUBLIC_GOATCOUNTER_CODE;
   return code ? `https://${code}.goatcounter.com` : null;

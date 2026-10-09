@@ -1,14 +1,30 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { client } from "@/lib/sanity/client";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { bookBySlugQuery, bookSlugsQuery } from "@/lib/sanity/queries";
 import type { Book } from "@/lib/sanity/types";
 import { responsiveImage } from "@/lib/sanity/image";
+import { metaDescription } from "@/lib/portable-text";
 import { PortableText } from "@/components/portable-text";
 
 async function getBook(slug: string): Promise<Book | null> {
   return client.fetch<Book | null>(bookBySlugQuery, { slug });
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const book = await getBook(slug);
+  if (!book) return { title: "Book not found" };
+  return {
+    title: book.author ? `${book.title} — ${book.author}` : book.title,
+    description: metaDescription(book.summary ?? book.body),
+  };
 }
 
 export async function generateStaticParams() {

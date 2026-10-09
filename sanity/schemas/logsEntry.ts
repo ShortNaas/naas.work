@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { proseOf } from "./shared";
 
 export const logsEntry = defineType({
   name: "logsEntry",
@@ -34,11 +35,7 @@ export const logsEntry = defineType({
       name: "body",
       type: "array",
       title: "Body",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
   ],
   preview: {

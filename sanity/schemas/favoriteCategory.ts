@@ -1,16 +1,7 @@
-import { defineField, defineType } from "sanity";
+import { categoryType } from "./shared";
 
-export const favoriteCategory = defineType({
-  name: "favoriteCategory",
-  title: "Favorite Category",
-  type: "document",
-  fields: [
-    defineField({
-      name: "title",
-      type: "string",
-      title: "Label",
-      description: "e.g. Books, YouTuber, Documentary, Music, Social media",
-      validation: (Rule) => Rule.required(),
-    }),
-  ],
-});
+export const favoriteCategory = categoryType(
+  "favoriteCategory",
+  "Favorite Category",
+  "e.g. Books, YouTuber, Documentary, Music, Social media"
+);

@@ -11,6 +11,9 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // The self-check in src/lib/*.test.ts imports its neighbours with a .ts
+    // extension so `node --test` can resolve them without a loader.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

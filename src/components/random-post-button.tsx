@@ -33,7 +33,7 @@ export function RandomPostButton({ slugs }: { slugs: string[] }) {
         type="button"
         onClick={go}
         disabled={busy}
-        className="cursor-pointer border-0 bg-transparent p-0 font-sans text-base text-[color:var(--link-color)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--link-color)]"
+        className="cursor-pointer border-0 bg-transparent p-0 pointer-coarse:py-2 font-sans text-base text-[color:var(--link-color)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--link-color)]"
       >
         {busy ? "Opening…" : "Random post"}
       </button>

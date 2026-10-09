@@ -41,7 +41,7 @@ export const project = defineType({
       name: "kind",
       type: "array",
       title: "Kind",
-      description: "Add one or more kinds (e.g. Software, Book). Existing kinds are suggested; you can create new ones.",
+      description: "Kinds live under Projects → Kinds. Add one or more; existing kinds are suggested.",
       of: [
         {
           type: "reference",
@@ -52,33 +52,12 @@ export const project = defineType({
     }),
     // Managed by drag-and-drop; not meant to be edited by hand.
     orderRankField({ type: "project", hidden: true }),
-    defineField({
-      name: "order",
-      title: "Manual order (sort index)",
-      type: "number",
-      description:
-        "Lower numbers come first. Sorted after Pin, so pinned projects group at the top.",
-      initialValue: 100,
-    }),
   ],
-  orderings: [
-    orderRankOrdering,
-    {
-      title: "Manual order (sort index)",
-      name: "manualOrder",
-      by: [
-        { field: "order", direction: "asc" },
-        { field: "title", direction: "asc" },
-      ],
-    },
-  ],
+  orderings: [orderRankOrdering],
   preview: {
-    select: { title: "title", pinned: "pinned", order: "order", media: "image" },
-    prepare({ title, pinned, order, media }) {
-      const flags = [pinned ? "📌 pinned" : null, order != null ? `#${order}` : null]
-        .filter(Boolean)
-        .join(" · ");
-      return { title, subtitle: flags || undefined, media };
+    select: { title: "title", pinned: "pinned", media: "image" },
+    prepare({ title, pinned, media }) {
+      return { title, subtitle: pinned ? "📌 pinned" : undefined, media };
     },
   },
 });

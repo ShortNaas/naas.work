@@ -1,16 +1,7 @@
-import { defineField, defineType } from "sanity";
+import { categoryType } from "./shared";
 
-export const toolCategory = defineType({
-  name: "toolCategory",
-  title: "Tool Category",
-  type: "document",
-  fields: [
-    defineField({
-      name: "title",
-      type: "string",
-      title: "Label",
-      description: "e.g. Editor, CLI, Browser, Design",
-      validation: (Rule) => Rule.required(),
-    }),
-  ],
-});
+export const toolCategory = categoryType(
+  "toolCategory",
+  "Tool Category",
+  "e.g. Editor, CLI, Browser, Design"
+);

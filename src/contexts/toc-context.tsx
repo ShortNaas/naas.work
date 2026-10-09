@@ -18,5 +18,6 @@ export function TocProvider({ children }: { children: ReactNode }) {
 
 export function useToc() {
   const ctx = useContext(TocContext);
-  return ctx ?? { toc: null, setToc: () => {} };
+  if (!ctx) throw new Error("useToc must be used inside TocProvider");
+  return ctx;
 }

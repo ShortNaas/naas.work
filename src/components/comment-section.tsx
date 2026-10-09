@@ -1,11 +1,6 @@
 import { getApprovedComments, isCommentsConfigured } from "@/lib/comments";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 import { CommentForm } from "@/components/comment-form";
-
-function formatDate(value: string): string {
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toISOString().slice(0, 10);
-}
 
 /**
  * Server-rendered so approved comments are in the HTML (no client fetch, and
@@ -52,7 +47,7 @@ export async function CommentSection({ postSlug }: { postSlug: string }) {
                     dateTime={c.created_at}
                     className="text-xs text-[color:var(--text-muted-color)]"
                   >
-                    {formatDate(c.created_at)}
+                    {formatDateYYYYMMDD(c.created_at)}
                   </time>
                 </div>
                 <p className="mt-1 whitespace-pre-wrap text-sm text-[color:var(--text-color)]">

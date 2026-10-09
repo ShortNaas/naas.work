@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { favoritesQuery } from "@/lib/sanity/queries";
 import type { Favorite } from "@/lib/sanity/types";
-import { FavoritesWithFilters } from "@/components/favorites-with-filters";
+import { CategoryList } from "@/components/category-list";
+
+export const metadata: Metadata = { title: "My Favorite Things" };
 
 async function getFavorites(): Promise<Favorite[]> {
   const favorites = await client.fetch<Favorite[]>(favoritesQuery);
@@ -16,7 +19,7 @@ export default async function FavoritePage() {
       <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-1">
         My Favorite Things
       </h1>
-      <FavoritesWithFilters favorites={favorites} />
+      <CategoryList items={favorites} noun="favorites" />
     </div>
   );
 }

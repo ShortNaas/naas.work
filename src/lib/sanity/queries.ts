@@ -45,14 +45,13 @@ export const latestPostsQuery = groq`
 
 export const projectsQuery = groq`
   *[_type == "project" && defined(slug.current)]
-    | order(pinned desc, orderRank asc, order asc, _createdAt desc) {
+    | order(pinned desc, orderRank asc, _createdAt desc) {
     _id,
     title,
     image,
     description,
     link,
     pinned,
-    order,
     orderRank,
     "kind": kind[]->{ _id, title }
   }
@@ -70,12 +69,14 @@ export const favoritesQuery = groq`
 `;
 
 export const toolsQuery = groq`
-  *[_type == "tool"] | order(_updatedAt desc) {
+  *[_type == "tool"] | order(coalesce(archived, false) asc, _updatedAt desc) {
     _id,
     name,
     description,
     link,
     _updatedAt,
+    archived,
+    archivedNote,
     "category": category->{ _id, title }
   }
 `;

@@ -6,7 +6,7 @@ Personal site: blog, projects, books, and custom pages. Built with Next.js and S
 
 - **Next.js** (App Router) + **Tailwind CSS**
 - **Sanity** for content (posts, projects, books, pages, site settings)
-- **next-themes** for light/dark mode (default: dark)
+- **Neon Postgres** for comments, **Resend** for the contact form
 
 ## Run locally
 
@@ -24,6 +24,17 @@ Content is edited in Sanity Studio, embedded at:
 **[/studio](http://localhost:3000/studio)**
 
 Configure CORS for your Studio URL in [sanity.io/manage](https://sanity.io/manage) (Project → API → CORS origins) so the embedded Studio can connect.
+
+The sidebar groups content by how it is authored:
+
+- **Projects**, **Tools** and **Favorites** list each label (`kind` / `category`)
+  as a parent, with `All …` and `Kinds` / `Categories` (create, rename, delete)
+  at the end of the group. The `+` inside a label opens the item form with that
+  reference already set, so a label is never created elsewhere and linked back
+  by hand. Projects keep drag-and-drop ordering in `All projects`.
+- **Logs** open to their entries.
+- A tool can be marked **No longer using**: it stays on `/uses`, struck through,
+  badged and sorted last in its category, with an optional one-line reason.
 
 ## On-demand revalidation (Vercel)
 
@@ -113,6 +124,7 @@ Comments only appear on the site once approved. New comments are protected by a 
 | `npm run build` | Production build         |
 | `npm run start` | Start production server  |
 | `npm run lint`  | Run ESLint               |
+| `npm test`      | Run the shared-logic self-check |
 
 ## Main routes
 
@@ -123,9 +135,9 @@ Comments only appear on the site once approved. New comments are protected by a 
 - `/about` — About (full bio + links from Site Settings)
 - `/contact` — Contact links
 - `/favorite` — My Favorite Things (grouped by category)
-- `/uses` — Tools I use (grouped by category). `/tools` 301-redirects here.
+- `/uses` — Tools I use (grouped by category; anything marked *no longer using* is struck through and sorted last). `/tools` 301-redirects here.
 - `/logs` — Logs index; `/logs/[slug]` — collection; `/logs/[slug]/[entrySlug]` — entry
-- `/[slug]` — Custom pages from Sanity (reserved: admin, blog, books, projects, favorite, uses, logs, about, contact, studio, api)
+- `/[slug]` — Custom pages from Sanity (a slug that collides with a static route above loses to it)
 - `/rss.xml` — RSS 2.0 feed for the blog
 - `/admin/comments` — Comment moderation (see below)
 
@@ -138,14 +150,12 @@ Comments only appear on the site once approved. New comments are protected by a 
 
 ## Ordering and pinning projects
 
-Both controls live on each Project document:
+Two controls:
 
 - **Pin to top** — pinned projects always sort above unpinned ones.
-- **Manual order** — a sort index; lower numbers come first.
-
-In the Studio sidebar, **Projects (drag to reorder)** gives drag-and-drop
-ordering (it writes the same rank the site reads). The other document types are
-listed below it.
+- **Projects (drag to reorder)** in the Studio sidebar gives drag-and-drop
+  ordering; it writes the rank the site reads. The other document types are
+  listed below it.
 
 ## Theme and fonts
 
@@ -155,3 +165,26 @@ runtime theme switcher, and `next-themes` is not a dependency.
 Typography uses a system font stack, so no webfont is downloaded and nothing is
 requested from Google Fonts at build or run time. `--font-sans` / `--font-heading`
 in `src/app/globals.css` are the single place to swap in a self-hosted face.
+
+## Design system
+
+Everything visual lives in `src/app/globals.css`: the palette is `:root` custom
+properties consumed as arbitrary Tailwind values (`bg-[var(--card-bg)]`). There
+is no `tailwind.config` and no second way to express a colour.
+
+- **Roles, not swatches** — canvas (`--background`), elevated surfaces
+  (`--card-bg`, `--sidebar-btn-bg`), text (`--foreground`, `--text-color`,
+  `--text-muted-color`, `--heading-color`), action (`--link-color`,
+  `--accent-bg` / `--accent-fg`), status (`--danger-color`), scrim
+  (`--overlay-color`).
+- **Layering** — 20 scroll-to-top · 30 sticky topbar · 40 drawer scrim ·
+  50 drawer · 60 skip link. The search dialog uses the browser's top layer.
+- **Motion** — a reading surface, so nothing enters on page load. The drawer
+  (200ms) and the drawer scrim + search panel (150–180ms, exponential ease-out)
+  are the only authored moments. `prefers-reduced-motion` removes the movement
+  at its source and keeps colour/opacity feedback.
+- **Touch** — controls reach 44px through `pointer-coarse:` variants, so pointer
+  layouts keep their density.
+- **Reachable** — a skip link is the first tab stop, every route sets its own
+  title, and the search dialog is a native `<dialog>` (focus trap, Escape and
+  focus restore come from the browser).

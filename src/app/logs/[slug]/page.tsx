@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { logsBySlugQuery, logsSlugsQuery } from "@/lib/sanity/queries";
 import type { Logs } from "@/lib/sanity/types";
@@ -10,6 +11,17 @@ async function getlogs(slug: string): Promise<Logs | null> {
     slug,
   });
   return logs;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const logs = await getlogs(slug);
+  if (!logs) return { title: "Log not found" };
+  return { title: logs.title, description: logs.description };
 }
 
 export async function generateStaticParams() {
@@ -33,17 +45,15 @@ export default async function LogsCollectionPage({
 
   return (
     <div className="max-w-6xl mx-auto py-8">
-      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-2">
+      <h1 className="text-2xl font-semibold text-[color:var(--heading-color)] mb-8">
         {logs.title}
       </h1>
 
       {logs.description && (
-        <p className="text-sm text-[color:var(--text-muted-color)] mb-8">
+        <p className="text-sm text-[color:var(--text-muted-color)] mb-2">
           {logs.description}
         </p>
       )}
-
-      {!logs.description && <div className="mb-8" />}
 
       {entries.length === 0 ? (
         <p className="text-sm text-[color:var(--text-muted-color)]">

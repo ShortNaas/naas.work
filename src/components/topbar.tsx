@@ -52,7 +52,7 @@ export function Topbar({
   return (
     <header
       id="topbar-wrapper"
-      className="flex-shrink-0 h-12 flex items-center bg-[var(--topbar-bg)] border-b border-[var(--main-border-color)] z-30"
+      className="sticky top-0 flex-shrink-0 h-12 flex items-center bg-[var(--topbar-bg)] backdrop-blur-sm border-b border-[var(--main-border-color)] z-30"
       aria-label="Top Bar"
     >
       <div
@@ -62,17 +62,19 @@ export function Topbar({
         <nav
           id="breadcrumb"
           aria-label="Breadcrumb"
-          className="hidden lg:flex items-center gap-1 text-base text-[color:var(--text-muted-color)] pl-2"
+          className="hidden lg:flex items-center gap-1 min-w-0 flex-1 text-base text-[color:var(--text-muted-color)] pl-2"
         >
           {breadcrumb.map((item, i) => (
-            <span key={item.href} className="flex items-center gap-1">
-              {i > 0 && <span className="opacity-60">›</span>}
+            <span key={item.href} className="flex items-center gap-1 min-w-0">
+              {i > 0 && <span className="opacity-60 shrink-0">›</span>}
               {i === breadcrumb.length - 1 ? (
-                <span aria-current="page">{item.label}</span>
+                <span aria-current="page" className="truncate">
+                  {item.label}
+                </span>
               ) : (
                 <Link
                   href={item.href}
-                  className="text-[color:var(--link-color)] hover:underline"
+                  className="text-[color:var(--link-color)] hover:underline shrink-0"
                 >
                   {item.label}
                 </Link>
@@ -88,7 +90,7 @@ export function Topbar({
           aria-expanded={sidebarOpen ?? false}
           aria-controls="sidebar"
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
+          className="lg:hidden p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
         >
           <IconBars className="w-5 h-5" />
         </button>
@@ -99,7 +101,7 @@ export function Topbar({
             id="search-trigger"
             aria-label="Search"
             onClick={onSearchClick}
-            className="p-2 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
+            className="p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
           >
             <IconSearch className="w-5 h-5" />
           </button>

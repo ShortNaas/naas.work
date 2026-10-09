@@ -1,4 +1,5 @@
 import { createHash, timingSafeEqual } from "crypto";
+import { cookies } from "next/headers";
 
 const COOKIE_NAME = "comments_admin";
 const COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours
@@ -24,7 +25,7 @@ export function verifyAdminToken(secret: string, token: string): boolean {
  * Gate for the moderation endpoints. The secret is sent in a header rather than
  * a query string so it does not end up in access logs or browser history.
  */
-export function isAuthorizedRequest(request: Request): boolean {
+export async function isAuthorizedRequest(request: Request): Promise<boolean> {
   const secret = process.env.COMMENTS_ADMIN_SECRET;
   if (!secret) return false;
 
@@ -32,12 +33,7 @@ export function isAuthorizedRequest(request: Request): boolean {
   if (headerToken && verifyAdminToken(secret, headerToken)) return true;
 
   // Fall back to the cookie so the moderation page itself can read data.
-  const cookieHeader = request.headers.get("cookie") ?? "";
-  const match = cookieHeader
-    .split(";")
-    .map((part) => part.trim())
-    .find((part) => part.startsWith(`${COOKIE_NAME}=`));
-  const cookieToken = match?.slice(COOKIE_NAME.length + 1);
+  const cookieToken = (await cookies()).get(COOKIE_NAME)?.value;
   return cookieToken ? verifyAdminToken(secret, cookieToken) : false;
 }
 

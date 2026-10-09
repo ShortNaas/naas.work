@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { proseOf } from "./shared";
 
 export const book = defineType({
   name: "book",
@@ -42,22 +43,14 @@ export const book = defineType({
       type: "array",
       title: "Short summary",
       description: "Shown on the book list page.",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
     defineField({
       name: "body",
       type: "array",
       title: "Review & notes",
       description: "Full review, actionable takeaways, and notes.",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
+      of: proseOf(),
     }),
   ],
 });

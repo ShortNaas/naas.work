@@ -1,37 +1,9 @@
-import { defineField, defineType } from "sanity";
+import { listType } from "./shared";
 
-export const tool = defineType({
+export const tool = listType({
   name: "tool",
   title: "Tool",
-  type: "document",
-  fields: [
-    defineField({
-      name: "name",
-      type: "string",
-      title: "Name",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "category",
-      type: "reference",
-      title: "Category",
-      description: "Add new categories in Tool Category.",
-      to: [{ type: "toolCategory" }],
-    }),
-    defineField({
-      name: "description",
-      type: "array",
-      title: "Short description",
-      of: [
-        { type: "block" },
-        { type: "bodyImage" },
-        { type: "inlineImage" },
-      ],
-    }),
-    defineField({
-      name: "link",
-      type: "url",
-      title: "Link or location",
-    }),
-  ],
+  category: "toolCategory",
+  categoryHint: "Categories live under Tools → Categories.",
+  archive: true,
 });

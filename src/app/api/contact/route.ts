@@ -3,6 +3,12 @@ import { Resend } from "resend";
 
 const CONTACT_EMAIL = "shortnaas@proton.me";
 
+// Mirrors the form's maxLength values: the browser constraint is a convenience,
+// these are the ones that hold.
+const MAX_NAME = 100;
+const MAX_EMAIL = 200;
+const MAX_MESSAGE = 5000;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -35,6 +41,25 @@ export async function POST(request: Request) {
       );
     }
 
+    if (fullName.trim().length > MAX_NAME) {
+      return NextResponse.json(
+        { message: `Name is too long (max ${MAX_NAME} characters).` },
+        { status: 400 }
+      );
+    }
+    if (email.trim().length > MAX_EMAIL) {
+      return NextResponse.json(
+        { message: `Email is too long (max ${MAX_EMAIL} characters).` },
+        { status: 400 }
+      );
+    }
+    if (message.trim().length > MAX_MESSAGE) {
+      return NextResponse.json(
+        { message: `Message is too long (max ${MAX_MESSAGE} characters).` },
+        { status: 400 }
+      );
+    }
+
     const apiKey = process.env.RESEND_API_KEY;
     const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <contact@naas.work>";
 
@@ -48,11 +73,14 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
 
+    // Newlines in a name would otherwise land in the mail subject header.
+    const safeName = fullName.trim().replace(/[\r\n]+/g, " ");
+
     const { error } = await resend.emails.send({
       from: fromEmail,
       to: CONTACT_EMAIL,
       replyTo: email.trim(),
-      subject: `Contact from ${fullName.trim()}`,
+      subject: `Contact from ${safeName}`,
       text: `From: ${fullName.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
     });
 

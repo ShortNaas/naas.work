@@ -58,13 +58,23 @@ export function MainLayout({
 
   return (
     <TocProvider>
+      {/*
+        First focusable thing on the page: the sidebar repeats on every route,
+        so keyboard users get a way past it. Hidden until focused.
+      */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-1/2 focus:-translate-x-1/2 focus:z-[60] focus:rounded-md focus:bg-[var(--accent-bg)] focus:px-4 focus:py-2 focus:text-sm focus:text-[var(--accent-fg)] focus:no-underline"
+      >
+        Skip to content
+      </a>
       <Sidebar open={sidebarOpen} />
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <button
           type="button"
           aria-label="Close sidebar"
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed inset-0 bg-[var(--overlay-color)] drawer-overlay z-40 lg:hidden"
           onClick={() => setOpenForPath(null)}
         />
       )}
@@ -80,6 +90,8 @@ export function MainLayout({
           />
           <div className="row flex-grow flex flex-col lg:flex-row">
             <main
+              id="main-content"
+              tabIndex={-1}
               aria-label="Main Content"
               className="flex-1 w-full lg:w-11/12 xl:w-9/12 px-0 md:px-4 py-6"
             >

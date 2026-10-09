@@ -11,12 +11,11 @@ export async function POST(request: Request) {
     );
   }
 
+  // The Sanity webhook sends `Authorization: Bearer <secret>`.
   const authHeader = request.headers.get("authorization");
-  const token =
-    authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
-  const headerSecret = request.headers.get("x-sanity-webhook-secret") ?? token;
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
-  if (headerSecret !== secret) {
+  if (token !== secret) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 

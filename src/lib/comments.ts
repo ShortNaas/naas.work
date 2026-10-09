@@ -23,7 +23,6 @@ export type Comment = {
 export type PendingComment = Comment & {
   email: string;
   approved: boolean;
-  created_at: string;
 };
 
 function getSql() {

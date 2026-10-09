@@ -10,6 +10,11 @@
 :root {
   color-scheme: dark;
 
+  /* The sidebar is fixed, so the content column is offset by its width. Both
+     numbers live here: the rail and the offset cannot drift apart. */
+  --sidebar-width: 232px;
+  --sidebar-gap: 20px;
+
   --background: #111111;
   --foreground: #b4b6b9;
   --main-border-color: #262626;
@@ -25,6 +30,15 @@
   --sidebar-active-color: #f0f0f2;
   --sidebar-hover-bg: #232323;
 
+  /* Utility chips in the sidebar footer (RSS + social). Muted on purpose so the
+     navigation keeps visual priority; the accent is not spent here. */
+  --sidebar-btn-bg: #212121;
+  --sidebar-btn-color: #a9abaf;
+  --sidebar-btn-hover-bg: #2b2b2b;
+  --sidebar-btn-hover-color: #e8e8ea;
+  /* RSS keeps its own brand hue on hover. */
+  --brand-rss: #f26522;
+
   --topbar-bg: rgba(17, 17, 17, 0.85);
   --topbar-text-color: #b4b6b9;
 
@@ -34,11 +48,20 @@
   --card-bg: #171717;
   --card-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.5), 0 0 0 1px #262626;
   --scroll-to-top-icon: #e8e8ea;
+  --scrollbar-thumb: #3f3f3f;
 
   /* Surfaces that carry text as a filled button/chip. Kept separate from
      --link-color so a link colour is never reused as a background. */
   --accent-bg: #1d4ed8;
   --accent-fg: #ffffff;
+
+  /* Status. Tuned for this canvas: 6.9:1 on --background, 6.6:1 on --card-bg. */
+  --danger-color: #f2777a;
+  /* Retired-but-kept, e.g. a tool I no longer use. Amber, not the error red:
+     9.9:1 on --background, so the badge stays AA at 12px. */
+  --warning-color: #e8b34a;
+  /* Scrim behind the mobile drawer and the search dialog. */
+  --overlay-color: rgba(0, 0, 0, 0.55);
 
   /*
    * System font stack: no webfont is downloaded, no request leaves the
@@ -49,16 +72,59 @@
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --font-heading: var(--font-sans);
+
+  /* Confident deceleration for arrivals. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
+/* Palette lives on :root and is consumed as arbitrary values,
+   e.g. bg-[var(--card-bg)] — one way to express a colour, not two. */
 
 /* Chirpy/Jekyll-style base and heading sizes */
 html {
   font-size: 18px;
+  caret-color: var(--link-color);
+  /* Firefox */
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/*
+ * Browser surfaces: selection, scrollbars, focus rings and underline offsets
+ * ship with defaults that belong to no design system. These are the cheapest
+ * signal that a page was designed rather than assembled.
+ */
+::selection {
+  background: var(--accent-bg);
+  color: var(--accent-fg);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 2px solid var(--background);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+/* One focus ring for every control that does not draw its own. */
+:focus-visible {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+a {
+  text-underline-offset: 0.2em;
 }
 
 body {
@@ -91,22 +157,28 @@ main, article {
   overflow-wrap: anywhere;
 }
 
-/* Layout – matches sidebar width (232px / 264px xl) + gap */
-#main-wrapper {
-  margin-left: 252px;
-}
+/*
+ * Layering, low to high. Positioned elements only — the search dialog lives in
+ * the browser's top layer and ignores this ladder entirely.
+ *   20 scroll-to-top · 30 sticky topbar · 40 drawer scrim · 50 drawer · 60 skip link
+ */
 
-@media (min-width: 1650px) {
-  #main-wrapper {
-    margin-left: 288px;
+/* The rail widens at Tailwind's `xl`, and the offset follows it. */
+@media (min-width: 1280px) {
+  :root {
+    --sidebar-width: 264px;
   }
 }
 
-/* Must match Tailwind's `lg` breakpoint (1024px), where the sidebar appears.
-   The old 991.98px value left a dead 252px gutter between 992px and 1023px. */
-@media (max-width: 1023.98px) {
+/* Layout – mobile first: below Tailwind's `lg` (1024px) the sidebar is a
+   drawer, so the content column is full width. */
+#main-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 1024px) {
   #main-wrapper {
-    margin-left: 0;
+    margin-left: calc(var(--sidebar-width) + var(--sidebar-gap));
   }
 }
 
@@ -152,14 +224,65 @@ main, article {
   border-radius: 4px;
 }
 
-/* Respect users who ask for less motion. */
+/*
+ * Motion.
+ *
+ * This surface is a reading surface: nothing enters on page load. Motion only
+ * explains the mobile drawer (continuity), the search dialog (arrival), and
+ * control state (feedback). Transform and opacity only, 150-180ms, decelerating.
+ */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Scrim behind the mobile drawer. */
+.drawer-overlay {
+  animation: overlay-in 150ms var(--ease-out-expo) both;
+}
+
+/* The scrim fills the viewport, so the dialog box itself must not move; the
+   panel inside it takes the arrival. */
+.dialog-panel {
+  animation: panel-in 180ms var(--ease-out-expo) both;
+}
+
+dialog[open]::backdrop {
+  animation: overlay-in 180ms var(--ease-out-expo) both;
+}
+
+/* A modal dialog traps focus and interaction, but not wheel scrolling. */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/*
+ * Reduced motion: fewer and gentler, not none. Movement is removed at its
+ * source (the drawer snaps, the dialog appears, no entrances run) while colour
+ * and opacity transitions keep confirming focus, hover and state.
+ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  #sidebar,
+  .drawer-overlay,
+  .dialog-panel,
+  dialog[open]::backdrop {
+    animation: none !important;
+    transition: none !important;
   }
 }

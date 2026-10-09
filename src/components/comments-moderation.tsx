@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PendingComment } from "@/lib/comments";
+import { formatDateYYYYMMDD } from "@/lib/format-date";
 
 type Action = "approve" | "unapprove" | "delete";
 
@@ -57,7 +58,7 @@ export function CommentsModeration({
           {c.author_name}
         </span>
         <span className="text-xs text-[color:var(--text-muted-color)]">
-          {new Date(c.created_at).toISOString().slice(0, 10)} · {c.post_slug}
+          {formatDateYYYYMMDD(c.created_at)} · {c.post_slug}
         </span>
       </div>
       <p className="mt-1 text-xs text-[color:var(--text-muted-color)]">
@@ -72,7 +73,7 @@ export function CommentsModeration({
             type="button"
             disabled={busyId === c.id}
             onClick={() => act(c.id, "unapprove")}
-            className="cursor-pointer rounded border border-[var(--main-border-color)] px-3 py-1 text-xs text-[color:var(--text-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-50"
+            className="cursor-pointer rounded border border-[var(--main-border-color)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--text-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-50"
           >
             Unapprove
           </button>
@@ -81,7 +82,7 @@ export function CommentsModeration({
             type="button"
             disabled={busyId === c.id}
             onClick={() => act(c.id, "approve")}
-            className="cursor-pointer rounded bg-[var(--accent-bg)] px-3 py-1 text-xs text-[var(--accent-fg)] hover:opacity-90 disabled:opacity-50"
+            className="cursor-pointer rounded bg-[var(--accent-bg)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[var(--accent-fg)] hover:opacity-90 disabled:opacity-50"
           >
             Approve
           </button>
@@ -90,7 +91,7 @@ export function CommentsModeration({
           type="button"
           disabled={busyId === c.id}
           onClick={() => act(c.id, "delete")}
-          className="cursor-pointer rounded px-3 py-1 text-xs text-red-400 hover:underline disabled:opacity-50"
+          className="cursor-pointer rounded px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--danger-color)] hover:underline disabled:opacity-50"
         >
           Delete
         </button>
@@ -100,7 +101,7 @@ export function CommentsModeration({
 
   return (
     <div className="space-y-8">
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-[color:var(--danger-color)]">{error}</p>}
 
       <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--text-muted-color)]">

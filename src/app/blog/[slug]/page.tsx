@@ -1,14 +1,27 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { client } from "@/lib/sanity/client";
 import { postBySlugQuery, postSlugsQuery } from "@/lib/sanity/queries";
 import type { Post } from "@/lib/sanity/types";
 import { getTocFromBody } from "@/lib/toc";
-import { PostPageClient } from "@/components/post-page-client";
+import { metaDescription } from "@/lib/portable-text";
+import { Article } from "@/components/article";
 import { CommentSection } from "@/components/comment-section";
 
 async function getPost(slug: string): Promise<Post | null> {
   const post = await client.fetch<Post | null>(postBySlugQuery, { slug });
   return post;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) return { title: "Post not found" };
+  return { title: post.title, description: metaDescription(post.body) };
 }
 
 /**
@@ -40,7 +53,7 @@ export default async function BlogPostPage({
 
   return (
     <div className="max-w-3xl mx-auto">
-      <PostPageClient post={post} toc={toc} />
+      <Article post={post} toc={toc} />
       <CommentSection postSlug={`/blog/${slug}`} />
     </div>
   );

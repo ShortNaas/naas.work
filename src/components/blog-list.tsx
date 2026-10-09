@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { formatDateYYYYMMDD } from "@/lib/format-date";
 import type { Post } from "@/lib/sanity/types";
+import { SortControls, useSort } from "@/components/sort-controls";
 
 type SortBy = "date" | "title" | "popular";
 export type ViewCounts = Record<string, number>;
@@ -53,6 +54,12 @@ const defaultAsc: Record<SortBy, boolean> = {
   popular: false,
 };
 
+const sortOptions: { key: SortBy; label: string }[] = [
+  { key: "date", label: "date" },
+  { key: "title", label: "title" },
+  { key: "popular", label: "popular" },
+];
+
 export function BlogList({
   posts,
   viewCounts,
@@ -60,22 +67,12 @@ export function BlogList({
   posts: Post[];
   viewCounts?: ViewCounts;
 }) {
-  const [sortBy, setSortBy] = useState<SortBy>("date");
-  const [sortAsc, setSortAsc] = useState(defaultAsc.date);
+  const { sortBy, sortAsc, toggle } = useSort<SortBy>("date", defaultAsc);
 
   const sortedPosts = useMemo(
     () => sortPosts(posts, sortBy, sortAsc, viewCounts),
     [posts, sortBy, sortAsc, viewCounts]
   );
-
-  const handleSort = (key: SortBy) => {
-    if (sortBy === key) {
-      setSortAsc((a) => !a);
-    } else {
-      setSortBy(key);
-      setSortAsc(defaultAsc[key]);
-    }
-  };
 
   if (posts.length === 0) {
     return (
@@ -83,35 +80,14 @@ export function BlogList({
     );
   }
 
-  const sortBtn = (key: SortBy, label: string) => {
-    const isActive = sortBy === key;
-    const direction = isActive ? (sortAsc ? "ascending" : "descending") : null;
-    return (
-      <button
-        type="button"
-        onClick={() => handleSort(key)}
-        aria-label={
-          direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
-        }
-        className={`cursor-pointer mr-3 px-1 py-0.5 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
-      >
-        {label}
-        {isActive && (
-          <span aria-hidden className="ml-1">
-            {sortAsc ? "↑" : "↓"}
-          </span>
-        )}
-      </button>
-    );
-  };
-
   return (
     <>
-      <div className="mb-5 text-sm text-[color:var(--text-muted-color)]">
-        Sort by: {sortBtn("date", "date")}
-        {sortBtn("title", "title")}
-        {sortBtn("popular", "popular")}
-      </div>
+      <SortControls
+        options={sortOptions}
+        sortBy={sortBy}
+        sortAsc={sortAsc}
+        onToggle={toggle}
+      />
       <ul className="list-none p-0 m-0 space-y-2">
         {sortedPosts.map((post) => (
           <li key={post._id}>

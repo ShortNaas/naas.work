@@ -47,8 +47,6 @@ export interface Project {
   link?: string;
   /** Pinned projects sort above everything else. */
   pinned?: boolean;
-  /** Manual sort index from the Studio. Lower sorts first. */
-  order?: number | null;
   /** Drag-and-drop ordering key managed by the Studio. */
   orderRank?: string | null;
   kind?: Array<{ _id: string; title: string }>;
@@ -103,6 +101,10 @@ export interface Tool {
   link?: string;
   _updatedAt?: string;
   category?: ToolCategory | null;
+  /** Kept on the page: struck through, last in its category, badged. */
+  archived?: boolean;
+  /** Why I stopped using it. Only rendered while `archived`. */
+  archivedNote?: string;
 }
 
 export interface LogsEntryRef {
