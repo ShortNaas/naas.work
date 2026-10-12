@@ -116,6 +116,17 @@ Comments need `DATABASE_URL`; moderation needs `COMMENTS_ADMIN_SECRET`. They are
 
 Comments only appear on the site once approved. New comments are protected by a hidden honeypot field and per-field length limits.
 
+## Contact form
+
+Submissions are emailed with [Resend](https://resend.com) from `src/app/api/contact/route.ts`, which holds both addresses: the recipient (`CONTACT_EMAIL`) and the default sender.
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Required. Without it the form returns 503 and sends nothing. |
+| `RESEND_FROM_EMAIL` | Optional. Overrides the sender; must be an address on a domain verified in Resend. Defaults to `Naas <yo@naas.work>`. |
+
+The visitor's address goes in `replyTo`, so replying answers them rather than the site.
+
 ## Scripts
 
 | Command      | Description              |
