@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const CONTACT_EMAIL = "shortnaas@proton.me";
+// Where contact-form mail is delivered. The sender below must stay on the
+// Resend-verified naas.work domain, which is why the two are kept separate.
+const CONTACT_EMAIL = "yo@naas.work";
 
 // Mirrors the form's maxLength values: the browser constraint is a convenience,
 // these are the ones that hold.
@@ -61,7 +63,7 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <contact@naas.work>";
+    const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <yo@naas.work>";
 
     if (!apiKey) {
       console.error("RESEND_API_KEY is not set");
