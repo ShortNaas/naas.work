@@ -6,8 +6,30 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { headingId, metaDescription, portableTextToPlainString, slugify } from "./portable-text.ts";
 import { groupByCategory, toHashtag, uniqueCategories } from "./category-groups.ts";
+import { smtpConfig } from "./smtp.ts";
 
 const block = (text: string) => ({ _type: "block", children: [{ text }] });
+
+test("smtpConfig: TLS mode follows the port, partial config is refused", () => {
+  const base = {
+    SMTP_HOST: "mail.example.com",
+    SMTP_USER: "yo@naas.work",
+    SMTP_PASSWORD: "secret",
+  };
+
+  assert.deepEqual(smtpConfig({ ...base, SMTP_PORT: "465" }), {
+    host: "mail.example.com",
+    port: 465,
+    secure: true,
+    auth: { user: "yo@naas.work", pass: "secret" },
+  });
+
+  // 587 upgrades with STARTTLS, so it must not be treated as implicit TLS.
+  assert.equal(smtpConfig({ ...base, SMTP_PORT: "587" })?.secure, false);
+  assert.equal(smtpConfig({ ...base, SMTP_PORT: undefined })?.port, 465);
+  assert.equal(smtpConfig({ ...base, SMTP_PASSWORD: undefined }), null);
+  assert.equal(smtpConfig({}), null);
+});
 
 test("headingId: the TOC link and the rendered heading agree", () => {
   assert.equal(slugify("Open Source"), "open-source");

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
+import { smtpConfig } from "@/lib/smtp";
 
-// Where contact-form mail is delivered. The sender below must stay on the
-// Resend-verified naas.work domain, which is why the two are kept separate.
+// Where contact-form mail is delivered. The sender has to stay on the naas.work
+// domain the mail host is authorised to send for (see README).
 const CONTACT_EMAIL = "yo@naas.work";
+const CONTACT_FROM = process.env.CONTACT_FROM ?? "Naas <yo@naas.work>";
 
 // Mirrors the form's maxLength values: the browser constraint is a convenience,
 // these are the ones that hold.
@@ -62,32 +64,38 @@ export async function POST(request: Request) {
       );
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.RESEND_FROM_EMAIL ?? "Naas <yo@naas.work>";
-
-    if (!apiKey) {
-      console.error("RESEND_API_KEY is not set");
+    const config = smtpConfig(process.env);
+    if (!config) {
+      console.error("SMTP_HOST / SMTP_USER / SMTP_PASSWORD are not set");
       return NextResponse.json(
         { message: "Contact form is not configured. Please try again later." },
         { status: 503 }
       );
     }
 
-    const resend = new Resend(apiKey);
+    // Timeouts stay under the platform's function limit, so an unreachable mail
+    // host fails cleanly instead of hanging until the request is killed.
+    const transport = nodemailer.createTransport({
+      ...config,
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
+    });
 
     // Newlines in a name would otherwise land in the mail subject header.
     const safeName = fullName.trim().replace(/[\r\n]+/g, " ");
 
-    const { error } = await resend.emails.send({
-      from: fromEmail,
-      to: CONTACT_EMAIL,
-      replyTo: email.trim(),
-      subject: `Contact from ${safeName}`,
-      text: `From: ${fullName.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
-    });
-
-    if (error) {
-      console.error("Resend error:", error);
+    // nodemailer throws on failure, unlike the API this replaced.
+    try {
+      await transport.sendMail({
+        from: CONTACT_FROM,
+        to: CONTACT_EMAIL,
+        replyTo: email.trim(),
+        subject: `Contact from ${safeName}`,
+        text: `From: ${fullName.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
+      });
+    } catch (error) {
+      console.error("SMTP send failed:", error);
       return NextResponse.json(
         { message: "Failed to send message. Please try again." },
         { status: 500 }

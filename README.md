@@ -118,14 +118,21 @@ Comments only appear on the site once approved. New comments are protected by a 
 
 ## Contact form
 
-Submissions are emailed with [Resend](https://resend.com) from `src/app/api/contact/route.ts`, which holds both addresses: the recipient (`CONTACT_EMAIL`) and the default sender.
+Submissions are sent over SMTP by `src/app/api/contact/route.ts`, to the same mail
+host that already serves `naas.work` — no third-party sending API. That file holds
+both addresses: the recipient (`CONTACT_EMAIL`) and the sender (`CONTACT_FROM`).
 
 | Variable | Purpose |
 | --- | --- |
-| `RESEND_API_KEY` | Required. Without it the form returns 503 and sends nothing. |
-| `RESEND_FROM_EMAIL` | Optional. Overrides the sender; must be an address on a domain verified in Resend. Defaults to `Naas <yo@naas.work>`. |
+| `SMTP_HOST` | Submission host from your mail provider's panel. Nothing public resolves for `smtp.naas.work`, so only they can supply it. |
+| `SMTP_PORT` | `465` (implicit TLS) or `587` (STARTTLS). Defaults to 465; the TLS mode is derived from it, never set separately. |
+| `SMTP_USER` | Usually `yo@naas.work`. |
+| `SMTP_PASSWORD` | Mailbox or app-specific password. |
+| `CONTACT_FROM` | Optional sender, defaults to `Naas <yo@naas.work>`. Must stay on `naas.work`, which root SPF already authorises (`include:_spf.franklymail.com`). |
 
-The visitor's address goes in `replyTo`, so replying answers them rather than the site.
+Without the three required variables the route returns 503 and the form says it is
+not configured. The visitor's address goes in `replyTo`, so replying answers them
+rather than the site.
 
 ## Scripts
 
