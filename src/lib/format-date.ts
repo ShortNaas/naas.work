@@ -1,10 +1,5 @@
 /** Format an ISO or date string as YYYY-MM-DD (numbers only) for site-wide consistency. */
 export function formatDateYYYYMMDD(iso: string | undefined): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+  if (!iso || iso.length < 10) return "";
+  return iso.slice(0, 10);
 }
