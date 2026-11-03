@@ -14,7 +14,7 @@ export function LayoutWrapper({
   const pathname = usePathname();
 
   // Don't wrap Sanity Studio or other full-screen routes
-  if (pathname?.startsWith("/studio")) {
+  if (pathname?.startsWith("/studio") || pathname?.startsWith("/keep-going")) {
     return <>{children}</>;
   }
 

@@ -16,6 +16,7 @@ import { tool } from "./sanity/schemas/tool";
 import { toolCategory } from "./sanity/schemas/toolCategory";
 import { logs } from "./sanity/schemas/logs";
 import { logsEntry } from "./sanity/schemas/logsEntry";
+import { keepGoing } from "./sanity/schemas/keepGoing";
 import { bodyImage } from "./sanity/schemas/bodyImage";
 import { inlineImage } from "./sanity/schemas/inlineImage";
 
@@ -78,6 +79,7 @@ const NESTED_TYPES = new Set<string>([
   ...LIST_SECTIONS.flatMap((section) => [section.itemType, section.categoryType]),
   "logs",
   "logsEntry",
+  "keepGoing",
 ]);
 
 async function categorySection(
@@ -170,6 +172,13 @@ export default defineConfig({
               .title("Logs")
               .child(S.documentTypeList("logs").title("Logs")),
             S.divider(),
+            orderableDocumentListDeskItem({
+              type: "keepGoing",
+              title: "Keep Going",
+              S,
+              context,
+            }),
+            S.divider(),
             ...S.documentTypeListItems().filter(
               (item) => !NESTED_TYPES.has(item.getId() ?? "")
             ),
@@ -191,6 +200,7 @@ export default defineConfig({
       toolCategory,
       logs,
       logsEntry,
+      keepGoing,
       // Shared rich-text block types, referenced from every prose field.
       bodyImage,
       inlineImage,

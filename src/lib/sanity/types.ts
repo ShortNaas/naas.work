@@ -137,3 +137,39 @@ export interface LogsEntry {
     slug: { current: string };
   };
 }
+
+export interface KeepGoingItem {
+  _id: string;
+  mediaType: "image" | "video" | "gif";
+  localUrl?: string;
+  itemNumber?: number;
+  image?: {
+    asset?: {
+      _id: string;
+      url: string;
+      metadata?: {
+        dimensions?: {
+          width: number;
+          height: number;
+          aspectRatio: number;
+        };
+        lqip?: string;
+      };
+    };
+  };
+  video?: {
+    asset?: {
+      _id: string;
+      url: string;
+      mimeType?: string;
+    };
+  };
+  videoFile?: {
+    asset?: {
+      _id: string;
+      url: string;
+      mimeType?: string;
+    };
+  };
+  orderRank?: string | null;
+}
