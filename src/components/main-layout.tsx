@@ -8,7 +8,6 @@ import { Footer } from "./footer";
 import { SearchOverlay } from "./search-overlay";
 import { RightPanel, type LatestPost } from "./right-panel";
 import { ScrollToTop } from "./scroll-to-top";
-import { TocProvider } from "@/contexts/toc-context";
 import type { SearchIndex } from "@/app/api/search/route";
 
 export function MainLayout({
@@ -63,7 +62,7 @@ export function MainLayout({
   }
 
   return (
-    <TocProvider>
+    <>
       {/*
         First focusable thing on the page: the sidebar repeats on every route,
         so keyboard users get a way past it. Hidden until focused.
@@ -125,6 +124,6 @@ export function MainLayout({
         error={searchError}
       />
       <ScrollToTop />
-    </TocProvider>
+    </>
   );
 }
