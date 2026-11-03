@@ -10,6 +10,8 @@ export function Footer() {
         © <time>{year}</time>{" "}
         <a
           href="https://github.com/shortnaas"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-[color:var(--link-color)] hover:underline"
         >
           Naas

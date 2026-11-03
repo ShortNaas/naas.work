@@ -134,17 +134,26 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 <div className="flex flex-wrap items-baseline gap-x-1.5">
                   <div className="text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
-                      /*
-                       * In-page navigation, no new tab. `prefetch` pulls the
-                       * destination early so it still feels instant.
-                       */
-                      <Link
-                        href={project.link}
-                        prefetch
-                        className="text-[color:var(--link-color)] hover:underline"
-                      >
-                        {project.title}
-                      </Link>
+                      project.link.startsWith("http://") ||
+                      project.link.startsWith("https://") ||
+                      project.link.startsWith("//") ? (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[color:var(--link-color)] hover:underline"
+                        >
+                          {project.title}
+                        </a>
+                      ) : (
+                        <Link
+                          href={project.link}
+                          prefetch
+                          className="text-[color:var(--link-color)] hover:underline"
+                        >
+                          {project.title}
+                        </Link>
+                      )
                     ) : (
                       project.title
                     )}

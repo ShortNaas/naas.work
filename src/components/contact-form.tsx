@@ -167,7 +167,7 @@ export function ContactForm({ projects }: Props) {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="px-4 py-2.5 rounded-lg bg-[var(--accent-bg)] text-[var(--accent-fg)] font-medium text-sm hover:opacity-90 disabled:opacity-60 transition-opacity pointer-coarse:min-h-11"
+        className="cursor-pointer px-4 py-2.5 rounded-lg bg-[var(--accent-bg)] text-[var(--accent-fg)] font-medium text-sm hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity pointer-coarse:min-h-11"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>

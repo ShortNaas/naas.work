@@ -34,8 +34,17 @@ function VideoCard({ item }: { item: KeepGoingItem }) {
 
   return (
     <div
-      className="group relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 bg-[var(--card-bg)]"
+      role="button"
+      tabIndex={0}
+      aria-label={`Keep going video ${item.itemNumber || ""}`.trim()}
+      className="group relative cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 bg-[var(--card-bg)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--link-color)]"
       onClick={togglePlay}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          togglePlay();
+        }
+      }}
     >
       <video
         ref={videoRef}

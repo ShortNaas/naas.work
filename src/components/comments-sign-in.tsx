@@ -67,7 +67,7 @@ export function CommentsSignIn() {
       <button
         type="submit"
         disabled={busy}
-        className="cursor-pointer rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 pointer-coarse:min-h-11 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="cursor-pointer rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 pointer-coarse:min-h-11 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {busy ? "Signing in…" : "Sign in"}
       </button>

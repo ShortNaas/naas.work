@@ -167,22 +167,31 @@ export function SearchOverlay({
                       Projects
                     </span>
                     <ul className="mt-1 list-none p-0 m-0">
-                      {projects.map((item) => (
-                        <li key={item._id}>
-                          <a
-                            href={item.url}
-                            onClick={() => onClose()}
-                            className="block px-3 py-2 pointer-coarse:py-3 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
-                          >
-                            <span className="font-medium">{item.title}</span>
-                            {item.snippet && (
-                              <span className="block text-sm text-[color:var(--text-muted-color)] truncate mt-0.5">
-                                {item.snippet}
-                              </span>
-                            )}
-                          </a>
-                        </li>
-                      ))}
+                      {projects.map((item) => {
+                        const isExternal =
+                          item.url.startsWith("http://") ||
+                          item.url.startsWith("https://") ||
+                          item.url.startsWith("//");
+                        return (
+                          <li key={item._id}>
+                            <a
+                              href={item.url}
+                              onClick={() => onClose()}
+                              {...(isExternal
+                                ? { target: "_blank", rel: "noopener noreferrer" }
+                                : {})}
+                              className="block px-3 py-2 pointer-coarse:py-3 rounded-md text-[color:var(--foreground)] hover:bg-[var(--sidebar-hover-bg)] no-underline"
+                            >
+                              <span className="font-medium">{item.title}</span>
+                              {item.snippet && (
+                                <span className="block text-sm text-[color:var(--text-muted-color)] truncate mt-0.5">
+                                  {item.snippet}
+                                </span>
+                              )}
+                            </a>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </li>
                 )}
