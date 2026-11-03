@@ -29,6 +29,7 @@ export interface Post {
       _ref: string;
       _type: string;
     };
+    alt?: string;
   };
   body?: PortableTextBlock[];
   excerpt?: string;
@@ -130,6 +131,7 @@ export interface LogsEntry {
   publishedAt?: string;
   coverImage?: {
     asset: { _ref: string; _type: string };
+    alt?: string;
   };
   body?: PortableTextBlock[];
   logs?: {

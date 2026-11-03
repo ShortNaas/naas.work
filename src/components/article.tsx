@@ -42,7 +42,7 @@ export function Article({
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            alt=""
+            alt={post.coverImage?.alt || `Cover image for ${post.title}`}
             className="w-full h-full object-cover"
           />
         </div>

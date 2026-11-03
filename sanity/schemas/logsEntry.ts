@@ -30,6 +30,16 @@ export const logsEntry = defineType({
       type: "image",
       title: "Cover image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt text",
+          description: "Describe the image for screen readers and accessibility.",
+          validation: (Rule) =>
+            Rule.max(200).warning("A short description helps accessibility."),
+        }),
+      ],
     }),
     defineField({
       name: "body",
