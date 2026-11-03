@@ -35,8 +35,8 @@ export function SortControls<K extends string>({
   onToggle: (key: K) => void;
 }) {
   return (
-    <div className="mb-5 text-sm text-[color:var(--text-muted-color)]">
-      Sort by:{" "}
+    <div className="mb-5 flex flex-wrap items-center gap-1 text-sm text-[color:var(--text-muted-color)]">
+      <span className="mr-1">Sort by:</span>
       {options.map(({ key, label }) => {
         const isActive = sortBy === key;
         const direction = isActive ? (sortAsc ? "ascending" : "descending") : null;
@@ -48,7 +48,11 @@ export function SortControls<K extends string>({
             aria-label={
               direction ? `Sort by ${label}, currently ${direction}` : `Sort by ${label}`
             }
-            className={`cursor-pointer mr-3 px-1 py-0.5 pointer-coarse:min-h-11 pointer-coarse:px-3 text-sm transition-colors ${isActive ? "text-[color:var(--link-color)]" : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)]"}`}
+            className={`cursor-pointer inline-flex items-center px-2 py-1 pointer-coarse:min-h-[44px] pointer-coarse:px-3 text-sm rounded-md transition-colors ${
+              isActive
+                ? "text-[color:var(--link-color)] font-medium"
+                : "text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)] hover:bg-[var(--sidebar-hover-bg)]"
+            }`}
           >
             {label}
             {isActive && (

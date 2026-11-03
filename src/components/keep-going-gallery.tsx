@@ -162,7 +162,7 @@ export function KeepGoingGallery({ items }: { items: KeepGoingItem[] }) {
             disabled={zoomIndex === 0}
             aria-label="Zoom out"
             title="Zoom out"
-            className="p-2 rounded-md text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="p-2 pointer-coarse:p-3 pointer-coarse:min-w-[44px] pointer-coarse:min-h-[44px] inline-flex items-center justify-center rounded-md text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -185,7 +185,7 @@ export function KeepGoingGallery({ items }: { items: KeepGoingItem[] }) {
             disabled={zoomIndex === 3}
             aria-label="Zoom in"
             title="Zoom in"
-            className="p-2 rounded-md text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="p-2 pointer-coarse:p-3 pointer-coarse:min-w-[44px] pointer-coarse:min-h-[44px] inline-flex items-center justify-center rounded-md text-[color:var(--text-muted-color)] hover:text-[color:var(--heading-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
