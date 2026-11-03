@@ -20,6 +20,7 @@ export function MainLayout({
   latestPosts: LatestPost[];
 }) {
   const pathname = usePathname();
+
   // Remember *which* route the drawer was opened on, so navigating away closes
   // it without a setState-in-effect.
   const [openForPath, setOpenForPath] = useState<string | null>(null);
@@ -55,6 +56,11 @@ export function MainLayout({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [sidebarOpen]);
+
+  // Don't wrap Sanity Studio or other full-screen routes
+  if (pathname?.startsWith("/studio") || pathname?.startsWith("/keep-going")) {
+    return <>{children}</>;
+  }
 
   return (
     <TocProvider>
