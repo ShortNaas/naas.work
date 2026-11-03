@@ -2,7 +2,6 @@ import { defineConfig, type ConfigContext } from "sanity";
 import { structureTool, type StructureBuilder } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
-import type { SanityClient } from "@sanity/client";
 
 import { post } from "./sanity/schemas/post";
 import { project } from "./sanity/schemas/project";
@@ -87,7 +86,7 @@ async function categorySection(
   context: ConfigContext,
   section: (typeof LIST_SECTIONS)[number]
 ) {
-  const client: SanityClient = context.getClient({ apiVersion: API_VERSION });
+  const client = context.getClient({ apiVersion: API_VERSION });
 
   // A failed fetch must not take the whole sidebar down with it.
   const categories = await client
