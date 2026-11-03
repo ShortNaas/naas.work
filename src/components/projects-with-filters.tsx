@@ -5,13 +5,9 @@ import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 import { portableTextToPlainString } from "@/lib/portable-text";
+import { toHashtag } from "@/lib/category-groups";
 
 type KindItem = { _id: string; title: string };
-
-/** Hashtag form of a label: "Open Source" -> "#opensource". */
-function toHashtag(title: string): string {
-  return `#${title.toLowerCase().replace(/[^a-z0-9]+/g, "")}`;
-}
 
 const TRUNCATE_AT = 200;
 
