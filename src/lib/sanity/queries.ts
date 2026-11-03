@@ -202,3 +202,41 @@ export const searchIndexQuery = groq`
     }
   }
 `;
+
+export const keepGoingQuery = groq`
+  *[_type == "keepGoing"] | order(orderRank asc, _createdAt asc) {
+    _id,
+    _createdAt,
+    mediaType,
+    image {
+      ...,
+      asset-> {
+        _id,
+        url,
+        metadata {
+          dimensions {
+            width,
+            height,
+            aspectRatio
+          },
+          lqip
+        }
+      }
+    },
+    video {
+      asset-> {
+        _id,
+        url,
+        mimeType
+      }
+    },
+    videoFile {
+      asset-> {
+        _id,
+        url,
+        mimeType
+      }
+    },
+    orderRank
+  }
+`;

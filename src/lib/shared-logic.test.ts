@@ -6,6 +6,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { headingId, metaDescription, portableTextToPlainString, slugify } from "./portable-text.ts";
 import { groupByCategory, toHashtag, uniqueCategories } from "./category-groups.ts";
+import { formatDateYYYYMMDD } from "./format-date.ts";
 import { smtpConfig } from "./smtp.ts";
 
 const block = (text: string) => ({ _type: "block", children: [{ text }] });
@@ -59,6 +60,13 @@ test("metaDescription: trimmed to length, undefined when there is nothing", () =
 test("toHashtag", () => {
   assert.equal(toHashtag("Open Source"), "#opensource");
   assert.equal(toHashtag("C++ / Rust"), "#crust");
+});
+
+test("formatDateYYYYMMDD: slices ISO dates cleanly", () => {
+  assert.equal(formatDateYYYYMMDD("2024-03-01T12:00:00.000Z"), "2024-03-01");
+  assert.equal(formatDateYYYYMMDD("2024-03-01"), "2024-03-01");
+  assert.equal(formatDateYYYYMMDD(undefined), "");
+  assert.equal(formatDateYYYYMMDD(""), "");
 });
 
 const items = [

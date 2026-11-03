@@ -29,6 +29,7 @@ export interface Post {
       _ref: string;
       _type: string;
     };
+    alt?: string;
   };
   body?: PortableTextBlock[];
   excerpt?: string;
@@ -130,10 +131,47 @@ export interface LogsEntry {
   publishedAt?: string;
   coverImage?: {
     asset: { _ref: string; _type: string };
+    alt?: string;
   };
   body?: PortableTextBlock[];
   logs?: {
     title: string;
     slug: { current: string };
   };
+}
+
+export interface KeepGoingItem {
+  _id: string;
+  mediaType: "image" | "video" | "gif";
+  localUrl?: string;
+  itemNumber?: number;
+  image?: {
+    asset?: {
+      _id: string;
+      url: string;
+      metadata?: {
+        dimensions?: {
+          width: number;
+          height: number;
+          aspectRatio: number;
+        };
+        lqip?: string;
+      };
+    };
+  };
+  video?: {
+    asset?: {
+      _id: string;
+      url: string;
+      mimeType?: string;
+    };
+  };
+  videoFile?: {
+    asset?: {
+      _id: string;
+      url: string;
+      mimeType?: string;
+    };
+  };
+  orderRank?: string | null;
 }

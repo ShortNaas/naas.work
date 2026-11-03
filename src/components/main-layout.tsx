@@ -8,7 +8,6 @@ import { Footer } from "./footer";
 import { SearchOverlay } from "./search-overlay";
 import { RightPanel, type LatestPost } from "./right-panel";
 import { ScrollToTop } from "./scroll-to-top";
-import { TocProvider } from "@/contexts/toc-context";
 import type { SearchIndex } from "@/app/api/search/route";
 
 export function MainLayout({
@@ -20,6 +19,7 @@ export function MainLayout({
   latestPosts: LatestPost[];
 }) {
   const pathname = usePathname();
+
   // Remember *which* route the drawer was opened on, so navigating away closes
   // it without a setState-in-effect.
   const [openForPath, setOpenForPath] = useState<string | null>(null);
@@ -56,8 +56,13 @@ export function MainLayout({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [sidebarOpen]);
 
+  // Don't wrap Sanity Studio or other full-screen routes
+  if (pathname?.startsWith("/studio") || pathname?.startsWith("/keep-going")) {
+    return <>{children}</>;
+  }
+
   return (
-    <TocProvider>
+    <>
       {/*
         First focusable thing on the page: the sidebar repeats on every route,
         so keyboard users get a way past it. Hidden until focused.
@@ -119,6 +124,6 @@ export function MainLayout({
         error={searchError}
       />
       <ScrollToTop />
-    </TocProvider>
+    </>
   );
 }

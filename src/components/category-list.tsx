@@ -113,9 +113,22 @@ export function CategoryList({
                       {/* Name and category share one line, comma-separated. */}
                       <div className="flex flex-wrap items-baseline gap-x-1.5">
                         {item.link ? (
-                          <Link href={item.link} prefetch className={nameClass}>
-                            {item.name}
-                          </Link>
+                          item.link.startsWith("http://") ||
+                          item.link.startsWith("https://") ||
+                          item.link.startsWith("//") ? (
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={nameClass}
+                            >
+                              {item.name}
+                            </a>
+                          ) : (
+                            <Link href={item.link} prefetch className={nameClass}>
+                              {item.name}
+                            </Link>
+                          )
                         ) : (
                           <span className={nameClass}>{item.name}</span>
                         )}

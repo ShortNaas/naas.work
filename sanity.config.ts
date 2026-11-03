@@ -2,7 +2,6 @@ import { defineConfig, type ConfigContext } from "sanity";
 import { structureTool, type StructureBuilder } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
-import type { SanityClient } from "@sanity/client";
 
 import { post } from "./sanity/schemas/post";
 import { project } from "./sanity/schemas/project";
@@ -16,6 +15,7 @@ import { tool } from "./sanity/schemas/tool";
 import { toolCategory } from "./sanity/schemas/toolCategory";
 import { logs } from "./sanity/schemas/logs";
 import { logsEntry } from "./sanity/schemas/logsEntry";
+import { keepGoing } from "./sanity/schemas/keepGoing";
 import { bodyImage } from "./sanity/schemas/bodyImage";
 import { inlineImage } from "./sanity/schemas/inlineImage";
 
@@ -78,6 +78,7 @@ const NESTED_TYPES = new Set<string>([
   ...LIST_SECTIONS.flatMap((section) => [section.itemType, section.categoryType]),
   "logs",
   "logsEntry",
+  "keepGoing",
 ]);
 
 async function categorySection(
@@ -85,7 +86,7 @@ async function categorySection(
   context: ConfigContext,
   section: (typeof LIST_SECTIONS)[number]
 ) {
-  const client: SanityClient = context.getClient({ apiVersion: API_VERSION });
+  const client = context.getClient({ apiVersion: API_VERSION });
 
   // A failed fetch must not take the whole sidebar down with it.
   const categories = await client
@@ -170,6 +171,13 @@ export default defineConfig({
               .title("Logs")
               .child(S.documentTypeList("logs").title("Logs")),
             S.divider(),
+            orderableDocumentListDeskItem({
+              type: "keepGoing",
+              title: "Keep Going",
+              S,
+              context,
+            }),
+            S.divider(),
             ...S.documentTypeListItems().filter(
               (item) => !NESTED_TYPES.has(item.getId() ?? "")
             ),
@@ -191,6 +199,7 @@ export default defineConfig({
       toolCategory,
       logs,
       logsEntry,
+      keepGoing,
       // Shared rich-text block types, referenced from every prose field.
       bodyImage,
       inlineImage,

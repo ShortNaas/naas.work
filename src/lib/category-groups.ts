@@ -37,17 +37,14 @@ export function uniqueCategories(items: CategorizedItem[]): Category[] {
 export function groupByCategory(
   items: CategorizedItem[]
 ): { category: Category | null; items: CategorizedItem[] }[] {
-  const groups = new Map<
-    string,
-    { category: Category | null; items: CategorizedItem[] }
-  >();
-  for (const item of items) {
-    const key = item.category?._id ?? "uncategorized";
-    const group = groups.get(key) ?? { category: item.category ?? null, items: [] };
-    group.items.push(item);
-    groups.set(key, group);
-  }
-  return [...groups.values()].sort((a, b) =>
+  const grouped = Map.groupBy(
+    items,
+    (item) => item.category?._id ?? "uncategorized"
+  );
+  return Array.from(grouped.values(), (groupItems) => ({
+    category: groupItems[0]?.category ?? null,
+    items: groupItems,
+  })).sort((a, b) =>
     a.category
       ? b.category
         ? a.category.title.localeCompare(b.category.title)

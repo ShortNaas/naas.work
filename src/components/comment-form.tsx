@@ -140,7 +140,7 @@ export function CommentForm({ postSlug }: { postSlug: string }) {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 pointer-coarse:min-h-11 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="cursor-pointer rounded-lg bg-[var(--accent-bg)] px-4 py-2.5 pointer-coarse:min-h-11 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {status === "sending" ? "Posting…" : "Post comment"}
       </button>

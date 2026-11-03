@@ -5,13 +5,9 @@ import Link from "next/link";
 import type { Project } from "@/lib/sanity/types";
 import { PortableText } from "@/components/portable-text";
 import { portableTextToPlainString } from "@/lib/portable-text";
+import { toHashtag } from "@/lib/category-groups";
 
 type KindItem = { _id: string; title: string };
-
-/** Hashtag form of a label: "Open Source" -> "#opensource". */
-function toHashtag(title: string): string {
-  return `#${title.toLowerCase().replace(/[^a-z0-9]+/g, "")}`;
-}
 
 const TRUNCATE_AT = 200;
 
@@ -138,17 +134,26 @@ export function ProjectsWithFilters({ projects }: { projects: Project[] }) {
                 <div className="flex flex-wrap items-baseline gap-x-1.5">
                   <div className="text-lg font-semibold text-[color:var(--heading-color)]">
                     {project.link ? (
-                      /*
-                       * In-page navigation, no new tab. `prefetch` pulls the
-                       * destination early so it still feels instant.
-                       */
-                      <Link
-                        href={project.link}
-                        prefetch
-                        className="text-[color:var(--link-color)] hover:underline"
-                      >
-                        {project.title}
-                      </Link>
+                      project.link.startsWith("http://") ||
+                      project.link.startsWith("https://") ||
+                      project.link.startsWith("//") ? (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[color:var(--link-color)] hover:underline"
+                        >
+                          {project.title}
+                        </a>
+                      ) : (
+                        <Link
+                          href={project.link}
+                          prefetch
+                          className="text-[color:var(--link-color)] hover:underline"
+                        >
+                          {project.title}
+                        </Link>
+                      )
                     ) : (
                       project.title
                     )}

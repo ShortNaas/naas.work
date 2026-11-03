@@ -119,14 +119,22 @@ function buildComponents(size: ImageSize) {
       ),
     },
     marks: {
-      link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => (
-        <a
-          href={value?.href}
-          className="text-[color:var(--link-color)] hover:underline"
-        >
-          {children}
-        </a>
-      ),
+      link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => {
+        const href = value?.href || "";
+        const isExternal =
+          href.startsWith("http://") ||
+          href.startsWith("https://") ||
+          href.startsWith("//");
+        return (
+          <a
+            href={href}
+            className="text-[color:var(--link-color)] hover:underline"
+            {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {children}
+          </a>
+        );
+      },
     },
     types: {
       // Structured image with alt text and optional caption.

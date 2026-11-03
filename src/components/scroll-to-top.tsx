@@ -1,40 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
-  // Read scroll position outside React state to avoid a render per scroll event.
-  const frame = useRef<number | null>(null);
 
   useEffect(() => {
-    const update = () => {
-      frame.current = null;
-      setVisible(window.scrollY > 400);
-    };
-
-    // Passive listener + rAF coalescing: the listener never blocks scrolling,
-    // and layout is read at most once per frame instead of on every event,
-    // which is what caused the forced-reflow warning.
-    const handleScroll = () => {
-      if (frame.current !== null) return;
-      frame.current = window.requestAnimationFrame(update);
-    };
-
+    const handleScroll = () => setVisible(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    update();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (frame.current !== null) window.cancelAnimationFrame(frame.current);
-    };
-  }, []);
-
-  const scrollUp = useCallback(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (!visible) return null;
@@ -43,9 +18,9 @@ export function ScrollToTop() {
     <div className="fixed bottom-8 right-8 z-20">
       <button
         type="button"
-        onClick={scrollUp}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Scroll to top"
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--card-bg)] text-[color:var(--scroll-to-top-icon)] shadow-[var(--card-shadow)] border border-[var(--main-border-color)] hover:bg-[var(--sidebar-hover-bg)] transition-colors"
+        className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--card-bg)] text-[color:var(--scroll-to-top-icon)] shadow-[var(--card-shadow)] border border-[var(--main-border-color)] hover:bg-[var(--sidebar-hover-bg)] transition-colors cursor-pointer"
       >
         <svg
           className="h-5 w-5"
@@ -53,7 +28,11 @@ export function ScrollToTop() {
           viewBox="0 0 24 24"
           aria-hidden
         >
-          <path fillRule="evenodd" d="M11.47 4.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 01-1.06 1.06L12 6.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z" clipRule="evenodd" />
+          <path
+            fillRule="evenodd"
+            d="M11.47 4.72a.75.75 0 011.06 0l7.5 7.5a.75.75 0 01-1.06 1.06L12 6.31l-6.97 6.97a.75.75 0 01-1.06-1.06l7.5-7.5z"
+            clipRule="evenodd"
+          />
         </svg>
       </button>
     </div>

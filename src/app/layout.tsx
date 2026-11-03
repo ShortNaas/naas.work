@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { LayoutWrapper } from "@/components/layout-wrapper";
+import { MainLayout } from "@/components/main-layout";
 import { GoatCounter } from "@/components/goatcounter";
 import { client } from "@/lib/sanity/client";
 import { latestPostsQuery } from "@/lib/sanity/queries";
@@ -47,7 +47,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen bg-[var(--background)] text-[color:var(--foreground)]">
-        <LayoutWrapper latestPosts={latestPosts}>{children}</LayoutWrapper>
+        <MainLayout latestPosts={latestPosts}>{children}</MainLayout>
         <GoatCounter />
       </body>
     </html>

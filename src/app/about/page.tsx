@@ -53,16 +53,23 @@ export default async function AboutPage() {
             Links
           </h2>
           <ul className="list-none p-0 m-0 flex flex-wrap gap-4">
-            {settings.links.map((link, i) => (
-              <li key={i}>
-                <a
-                  href={link.url}
-                  className="text-[color:var(--link-color)] hover:underline"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+            {settings.links.map((link, i) => {
+              const isExternal =
+                link.url.startsWith("http://") ||
+                link.url.startsWith("https://") ||
+                link.url.startsWith("//");
+              return (
+                <li key={i}>
+                  <a
+                    href={link.url}
+                    className="text-[color:var(--link-color)] hover:underline"
+                    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

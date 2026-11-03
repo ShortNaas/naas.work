@@ -13,6 +13,7 @@ const topbarTitles: Record<string, string> = {
   "/uses": "Uses",
   "/favorite": "Favorites",
   "/logs": "Logs",
+  "/keep-going": "Keep Going",
   "/contact": "Contact",
 };
 
@@ -90,7 +91,7 @@ export function Topbar({
           aria-expanded={sidebarOpen ?? false}
           aria-controls="sidebar"
           onClick={onMenuClick}
-          className="lg:hidden p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
+          className="lg:hidden p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)] transition-colors cursor-pointer"
         >
           <IconBars className="w-5 h-5" />
         </button>
@@ -101,7 +102,7 @@ export function Topbar({
             id="search-trigger"
             aria-label="Search"
             onClick={onSearchClick}
-            className="p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)]"
+            className="p-2 pointer-coarse:p-3 rounded-md text-[color:var(--topbar-text-color)] hover:bg-[var(--sidebar-hover-bg)] transition-colors cursor-pointer"
           >
             <IconSearch className="w-5 h-5" />
           </button>

@@ -73,7 +73,7 @@ export function CommentsModeration({
             type="button"
             disabled={busyId === c.id}
             onClick={() => act(c.id, "unapprove")}
-            className="cursor-pointer rounded border border-[var(--main-border-color)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--text-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-50"
+            className="cursor-pointer rounded border border-[var(--main-border-color)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--text-color)] hover:bg-[var(--sidebar-hover-bg)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Unapprove
           </button>
@@ -82,7 +82,7 @@ export function CommentsModeration({
             type="button"
             disabled={busyId === c.id}
             onClick={() => act(c.id, "approve")}
-            className="cursor-pointer rounded bg-[var(--accent-bg)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[var(--accent-fg)] hover:opacity-90 disabled:opacity-50"
+            className="cursor-pointer rounded bg-[var(--accent-bg)] px-3 py-1 pointer-coarse:min-h-11 text-xs text-[var(--accent-fg)] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Approve
           </button>
@@ -91,7 +91,7 @@ export function CommentsModeration({
           type="button"
           disabled={busyId === c.id}
           onClick={() => act(c.id, "delete")}
-          className="cursor-pointer rounded px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--danger-color)] hover:underline disabled:opacity-50"
+          className="cursor-pointer rounded px-3 py-1 pointer-coarse:min-h-11 text-xs text-[color:var(--danger-color)] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Delete
         </button>
