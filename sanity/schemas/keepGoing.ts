@@ -46,24 +46,12 @@ export const keepGoing = defineType({
   preview: {
     select: {
       mediaType: "mediaType",
-      image: "image",
+      media: "image",
       imageFilename: "image.asset.originalFilename",
       videoFilename: "video.asset.originalFilename",
       createdAt: "_createdAt",
     },
-    prepare({
-      mediaType,
-      image,
-      imageFilename,
-      videoFilename,
-      createdAt,
-    }: {
-      mediaType?: string;
-      image?: unknown;
-      imageFilename?: string;
-      videoFilename?: string;
-      createdAt?: string;
-    }) {
+    prepare({ mediaType, media, imageFilename, videoFilename, createdAt }) {
       const typeLabel =
         mediaType === "video"
           ? "Video"
@@ -81,7 +69,7 @@ export const keepGoing = defineType({
       return {
         title: filename || typeLabel,
         subtitle: filename ? `${typeLabel} · ${dateStr}` : dateStr,
-        media: image,
+        media,
       };
     },
   },
