@@ -10,11 +10,15 @@ export const metadata: Metadata = {
     "A collection of images, reminders, and videos to help you keep going.",
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getKeepGoingItems(): Promise<KeepGoingItem[]> {
   try {
-    const rawItems = await client.fetch<KeepGoingItem[]>(keepGoingQuery);
+    const rawItems = await client.fetch<KeepGoingItem[]>(
+      keepGoingQuery,
+      {},
+      { cache: "no-store" }
+    );
     return (rawItems ?? []).map((item, idx) => {
       const num = String(idx + 1).padStart(2, "0");
       const ext = item.mediaType === "video" ? "mp4" : "webp";
