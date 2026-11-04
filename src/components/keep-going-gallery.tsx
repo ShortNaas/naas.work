@@ -18,7 +18,7 @@ function VideoCard({ item }: { item: KeepGoingItem }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const videoSrc =
-    item.localUrl || item.video?.asset?.url || item.videoFile?.asset?.url;
+    item.video?.asset?.url || item.videoFile?.asset?.url || item.localUrl;
 
   if (!videoSrc) return null;
 
