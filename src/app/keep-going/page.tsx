@@ -21,7 +21,7 @@ async function getKeepGoingItems(): Promise<KeepGoingItem[]> {
       return {
         ...item,
         itemNumber: idx + 1,
-        localUrl: `/keep-going/${num}.${ext}`,
+        localUrl: `/keep-going/${num}.${ext}?v=${item._id}`,
       };
     });
   } catch (error) {

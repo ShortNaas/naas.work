@@ -47,16 +47,40 @@ export const keepGoing = defineType({
     select: {
       mediaType: "mediaType",
       image: "image",
+      imageFilename: "image.asset.originalFilename",
+      videoFilename: "video.asset.originalFilename",
+      createdAt: "_createdAt",
     },
-    prepare({ mediaType, image }) {
+    prepare({
+      mediaType,
+      image,
+      imageFilename,
+      videoFilename,
+      createdAt,
+    }: {
+      mediaType?: string;
+      image?: unknown;
+      imageFilename?: string;
+      videoFilename?: string;
+      createdAt?: string;
+    }) {
       const typeLabel =
         mediaType === "video"
           ? "Video"
           : mediaType === "gif"
           ? "GIF"
           : "Image";
+      const filename = imageFilename || videoFilename;
+      const dateStr = createdAt
+        ? new Date(createdAt).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          })
+        : "";
+
       return {
-        title: typeLabel,
+        title: filename || typeLabel,
+        subtitle: filename ? `${typeLabel} · ${dateStr}` : dateStr,
         media: image,
       };
     },

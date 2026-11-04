@@ -60,7 +60,7 @@ export async function GET(
         status: 200,
         headers: {
           "Content-Type": "video/mp4",
-          "Cache-Control": "public, max-age=31536000, immutable",
+          "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
           ...(upstream.headers.get("content-length")
             ? { "Content-Length": upstream.headers.get("content-length")! }
             : {}),
@@ -87,7 +87,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "image/webp",
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
         ...(upstream.headers.get("content-length")
           ? { "Content-Length": upstream.headers.get("content-length")! }
           : {}),
