@@ -49,23 +49,9 @@ export async function GET(
         return new Response("Video file not found", { status: 404 });
       }
 
-      const upstream = await fetch(item.videoUrl);
-      if (!upstream.ok) {
-        return new Response("Error fetching video", {
-          status: upstream.status,
-        });
-      }
-
-      return new Response(upstream.body, {
-        status: 200,
-        headers: {
-          "Content-Type": "video/mp4",
-          "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
-          ...(upstream.headers.get("content-length")
-            ? { "Content-Length": upstream.headers.get("content-length")! }
-            : {}),
-        },
-      });
+      // Redirect directly to the CDN so browsers receive native HTTP 206
+      // Partial Content byte-range streaming, instant seeking, and edge caching.
+      return Response.redirect(item.videoUrl, 307);
     }
 
     // For images and GIFs: convert to WebP using Sanity's image transformation API
