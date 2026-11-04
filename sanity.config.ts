@@ -2,6 +2,7 @@ import { defineConfig, type ConfigContext } from "sanity";
 import { structureTool, type StructureBuilder } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { orderableDocumentListDeskItem } from "@sanity/orderable-document-list";
+import { UploadIcon } from "@sanity/icons";
 
 import { post } from "./sanity/schemas/post";
 import { project } from "./sanity/schemas/project";
@@ -18,6 +19,7 @@ import { logsEntry } from "./sanity/schemas/logsEntry";
 import { keepGoing } from "./sanity/schemas/keepGoing";
 import { bodyImage } from "./sanity/schemas/bodyImage";
 import { inlineImage } from "./sanity/schemas/inlineImage";
+import { BatchUploadKeepGoing } from "./sanity/components/BatchUploadKeepGoing";
 
 const API_VERSION = "2024-01-01";
 
@@ -177,6 +179,14 @@ export default defineConfig({
               S,
               context,
             }),
+            S.listItem()
+              .id("batch-upload-keep-going")
+              .title("Keep Going (Batch Upload)")
+              .icon(UploadIcon)
+              .child(
+                S.component(BatchUploadKeepGoing)
+                  .title("Batch Upload to Keep Going")
+              ),
             S.divider(),
             ...S.documentTypeListItems().filter(
               (item) => !NESTED_TYPES.has(item.getId() ?? "")
@@ -184,6 +194,15 @@ export default defineConfig({
           ]),
     }),
     visionTool(),
+  ],
+  tools: (prev) => [
+    ...prev,
+    {
+      name: "batch-upload",
+      title: "Batch Upload",
+      icon: UploadIcon,
+      component: BatchUploadKeepGoing,
+    },
   ],
   schema: {
     types: [
